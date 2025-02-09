@@ -13,7 +13,7 @@ export const Delivery = () => {
         {/* Map Section */}
         <div className="flex flex-col md:flex-row justify-between items-stretch m-5 gap-4">
           <RouteInput />
-          <div className="text-white border-2 flex-1 w-full">
+          <div className="text-white border-2 flex-grow h-fit w-full">
             <DeliveryMap />
           </div>
         </div>
