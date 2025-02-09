@@ -1,23 +1,24 @@
-import { inputAtom } from '../hooks/atoms/atom';
+// routeInput.js
 import { useRecoilState } from 'recoil';
+import { inputAtom } from '../../hooks/atoms/atom';
 
 export default function RouteInput() {
   const [stops, setStops] = useRecoilState(inputAtom);
 
   const addStop = () => {
-    setStops([...stops, '']);
+    setStops([...stops, { location: "", capacity: 0 }]);
   };
 
   const removeStop = (index) => {
-    if (index > 0) { // Prevent removing the first input
+    if (index > 0) {
       const newStops = stops.filter((_, i) => i !== index);
       setStops(newStops);
     }
   };
 
-  const handleStopChange = (index, value) => {
+  const handleLocationChange = (index, value) => {
     const newStops = [...stops];
-    newStops[index] = value;
+    newStops[index] = { ...newStops[index], location: value };
     setStops(newStops);
   };
 
@@ -33,12 +34,11 @@ export default function RouteInput() {
                 <div className="flex items-center">
                   <input
                     type="text"
-                    value={stop}
-                    onChange={(e) => handleStopChange(index, e.target.value)}
+                    value={stop.location}
+                    onChange={(e) => handleLocationChange(index, e.target.value)}
                     placeholder={index === 0 ? 'Starting point' : `Stop ${index}`}
                     className="w-full pr-8 p-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
-                  {console.log(stops)}
                   {index > 0 && (
                     <button
                       onClick={() => removeStop(index)}

@@ -1,20 +1,22 @@
+// atoms.js
 import { atom, selector } from "recoil";
 
 export const inputAtom = atom({
     key: "inputAtom",
-    default: [""], // Default value is an array with an empty string
+    default: [{ location: "", capacity: 0 }],
 });
 
 export const markerSelector = selector({
     key: "markerSelector",
     get: ({ get }) => {
         const input = get(inputAtom);
-        const numbers = input.map(str =>
-            str.split(',')
-               .map(num => parseFloat(num))
-               .filter(num => !isNaN(num)) // Keep only valid numbers
-        );
-        console.log(numbers);
-        return numbers;
+        return input
+            .filter(stop => stop.location) // Only include stops with non-empty locations
+            .map(stop => 
+                stop.location.split(',')
+                    .map(num => parseFloat(num.trim()))
+                    .filter(num => !isNaN(num))
+            )
+            .filter(coords => coords.length === 2); // Only include valid coordinate pairs
     },
 });
