@@ -13,7 +13,7 @@ export const Inventory = () => {
 
     return (
         <div className="w-full h-fit flex justify-center items-center">
-            <div className="text-white w-fit h-fit border-2 border-gray-100 my-10 px-20 sm:px-10 md:px-20 overflow-hidden">
+            <div className="text-white w-fit h-fit border-2 border-gray-100 my-10 px-20 sm:px-10 md:px-20 sm:overflow-hidden">
                 <div className="font-medium flex justify-center items-center underline text-xl my-5 sm:text-xl">
                     INVENTORY
                 </div>
@@ -34,14 +34,15 @@ export const Inventory = () => {
                 </div>
 
                 {stops.map((stop, index) => (
-                    <div key={index} className="flex flex-wrap justify-center items-center gap-x-2 gap-y-2 m-5 sm:m-4 md:m-5">
-                        <div>
+                    <div key={index} className="flex justify-between sm:justify-center items-center  m-5 sm:m-4 md:m-5 w-full sm:w-auto ml-1">
+
+                        <div className="flex w-full sm:w-auto">
 
                             <input
                                 value={stop.location}
                                 readOnly
                                 placeholder={index === 0 ? 'Starting Point' : `Stop ${index}`}
-                                className="border-2 border-gray-100 p-2"
+                                className="text-white text-sm sm:text-base text-center border-2 p-2 m-1 sm:m-2 rounded-md w-full sm:w-auto max-w-xs sm:max-w-sm"
                             />
 
                         </div>
@@ -54,13 +55,14 @@ export const Inventory = () => {
                         >
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
-                        <div>
+
+                        <div className="flex w-full sm:w-auto">
                             <input
                                 type="number"
                                 placeholder="Enter weight"
                                 value={stop.capacity}
                                 onChange={(e) => handleCapacityChange(index, e.target.value)}
-                                className="border-2 border-gray-100 p-2"
+                                className="text-white text-sm sm:text-base text-center border-2 p-2 m-1 sm:m-2 rounded-md w-full sm:w-auto max-w-xs sm:max-w-sm"
                             />
                         </div>
                     </div>
