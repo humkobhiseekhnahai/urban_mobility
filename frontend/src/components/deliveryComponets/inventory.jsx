@@ -13,7 +13,7 @@ export const Inventory = () => {
 
     return (
         <div className="w-full h-fit flex justify-center items-center">
-            <div className="text-white w-fit h-fit border-2 border-gray-100 my-10 px-20 sm:px-10 md:px-20 sm:overflow-hidden">
+            <div className="text-white max-w-screen-lg h-fit border-2 border-gray-100 my-10 px-4 sm:px-6 md:px-10 overflow-hidden">
                 <div className="font-medium flex justify-center items-center underline text-xl my-5 sm:text-xl">
                     INVENTORY
                 </div>
@@ -42,7 +42,7 @@ export const Inventory = () => {
                                 value={stop.location}
                                 readOnly
                                 placeholder={index === 0 ? 'Starting Point' : `Stop ${index}`}
-                                className="text-white text-sm sm:text-base text-center border-2 p-2 m-1 sm:m-2 rounded-md w-full sm:w-auto max-w-xs sm:max-w-sm"
+                                className="text-white text-sm sm:text-base text-center border-2 p-2 sm:m-2 rounded-md min-w-[150px] sm:min-w-[200px] md:min-w-[250px] w-full sm:w-auto"
                             />
 
                         </div>
@@ -62,7 +62,7 @@ export const Inventory = () => {
                                 placeholder="Enter weight"
                                 value={stop.capacity}
                                 onChange={(e) => handleCapacityChange(index, e.target.value)}
-                                className="text-white text-sm sm:text-base text-center border-2 p-2 m-1 sm:m-2 rounded-md w-full sm:w-auto max-w-xs sm:max-w-sm"
+                                className="text-white text-sm sm:text-base text-center border-2 p-2 sm:m-2 rounded-md min-w-[100px] sm:min-w-[150px] md:min-w-[200px] w-full sm:w-auto"
                             />
                         </div>
                     </div>
