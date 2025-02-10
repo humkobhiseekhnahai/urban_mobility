@@ -19,16 +19,16 @@ export const Delivery = () => {
         </div>
 
         {/* Inputs */}
-        <div className="flex justify-center mt-10">
+        <div className="flex justify-center items-center mt-10">
           <input
             disabled
             placeholder="Sample Vehicle"
-            className="text-white text-center border-2 p-2 m-2 mr-5 cursor-not-allowed"
+            className="text-white text-sm sm:text-base text-center border-2 p-2 m-1 sm:m-2 cursor-not-allowed rounded-md w-full sm:w-auto max-w-xs sm:max-w-sm"
           />
           <input
             type="number"
             placeholder="Enter capacity*"
-            className="text-white text-center border-2 p-2 m-2"
+            className="text-white text-sm sm:text-base text-center border-2 p-2 m-1 sm:m-2 rounded-md w-full sm:w-auto max-w-xs sm:max-w-sm "
           />
         </div>
 

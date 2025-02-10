@@ -13,8 +13,8 @@ export const Inventory = () => {
 
     return (
         <div className="w-full h-fit flex justify-center items-center">
-            <div className="text-white w-fit h-fit border-2 border-gray-100 my-10 px-20">
-                <div className="font-medium flex justify-center items-center underline text-xl my-5">
+            <div className="text-white w-fit h-fit border-2 border-gray-100 my-10 px-20 sm:px-10 md:px-20 overflow-hidden">
+                <div className="font-medium flex justify-center items-center underline text-xl my-5 sm:text-xl">
                     INVENTORY
                 </div>
 
@@ -34,7 +34,7 @@ export const Inventory = () => {
                 </div>
 
                 {stops.map((stop, index) => (
-                    <div key={index} className="flex justify-center items-center space-x-4 m-5">
+                    <div key={index} className="flex flex-wrap justify-center items-center gap-x-2 gap-y-2 m-5 sm:m-4 md:m-5">
                         <div>
 
                             <input
