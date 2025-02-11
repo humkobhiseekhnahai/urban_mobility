@@ -1,9 +1,9 @@
 // DeliveryMap.js
-import { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
-import tt from '@tomtom-international/web-sdk-maps';
-import '@tomtom-international/web-sdk-maps/dist/maps.css';
-import { markerSelector } from '../../hooks/atoms/atom';
+import { useEffect, useRef, useState } from "react";
+import { useRecoilValue } from "recoil";
+import tt from "@tomtom-international/web-sdk-maps";
+import "@tomtom-international/web-sdk-maps/dist/maps.css";
+import { markerSelector } from "../../hooks/atoms/atom";
 
 const DeliveryMap = () => {
   const mapRef = useRef(null);
@@ -16,9 +16,9 @@ const DeliveryMap = () => {
         key: "4pIumWwcCYdl3HsGdBAp3PHp8nmDlG6l",
         container: "map",
         center: [77.5946, 12.9716],
-        zoom: 11
+        zoom: 11,
       });
-      
+
       mapRef.current = mapInstance;
       setMap(mapInstance);
     }
@@ -34,28 +34,24 @@ const DeliveryMap = () => {
 
   useEffect(() => {
     if (map && markers.length > 0) {
-      // Clear existing markers
-      map.getStyle().layers.forEach(layer => {
-        if (layer.id.includes('marker')) {
+      // Clear existing markers (if any)
+      map.getStyle().layers.forEach((layer) => {
+        if (layer.id.includes("marker")) {
           map.removeLayer(layer.id);
         }
       });
-      map.getSource('markers')?.setData({
-        type: 'FeatureCollection',
-        features: []
+      map.getSource("markers")?.setData({
+        type: "FeatureCollection",
+        features: [],
       });
 
-      // Add new markers
+      // Add new markers and update bounds
       const bounds = new tt.LngLatBounds();
       markers.forEach((coordinates, index) => {
-        const popup = new tt.Popup({ offset: 30 })
-          .setHTML(`Location ${index + 1}`);
-
-        new tt.Marker()
-          .setLngLat(coordinates)
-          .setPopup(popup)
-          .addTo(map);
-
+        const popup = new tt.Popup({ offset: 30 }).setHTML(
+          `Location ${index + 1}`
+        );
+        new tt.Marker().setLngLat(coordinates).setPopup(popup).addTo(map);
         bounds.extend(coordinates);
       });
 
@@ -63,7 +59,12 @@ const DeliveryMap = () => {
     }
   }, [map, markers]);
 
-  return <div id="map" className="w-full h-[500px]" />;
+  return (
+    <div
+      id="map"
+      className="w-full h-80 md:h-[500px] rounded-lg border-2 border-gray-700 shadow-md transition duration-300"
+    />
+  );
 };
 
 export default DeliveryMap;

@@ -3,71 +3,47 @@ import { useRecoilState } from "recoil";
 import { inputAtom } from "../../hooks/atoms/atom";
 
 export const Inventory = () => {
-    const [stops, setStops] = useRecoilState(inputAtom);
+  const [stops, setStops] = useRecoilState(inputAtom);
 
-    const handleCapacityChange = (index, value) => {
-        const newStops = [...stops];
-        newStops[index].capacity = Number(value);
-        setStops(newStops);
-    };
+  const handleCapacityChange = (index, value) => {
+    const newStops = [...stops];
+    newStops[index].capacity = Number(value);
+    setStops(newStops);
+  };
 
-    return (
-        <div className="w-full h-fit flex justify-center items-center">
-            <div className="text-white max-w-screen-lg h-fit border-2 border-gray-100 my-10 px-4 sm:px-6 md:px-10 overflow-hidden">
-                <div className="font-medium flex justify-center items-center underline text-xl my-5 sm:text-xl">
-                    INVENTORY
-                </div>
-
-                {/* Column Headers */}
-                <div className="flex justify-center items-center space-x-4 m-5">
-                    <div className="font-medium">Location</div>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5 text-gray-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                    <div className="font-medium">Weight</div>
-                </div>
-
-                {stops.map((stop, index) => (
-                    <div key={index} className="flex justify-between sm:justify-center items-center  m-5 sm:m-4 md:m-5 w-full sm:w-auto ml-1">
-
-                        <div className="flex w-full sm:w-auto">
-
-                            <input
-                                value={stop.location}
-                                readOnly
-                                placeholder={index === 0 ? 'Starting Point' : `Stop ${index}`}
-                                className="text-white text-sm sm:text-base text-center border-2 p-2 sm:m-2 rounded-md min-w-[150px] sm:min-w-[200px] md:min-w-[250px] w-full sm:w-auto"
-                            />
-
-                        </div>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-
-                        <div className="flex w-full sm:w-auto">
-                            <input
-                                type="number"
-                                placeholder="Enter weight"
-                                value={stop.capacity}
-                                onChange={(e) => handleCapacityChange(index, e.target.value)}
-                                className="text-white text-sm sm:text-base text-center border-2 p-2 sm:m-2 rounded-md min-w-[100px] sm:min-w-[150px] md:min-w-[200px] w-full sm:w-auto"
-                            />
-                        </div>
-                    </div>
-                ))}
-            </div>
+  return (
+    <div className="w-full flex justify-center items-center">
+      <div className="bg-slate-800 text-white max-w-4xl w-full border-2 border-gray-700 my-10 p-6 overflow-hidden rounded-lg shadow-md transition duration-300">
+        <div className="font-medium flex justify-center items-center text-xl my-5">
+          INVENTORY
         </div>
-    );
+
+        {/* Column Headers */}
+        <div className="flex justify-between items-center border-b border-gray-600 pb-2 px-4">
+          <div className="font-medium w-1/2 text-center">Location</div>
+          <div className="font-medium w-1/2 text-center">Weight</div>
+        </div>
+
+        {stops.map((stop, index) => (
+          <div key={index} className="flex gap-2 items-center m-4 px-4">
+            <input
+              value={stop.location}
+              readOnly
+              placeholder={index === 0 ? "Starting Point" : `Stop ${index}`}
+              className="text-white text-sm sm:text-base text-center border-2 border-gray-600 p-2 rounded-md w-1/2 bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            />
+            <input
+              type="number"
+              placeholder="Enter weight"
+              value={stop.capacity}
+              onChange={(e) => handleCapacityChange(index, e.target.value)}
+              className="text-white text-sm sm:text-base text-center border-2 border-gray-600 p-2 rounded-md w-1/2 bg-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 "
+            />
+
+            
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
