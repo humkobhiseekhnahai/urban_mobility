@@ -2,6 +2,7 @@ import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Delivery } from "./pages/delivery";
 import { Dashboard } from "./pages/dashboard";
+import "mapbox-gl/dist/mapbox-gl.css";
 function App() {
   return (
     <>
