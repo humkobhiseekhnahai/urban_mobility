@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { assets } from "../assets/assets";
 
 export const NavBar = () => {
   const navigate = useNavigate();
@@ -9,8 +10,7 @@ export const NavBar = () => {
         <div className="flex items-center space-x-8">
           {/* Logo Section */}
           <div className="flex items-center space-x-2">
-            <span className="text-amber-400 text-2xl font-bold">🚚</span>
-            <span className="text-white font-bold text-xl">UPLYFT</span>
+          <img onClick={()=>navigate('/')} className='w-33 cursor-pointer' src={assets.logo} alt='' />
           </div>
 
           {/* Navigation Items */}

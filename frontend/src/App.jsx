@@ -7,7 +7,7 @@ function App() {
   
 
   return (
-    <>
+    <div>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Dashboard/>}/>
@@ -15,7 +15,7 @@ function App() {
           <Route path="/delivery" element={<Delivery/>}/>
         </Routes>
       </BrowserRouter>
-    </>
+    </div>
   )
 }
 

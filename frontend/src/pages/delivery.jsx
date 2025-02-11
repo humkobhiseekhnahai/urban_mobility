@@ -3,6 +3,8 @@ import RouteInput from "../components/deliveryComponets/routeInput";
 import { NavBar } from "../components/navBar";
 import DeliveryMap from "../components/deliveryComponets/deliveryMap";
 import { Inventory } from "../components/deliveryComponets/inventory";
+import Footer from "../components/footer";
+
 
 export const Delivery = () => {
   return (
@@ -19,7 +21,7 @@ export const Delivery = () => {
 
           {/* Right: Delivery Map */}
           <div className="md:w-2/3 w-full">
-            <div className="text-white border-2 border-gray-700 rounded-lg shadow-lg transition transform hover:scale-105">
+            <div className="text-white border-2 border-gray-200 rounded-lg shadow-lg ">
               <DeliveryMap />
             </div>
           </div>
@@ -49,6 +51,7 @@ export const Delivery = () => {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
