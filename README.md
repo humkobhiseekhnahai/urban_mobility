@@ -1,5 +1,25 @@
-To Run FASTAPI
-cd backend
-cd delivery or cd public_transport (depending on which to use)
-venv\Scripts\activate (To start python env, Might differ in Mac)
-uvicorn app.main:app --reload (To run FASTAPI)
+# Running FASTAPI
+
+## Setup and Execution
+
+1. Navigate to the backend directory:
+
+   ```sh
+   cd backend
+   ```
+
+2. Activate the virtual environment:
+
+   - On Windows:
+     ```sh
+     venv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```sh
+     source venv/bin/activate
+     ```
+
+3. Run the FASTAPI application:
+   ```sh
+   uvicorn app.main:app --reload
+   ```
