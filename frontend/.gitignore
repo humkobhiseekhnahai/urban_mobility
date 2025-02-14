@@ -14,5 +14,3 @@ build/
 # Ignore IDE-specific files
 .vscode/
 .idea/
-
-.DS_Store
