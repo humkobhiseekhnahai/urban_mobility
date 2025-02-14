@@ -64,7 +64,7 @@ export const Dashboard = () => {
           });
         });
       });
-
+      // Heatmap
       const normalizedHeatmapData = points.map(([lat, lng, intensity]) => [
         lat,
         lng,
