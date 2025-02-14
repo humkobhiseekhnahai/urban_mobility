@@ -7,7 +7,7 @@ import "leaflet.heat";
 import { useMap } from "react-leaflet";
 
 const mapBoxAccessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-const tomtomApiKey = import.meta.env.VITE_TOMTOM_KEY;
+const tomtomApiKey = import.meta.env.VITE_TOMTOM_API_KEY;
 const hereApiKey = import.meta.env.VITE_HEREAPI_KEY;
 
 // Mapping of incident categories (TomTom)
