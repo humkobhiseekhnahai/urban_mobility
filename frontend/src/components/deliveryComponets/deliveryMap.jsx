@@ -13,7 +13,7 @@ const DeliveryMap = () => {
   useEffect(() => {
     if (!mapRef.current) {
       const mapInstance = tt.map({
-        key: "4pIumWwcCYdl3HsGdBAp3PHp8nmDlG6l",
+        key: import.meta.env.VITE_TOMTOM_API_KEY,
         container: "map",
         center: [77.5946, 12.9716],
         zoom: 11
