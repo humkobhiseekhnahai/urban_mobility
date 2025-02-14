@@ -1,12 +1,12 @@
 // Inventory.js
-import { useRecoilState } from "recoil";
+// Inventory.js (updated imports)
+import { useAtom } from 'jotai';
 import { inputAtom } from "../../hooks/atoms/atom";
 import { useState } from "react";
 
 export const Inventory = () => {
-    const [stops, setStops] = useRecoilState(inputAtom);
+    const [stops, setStops] = useAtom(inputAtom);
     const [priority, setPriority] = useState("Priority");
-
     const handleCapacityChange = (index, value) => {
         const newStops = [...stops];
         newStops[index].capacity = Number(value);
