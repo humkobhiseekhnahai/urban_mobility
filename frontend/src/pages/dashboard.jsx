@@ -9,6 +9,8 @@ import { useMap } from "react-leaflet";
 const mapBoxAccessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 const tomtomApiKey = import.meta.env.VITE_TOMTOM_KEY;
 const hereApiKey = import.meta.env.VITE_HEREAPI_KEY;
+const weatherApiKey = import.meta.env.VITE_WEATHERAPI_KEY;
+const geoapifyKey = import.meta.env.VITE_GEOAPIFY_KEY;
 
 // Mapping of incident categories (TomTom)
 const incidentCategoryMap = {
@@ -80,9 +82,7 @@ export const Dashboard = () => {
   const fetchLocationName = useCallback(async (lng, lat) => {
     try {
       const response = await fetch(
-        `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=${
-          import.meta.env.VITE_GEOAPIFY_KEY
-        }`
+        `https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=${geoapifyKey}`
       );
       const data = await response.json();
       return data.features[0].properties.name || "Unknown location";
@@ -119,9 +119,7 @@ export const Dashboard = () => {
         longitude + 0.01
       },${latitude + 0.01}`;
 
-      const tempbbox = "77.58387,12.96293,77.60387,12.98293";
-
-      const tomtomApiUrl = `https://api.tomtom.com/traffic/services/5/incidentDetails?key=${tomtomApiKey}&bbox=${tempbbox}&fields={incidents{type,geometry{type,coordinates},properties{iconCategory}}}&language=en-GB&t=1111&timeValidityFilter=present`;
+      const tomtomApiUrl = `https://api.tomtom.com/traffic/services/5/incidentDetails?key=${tomtomApiKey}&bbox=${bbox}&fields={incidents{type,geometry{type,coordinates},properties{iconCategory}}}&language=en-GB&t=1111&timeValidityFilter=present`;
 
       try {
         const response = await fetch(tomtomApiUrl);
@@ -148,7 +146,7 @@ export const Dashboard = () => {
         async ({ coords: { latitude, longitude } }) => {
           setLocation({ latitude, longitude });
           await fetchIncidents(latitude, longitude);
-          await fetchTrafficData(12.96293, 77.58387);
+          await fetchTrafficData(latitude, longitude);
         },
         (error) => {
           console.error("Geolocation error:", error);
@@ -255,7 +253,7 @@ export const Dashboard = () => {
       </div>
 
       {/* Main Grid Section (Incidents + Future Sections) */}
-      <main className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 grid-rows-1">
+      <main className="grid grid-cols-4 gap-6 grid-rows-1">
         {/* Traffic Incidents Box */}
         <section className="bg-white p-4 shadow-lg rounded-lg h-[400px] overflow-hidden">
           <h2 className="text-xl font-semibold mb-3">Traffic Incidents</h2>
@@ -288,7 +286,11 @@ export const Dashboard = () => {
         {/* Placeholder for Future Sections */}
         <section className="bg-white p-4 shadow-lg rounded-lg h-[400px] flex items-center justify-center text-gray-500 col-span-2">
           <MapContainer
-            center={[12.96293, 77.58387]}
+            center={
+              location
+                ? [location.latitude, location.longitude]
+                : [37.8, -122.4]
+            }
             zoom={14}
             style={{ height: "100%", width: "100%" }}
           >
@@ -298,9 +300,7 @@ export const Dashboard = () => {
             )}
           </MapContainer>
         </section>
-        {/* <section className="bg-white p-4 shadow-lg rounded-lg h-[400px] flex items-center justify-center text-gray-500">
-          Coming Soon...
-        </section> */}
+        <WeatherApp />
       </main>
     </div>
   );
@@ -313,7 +313,7 @@ const HeatmapLayer = ({ heatmapData }) => {
     if (!map || heatmapData.length === 0) return;
 
     const heatLayer = L.heatLayer(heatmapData, {
-      radius: 10, // Adjust the spread of the heatmap
+      radius: 10,
       blur: 15,
       maxZoom: 17,
       max: 1.0,
@@ -325,4 +325,97 @@ const HeatmapLayer = ({ heatmapData }) => {
   }, [map, heatmapData]);
 
   return null;
+};
+
+const WeatherApp = () => {
+  const [weatherData, setWeatherData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchWeatherData = async (lat, lon) => {
+    try {
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/current.json?key=${weatherApiKey}&q=${lat},${lon}`
+      );
+      const data = await response.json();
+      setWeatherData(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        ({ coords: { latitude, longitude } }) => {
+          fetchWeatherData(latitude, longitude);
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+          setLoading(false);
+        }
+      );
+    } else {
+      console.error("Geolocation not supported.");
+      setLoading(false);
+    }
+  }, []); // Removed fetchWeatherData from dependencies
+
+  return (
+    <section className="bg-gradient-to-br from-blue-100 to-blue-200 p-6 shadow-lg rounded-lg h-[400px] flex flex-col justify-between">
+      <h2 className="text-2xl font-bold text-blue-800 mb-4">Weather Updates</h2>
+      {loading ? (
+        <div className="flex items-center justify-center h-full">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      ) : weatherData ? (
+        <div className="text-blue-900">
+          <div className="mb-4">
+            <h3 className="text-3xl font-bold">{weatherData.location.name}</h3>
+            <p className="text-lg text-blue-700">
+              {weatherData.location.region}
+            </p>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-between">
+            <div className="flex items-center space-x-4 mb-4 sm:mb-0">
+              <img
+                src={weatherData.current.condition.icon || "/placeholder.svg"}
+                alt="Weather Icon"
+                className="w-20 h-20"
+              />
+              <div>
+                <p className="text-5xl font-bold">
+                  {weatherData.current.temp_c}°C
+                </p>
+                <p className="text-xl">{weatherData.current.condition.text}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex items-center space-x-2">
+                <span className="text-red-500 text-2xl">🌡️</span>
+                <span>Feels like {weatherData.current.feelslike_c}°C</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-blue-500 text-2xl">💧</span>
+                <span>Humidity {weatherData.current.humidity}%</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-500 text-2xl">💨</span>
+                <span>Wind {weatherData.current.wind_kph} km/h</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-400 text-2xl">☁️</span>
+                <span>Cloud {weatherData.current.cloud}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <p className="text-red-600 text-center">
+          Unable to fetch weather data.
+        </p>
+      )}
+    </section>
+  );
 };
