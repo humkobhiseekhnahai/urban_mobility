@@ -23,7 +23,7 @@ const HeroSection = () => {
         >
           Start for free
         </a>
-        <a href="Documentation" className="py-3 px-4 mx-3 rounded-md border">
+        <a href="documentation" className="py-3 px-4 mx-3 rounded-md border">
           Documentation
         </a>
       </div>

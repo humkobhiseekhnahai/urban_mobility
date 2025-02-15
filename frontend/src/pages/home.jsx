@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar_home from '../components/homeComponents/navBar_home'
 import HeroSection from '../components/homeComponents/heroSection'
+import Documentation from './documentation'
 
 const Home = () => {
   return (
