@@ -1,9 +1,5 @@
-import { BotMessageSquare } from "lucide-react";
-import { BatteryCharging } from "lucide-react";
-import { Fingerprint } from "lucide-react";
-import { ShieldHalf } from "lucide-react";
-import { PlugZap } from "lucide-react";
-import { GlobeLock } from "lucide-react";
+import { Bus, LayoutDashboard, Route, TrafficCone, TriangleAlert, Weight } from "lucide-react";
+
 
 import user1 from "../assets/profile-pictures/user1.jpg";
 import user2 from "../assets/profile-pictures/user2.jpg";
@@ -60,40 +56,40 @@ export const testimonials = [
 
 export const features = [
   {
-    icon: <BotMessageSquare />,
-    text: "Drag-and-Drop Interface",
+    icon: <Route />,
+    text: "Dynamic Route Optimization",
     description:
-      "Easily design and arrange your VR environments with a user-friendly drag-and-drop interface.",
+      "Leverages AI algorithms (Genetic Algorithm + TSP) to generate fuel-efficient routes in real-time, adjusting for traffic, weather, and road closures. Reduces delivery time by 30% and fuel costs by 20%.",
   },
   {
-    icon: <Fingerprint />,
-    text: "Multi-Platform Compatibility",
+    icon: <TrafficCone />,
+    text: "AI-Powered Traffic Heatmaps",
     description:
-      "Build VR applications that run seamlessly across multiple platforms, including mobile, desktop, and VR headsets.",
+      "Identifies traffic hotspots using DBSCAN clustering and time-series analysis. Helps city planners reroute traffic during peak hours, reducing congestion by 25%.",
   },
   {
-    icon: <ShieldHalf />,
-    text: "Built-in Templates",
+    icon: <TriangleAlert />,
+    text: "Accident Hotspot Detection",
     description:
-      "Jumpstart your VR projects with a variety of built-in templates for different types of applications and environments.",
+      "Maps accident-prone zones using spatial clustering and historical data. Recommends infrastructure upgrades (e.g., speed bumps, traffic lights) to reduce accidents by 40% in high-risk areas.",
   },
   {
-    icon: <BatteryCharging />,
-    text: "Real-Time Preview",
+    icon: <Weight />,
+    text: "Loading Sequence Planner",
     description:
-      "Preview your VR application in real-time as you make changes, allowing for quick iterations and adjustments.",
+      " Uses bin-packing algorithms to organize goods by delivery priority and fragility, minimizing unloading steps and product damage. Ensures 95% truck space utilization.",
   },
   {
-    icon: <PlugZap />,
-    text: "Collaboration Tools",
+    icon: <Bus />,
+    text:  "Public Transport Load Balancing",
     description:
-      "Work together with your team in real-time on VR projects, enabling seamless collaboration and idea sharing.",
+      "Creates transshipment nodes using PageRank and spatial clustering to redistribute passengers across buses/metros. Reduces overcrowding by 35% during peak hours.",
   },
   {
-    icon: <GlobeLock />,
-    text: "Analytics Dashboard",
+    icon: <LayoutDashboard />,
+    text: "Interactive Dashboard",
     description:
-      "Gain valuable insights into user interactions and behavior within your VR applications with an integrated analytics dashboard.",
+      "A user-friendly interface that visualizes key metrics, traffic patterns, and optimization insights with interactive charts and heatmaps. Provides real-time monitoring and weather updates.",
   },
 ];
 
