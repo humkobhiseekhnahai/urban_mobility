@@ -1,9 +1,9 @@
 // routeInput.js
-import { useRecoilState } from 'recoil';
+import { useAtom } from 'jotai';
 import { inputAtom } from '../../hooks/atoms/atom';
 
 export default function RouteInput() {
-  const [stops, setStops] = useRecoilState(inputAtom);
+  const [stops, setStops] = useAtom(inputAtom);
 
   const addStop = () => {
     setStops([...stops, { location: "", capacity: 0 }]);
