@@ -2,19 +2,53 @@ const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-const authMiddleware = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-  if (!token) return res.status(401).json({ error: 'Access denied' });
-
+// Main authentication middleware
+const authMiddleware = async (req, res, next) => {
   try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) return res.status(401).json({ error: 'Access denied' });
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // Contains sub, email, user_type
+    
+    // Fetch fresh user data from database
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.sub }
+    });
+
+    if (!user) throw new Error('User not found');
+    
+    // Add the complete user object to the request
+    req.user = user;
     next();
   } catch (err) {
-    res.status(400).json({ error: 'Invalid token' });
+    console.error('Auth middleware error:', err);
+    res.status(401).json({ error: 'Invalid token' });
   }
 };
 
+// Role verification middlewares
+const isUser = (req, res, next) => {
+  if (req.user.user_type !== 'user') {
+    return res.status(403).json({ error: 'User access required' });
+  }
+  next();
+};
+
+const isOperator = (req, res, next) => {
+  if (req.user.user_type !== 'operator') {
+    return res.status(403).json({ error: 'Operator access required' });
+  }
+  next();
+};
+
+const isPartner = (req, res, next) => {
+  if (req.user.user_type !== 'partner') {
+    return res.status(403).json({ error: 'Partner access required' });
+  }
+  next();
+};
+
+// Token generator
 const generateToken = (user) => {
   return jwt.sign(
     {
@@ -29,5 +63,8 @@ const generateToken = (user) => {
 
 module.exports = {
   authMiddleware,
-  generateToken
+  generateToken,
+  isUser,
+  isOperator,
+  isPartner
 };

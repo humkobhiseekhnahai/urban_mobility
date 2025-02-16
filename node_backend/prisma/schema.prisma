@@ -21,6 +21,7 @@ model User {
   googleId    String?   @unique
   user_type   UserType  @default(user)
   roleSelected Boolean   @default(false) 
+}
 
 enum UserType {
   user
