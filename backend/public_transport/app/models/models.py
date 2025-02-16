@@ -1,27 +1,28 @@
 from pydantic import BaseModel
 from typing import List, Tuple
 
-class PassengerLoad(BaseModel):
-    stop: str
-    average_passengers: int
+class BusStop(BaseModel):
+    name: str
+    location: Tuple[float, float]  # (latitude, longitude)
+    passenger_count: int  # Estimated number of passengers
+    is_interchange: bool = False  # True if it connects multiple routes
 
 class Route(BaseModel):
     route_id: str
-    stops: List[str]
-    passenger_load: List[PassengerLoad]
-    overlaps_with: List[str]
-    geodata: List[Tuple[float, float]]  # Latitude, Longitude
+    stops: List[BusStop]
+    frequency: int  # Buses per hour
+    overlaps_with: List[str] = []  # Other routes sharing stops
 
 class TrafficData(BaseModel):
-    road: str
-    congestion_level: str
-    location: Tuple[float, float]
-
-class Constraints(BaseModel):
-    max_vehicle_congestion: str  # Example: "30%"
-    max_passenger_load: int
+    stop_name: str
+    congestion_level: float  # e.g., 0 (low) to 1 (high)
 
 class TransportInput(BaseModel):
     routes: List[Route]
     traffic_data: List[TrafficData]
-    constraints: Constraints
+    max_passenger_load: int  # Maximum capacity per bus
+
+class TransshipmentNode(BaseModel):
+    stop: str
+    location: Tuple[float, float]
+    action: str

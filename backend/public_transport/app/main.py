@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from app.api.routes import router
+from app.models.models import TransportInput, TransshipmentNode
+from app.api.optimizer import identify_transshipment_nodes
 
-app = FastAPI(title="Public Transport Optimization API")
+app = FastAPI()
 
-app.include_router(router)
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+@app.post("/optimize-transit", response_model=list[TransshipmentNode])
+def optimize_transit(data: TransportInput):
+    transshipment_nodes = identify_transshipment_nodes(data.routes, data.traffic_data, data.max_passenger_load)
+    return transshipment_nodes
