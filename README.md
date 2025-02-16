@@ -101,7 +101,6 @@ This guide provides instructions for setting up the complete Urban Mobility proj
    ```bash
    npm run dev
    ```
-   > The application will be available at http://localhost:3000 or http://localhost:5173
 
 ## Maintenance
 
