@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const passport = require('../config/passport.js');
-const { generateToken } = require('../middlewares/auth.js');
+const { generateToken, authMiddleware } = require('../middlewares/auth.js'); // Added authMiddleware
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
@@ -40,12 +40,52 @@ router.post('/login', passport.authenticate('local', { session: false }),
 // Google auth routes
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
+// Google auth callback
 router.get('/google/callback', 
   passport.authenticate('google', { session: false }),
   (req, res) => {
     const token = generateToken(req.user);
-    res.redirect(`http://localhost:5173/auth-success?token=${token}`); //redirectURL
+    
+    if (req.user.roleSelected) {
+      return res.redirect(`http://localhost:5173/dashboard?token=${token}`);
+    }
+    res.redirect(`http://localhost:5173/role-select?token=${token}`);
   }
 );
+
+
+// Update role endpoint
+router.put('/update-role', authMiddleware, async (req, res) => {
+  const { role } = req.body;
+  const validRoles = ['user', 'operator', 'partner'];
+
+  if (!validRoles.includes(role)) {
+    return res.status(400).json({ error: 'Invalid role type' });
+  }
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: req.user.sub },
+      data: { 
+        user_type: role,
+        roleSelected: true // Add this line
+      }
+    });
+
+    // Send 200 with JSON response
+    res.status(200).json({
+      success: true,
+      role: updatedUser.user_type
+    });
+
+  } catch (error) {
+    console.error('Role update error:', error);
+    res.status(500).json({ 
+      error: 'Failed to update role',
+      details: error.message 
+    });
+  }
+});
+
 
 module.exports = router;
