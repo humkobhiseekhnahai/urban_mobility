@@ -1,13 +1,18 @@
-
 import './index.css'
-import { BrowserRouter, Route,Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Delivery } from './pages/delivery'
 import { Dashboard } from './pages/dashboard'
 import Home from './pages/home'
 import Documentation from './pages/documentation'
-function App() {
-  
+import AuthSuccess from './pages/authSuccess'
+import Login from './pages/login'
+import RoleSelection from './pages/roleSelection'
+import Signup from './pages/signup'
+import ProtectedRoute from './components/protectedRoute'
+import Unauthorized from './pages/unauthorized'
 
+
+function App() {
   return (
     <>
       <BrowserRouter>
@@ -15,8 +20,28 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/home" element={<Home/>}/>
           <Route path="/documentation" element={<Documentation/>}/>
-          <Route path="/dashboard" element={<Dashboard/>}/>
-          <Route path="/delivery" element={<Delivery/>}/>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="/auth-success" element={<AuthSuccess />} />
+          
+          {/* Protected routes */}
+          <Route path="/dashboard" element={
+            <ProtectedRoute role={"user"|"operator"|"partner"}>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/delivery" element={
+            <ProtectedRoute role="partner">
+              <Delivery />
+            </ProtectedRoute>
+          } />
+          <Route path="/role-select" element={
+            <ProtectedRoute>
+              <RoleSelection />
+            </ProtectedRoute>
+          } />
         </Routes>
       </BrowserRouter>
     </>
