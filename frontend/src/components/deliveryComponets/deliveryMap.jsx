@@ -1,14 +1,14 @@
 // DeliveryMap.js
 import { useEffect, useRef, useState } from 'react';
-import { useRecoilValue } from 'recoil';
+import { useAtomValue } from 'jotai';
+import { markerAtom } from '../../hooks/atoms/atom';
 import tt from '@tomtom-international/web-sdk-maps';
 import '@tomtom-international/web-sdk-maps/dist/maps.css';
-import { markerSelector } from '../../hooks/atoms/atom';
 
 const DeliveryMap = () => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
-  const markers = useRecoilValue(markerSelector);
+  const markers = useAtomValue(markerAtom);
 
   useEffect(() => {
     if (!mapRef.current) {
