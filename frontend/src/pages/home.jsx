@@ -1,7 +1,6 @@
 import React from 'react'
 import Navbar_home from '../components/homeComponents/navBar_home'
 import HeroSection from '../components/homeComponents/heroSection'
-import Documentation from './documentation'
 import Features from '../components/homeComponents/features'
 import Footer from '../components/homeComponents/footer'
 
