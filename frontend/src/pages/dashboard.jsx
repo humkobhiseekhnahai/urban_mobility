@@ -162,7 +162,7 @@ export const Dashboard = () => {
   }, [fetchIncidents]);
 
   return (
-    <div className="min-h-screen w-full px-8 py-6 bg-gray-50">
+    <div className="min-h-screen w-full px-8 py-6 bg-inherit">
       <header className="grid grid-cols-3 bg-white shadow-lg p-4 rounded-lg mb-6">
         <h1 className="text-2xl font-bold">Uplyft</h1>
         <div className="flex justify-center">
