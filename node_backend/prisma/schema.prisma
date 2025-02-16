@@ -13,15 +13,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// schema.prisma
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String?
-  googleId  String?  @unique
-  user_type UserType @default(user)
-}
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  password    String?
+  googleId    String?   @unique
+  user_type   UserType  @default(user)
+  roleSelected Boolean   @default(false) 
 
 enum UserType {
   user

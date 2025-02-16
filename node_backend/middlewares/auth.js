@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
+    req.user = decoded; // Contains sub, email, user_type
     next();
   } catch (err) {
     res.status(400).json({ error: 'Invalid token' });
@@ -17,7 +17,11 @@ const authMiddleware = (req, res, next) => {
 
 const generateToken = (user) => {
   return jwt.sign(
-    { sub: user.id, email: user.email, user_type: user.user_type },
+    {
+      sub: user.id,
+      email: user.email,
+      user_type: user.user_type
+    },
     process.env.JWT_SECRET,
     { expiresIn: '1d' }
   );

@@ -23,7 +23,8 @@ module.exports = new GoogleStrategy({
         data: {
           name: profile.displayName,
           email,
-          googleId: profile.id
+          googleId: profile.id,
+          roleSelected: false
         }
       });
     } else if (!user.googleId) {
