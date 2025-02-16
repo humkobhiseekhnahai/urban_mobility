@@ -1,7 +1,8 @@
+//herosection
 import React from 'react'
 import video1 from "../../assets/video1.mp4";
 import video2 from "../../assets/video2.mp4";
-import Documentation from '../../pages/documentation';
+
 
 const HeroSection = () => {
   return (

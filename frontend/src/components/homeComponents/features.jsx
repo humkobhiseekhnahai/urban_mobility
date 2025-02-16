@@ -1,3 +1,4 @@
+//features
 import React from 'react'
 import { features } from '../../constants'
 
