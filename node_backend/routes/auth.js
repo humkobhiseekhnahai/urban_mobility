@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const passport = require('../config/passport.js');
-const { generateToken, authMiddleware } = require('../middlewares/auth.js'); // Added authMiddleware
+const { generateToken, authMiddleware, isUser, isOperator, isPartner } = require('../middlewares/auth.js'); // Added authMiddleware
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
@@ -85,6 +85,25 @@ router.put('/update-role', authMiddleware, async (req, res) => {
       details: error.message 
     });
   }
+});
+
+router.get('/check-user', authMiddleware, isUser, (req, res) => {
+  res.json({ valid: true, role: 'user' });
+});
+
+router.get('/check-operator', authMiddleware, isOperator, (req, res) => {
+  res.json({ valid: true, role: 'operator' });
+});
+
+router.get('/check-partner', authMiddleware, isPartner, (req, res) => {
+  res.json({ valid: true, role: 'partner' });
+});
+
+router.get('/check-role', authMiddleware, (req, res) => {
+  res.json({ 
+    roleSelected: !!req.user.user_type, 
+    role: req.user.user_type || null
+  });
 });
 
 
