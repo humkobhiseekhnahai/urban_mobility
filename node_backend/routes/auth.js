@@ -64,8 +64,9 @@ router.put('/update-role', authMiddleware, async (req, res) => {
   }
 
   try {
+    const userId = req.user?.id || req.user?.sub;
     const updatedUser = await prisma.user.update({
-      where: { id: req.user.sub },
+      where:{ id: userId},
       data: { 
         user_type: role,
         roleSelected: true // Add this line
