@@ -27,15 +27,15 @@ const Navbar_home = () => {
             ))}
           </ul>
           <div className="hidden lg:flex justify-center space-x-12 items-center">
-            <a href="#" className="bg-gradient-to-r from-orange-500 to-orange-800 py-2 px-3 rounded-md">
-              Sign In/Register
+            <a href="login" className="bg-gradient-to-r from-orange-500 to-orange-800 py-2 px-3 rounded-md">
+              Login
             </a>
-            {/* <a
-              href="#"
+            <a
+              href="signup"
               className="bg-gradient-to-r from-orange-500 to-orange-800 py-2 px-3 rounded-md"
             >
-              Create an account
-            </a> */}
+              Register
+            </a>
           </div>
           <div className="lg:hidden md:flex flex-col justify-end">
           <button onClick={toggleNavbar}>
@@ -54,15 +54,15 @@ const Navbar_home = () => {
               ))}
             </ul>
             <div className="flex space-x-6">
-              <a href="#" className="py-2 px-3 rounded-md bg-gradient-to-r from-orange-500 to-orange-800">
-                Sign In/Register
+              <a href="login" className="py-2 px-3 rounded-md bg-gradient-to-r from-orange-500 to-orange-800">
+                Login
               </a>
-              {/* <a
-                href="#"
+              <a
+                href="signup"
                 className="py-2 px-3 rounded-md bg-gradient-to-r from-orange-500 to-orange-800"
               >
-                Create an account
-              </a> */}
+                Register
+              </a>
             </div>
           </div>
         )}
