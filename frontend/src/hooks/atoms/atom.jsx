@@ -1,7 +1,7 @@
 // atoms.js (updated for Jotai)
 import { atom } from 'jotai';
 
-export const inputAtom = atom([{ location: "", capacity: 0 }]);
+export const inputAtom = atom([{ location: "", capacity: 0, priority:"low"}]);
 
 export const markerAtom = atom((get) => {
     const input = get(inputAtom);
@@ -14,3 +14,6 @@ export const markerAtom = atom((get) => {
         )
         .filter(coords => coords.length === 2);
 });
+
+
+
