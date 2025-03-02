@@ -1,6 +1,6 @@
-// routeInput.js
 import { useAtom } from 'jotai';
 import { inputAtom } from '../../hooks/atoms/atom';
+import { PlusCircleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function RouteInput() {
   const [stops, setStops] = useAtom(inputAtom);
@@ -23,48 +23,44 @@ export default function RouteInput() {
   };
 
   return (
-    <div className="h-full p-8 bg-inherit text-white">
-      <div className="max-w-md mx-auto space-y-4">
-        <h1 className="text-2xl font-bold text-gray-100 mb-6">Route Planner</h1>
-        
-        <div className="flex flex-col items-center">
-          {stops.map((stop, index) => (
-            <div key={index} className="w-full flex flex-col items-center">
-              <div className="w-full relative group">
-                <div className="flex items-center">
-                  <input
-                    type="text"
-                    value={stop.location}
-                    onChange={(e) => handleLocationChange(index, e.target.value)}
-                    placeholder={index === 0 ? 'Starting point' : `Stop ${index}`}
-                    className="w-full pr-8 p-2 border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  {index > 0 && (
-                    <button
-                      onClick={() => removeStop(index)}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-                    >
-                      <span className="text-gray-100 hover:text-red-600 text-xl">&times;</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {index < stops.length - 1 && (
-                <div className="my-2">
-                  <span className="text-2xl text-gray-500">↓</span>
-                </div>
+    <div className="relative mt-4">
+      <div className="flex items-center space-x-4 py-4 px-4 overflow-x-auto scrollbar-thin scrollbar-track-neutral-800 scrollbar-thumb-neutral-600">
+        {stops.map((stop, index) => (
+          <div key={index} className="flex items-center shrink-0">
+            <div className="relative group">
+              <input
+                type="text"
+                value={stop.location}
+                onChange={(e) => handleLocationChange(index, e.target.value)}
+                placeholder={index === 0 ? 'Warehouse' : `Stop ${index}`}
+                className="bg-neutral-800 text-gray-200 px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48"
+              />
+              
+              {index > 0 && (
+                <button
+                  onClick={() => removeStop(index)}
+                  className="absolute -right-2 -top-2 bg-neutral-700 rounded-full p-1 hover:bg-red-500 transition-colors"
+                >
+                  <XMarkIcon className="w-4 h-4 text-white" />
+                </button>
               )}
             </div>
-          ))}
 
-          <button
-            onClick={addStop}
-            className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            Add Stop +
-          </button>
-        </div>
+            {index < stops.length - 1 && (
+              <div className="text-gray-500">
+                <span className="text-xl">→</span>
+              </div>
+            )}
+          </div>
+        ))}
+
+        <button
+          onClick={addStop}
+          className="flex items-center text-blue-500 hover:text-blue-400 transition-colors shrink-0"
+        >
+          <PlusCircleIcon className="w-6 h-6 mr-2" />
+          <span>Add Stop</span>
+        </button>
       </div>
     </div>
   );

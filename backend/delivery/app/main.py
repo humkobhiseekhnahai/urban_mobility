@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI # type: ignore
 from app.models.models import DeliveryRequest, DeliveryResponse
 from app.api.routing import optimize_route
 from app.api.loading import optimize_loading
