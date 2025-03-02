@@ -1,6 +1,6 @@
 import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Delivery } from './pages/delivery'
+import Delivery from './pages/delivery'
 import { Dashboard } from './pages/dashboard'
 import Home from './pages/home'
 import Documentation from './pages/documentation'
