@@ -1,56 +1,93 @@
-//herosection
-import React from 'react'
-import video1 from "../../assets/video1.mp4";
-import video2 from "../../assets/video2.mp4";
+import React, { useRef } from "react";
+import { motion } from "framer-motion";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Sphere } from "@react-three/drei";
+import Navbar_home from "./navBar_home";
 
+const InteractiveSphere = () => {
+  const meshRef = useRef();
+  const targetRotation = useRef({ x: 0, y: 0 });
 
-const HeroSection = () => {
+  // Ultra-smooth rotation with enhanced damping
+  useFrame(({ mouse }) => {
+    if (meshRef.current) {
+      // Calculate target rotation based on mouse position
+      targetRotation.current.x = mouse.y * 0.5;
+      targetRotation.current.y = mouse.x * 0.5;
+
+      // Apply smoother interpolation (lower factor = smoother but slower response)
+      meshRef.current.rotation.x += (targetRotation.current.x - meshRef.current.rotation.x) * 0.05;
+      meshRef.current.rotation.y += (targetRotation.current.y - meshRef.current.rotation.y) * 0.05;
+    }
+  });
+
   return (
-    <div className="flex flex-col items-center mt-6 lg:mt-20">
-      <h1 className="text-4xl sm:text-6xl lg:text-7xl text-center tracking-wide">
-        UPLYFT: Smarter Cities,
-        <span className="bg-gradient-to-r from-orange-500 to-red-800 text-transparent bg-clip-text">
-          {" "}
-          Better Routes
-        </span>
-      </h1>
-      <p className="mt-10 text-lg text-center text-neutral-500 max-w-4xl">
-      Empower your urban mobility and logistics with UPLYFT’s cutting-edge solutions. Optimize routes, reduce congestion, and transform cities into smarter, more efficient spaces today!
-      </p>
-      <div className="flex justify-center my-10">
-        <a
-          href="#"
-          className="bg-gradient-to-r from-orange-500 to-orange-800 py-3 px-4 mx-3 rounded-md"
-        >
-          Start for free
-        </a>
-        <a href="documentation" className="py-3 px-4 mx-3 rounded-md border">
-          Documentation
-        </a>
-      </div>
-      <div className="flex mt-10 justify-center">
-        <video
-          autoPlay
-          loop
-          muted
-          className="rounded-lg w-1/2 border border-orange-700 shadow-sm shadow-orange-400 mx-2 my-4"
-        >
-          <source src={video1} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <video
-          autoPlay
-          loop
-          muted
-          className="rounded-lg w-1/2 border border-orange-700 shadow-sm shadow-orange-400 mx-2 my-4"
-        >
-          <source src={video2} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      </div>
-    </div>
+    <mesh ref={meshRef}>
+      <sphereGeometry args={[5, 32, 32]} />
+      <meshStandardMaterial color="#ffffff" wireframe />
+    </mesh>
   );
 };
 
+const HeroSection = () => {
+  return (
+    <>
 
-export default HeroSection
+      <div className="relative flex flex-col items-center justify-center min-h-screen bg-[#000000] text-[#ffffff] overflow-hidden">
+        {/* Three.js Background Animation */}
+
+        <div className="absolute inset-0 z-0">
+          <Canvas>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
+            <InteractiveSphere />
+            <OrbitControls enableZoom={false} />
+          </Canvas>
+        </div>
+
+        {/* <!-- Navbar --> */}
+        <div class="fixed top-0 left-0 right-0 z-10">
+          <nav class="bg-transparent"> <Navbar_home /> </nav>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 text-center px-4 select-none">
+
+          <motion.h1
+            className="text-5xl md:text-7xl font-bold mb-4 tracking-wide"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+          >
+            UPLYFT: Elevate the Urban Experience
+          </motion.h1>
+          <motion.p
+            className="text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            Streamline travel, conquer chaos, and redefine city life.
+          </motion.p>
+          <motion.div
+            className="flex justify-center"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+          >
+            <motion.a
+              href="/login"
+              className="bg-[#ffffff] text-black py-3 px-8 rounded-md hover:bg-[#e5e5e5] transition-colors duration-300"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Get Started
+            </motion.a>
+          </motion.div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default HeroSection;
