@@ -1,15 +1,15 @@
 import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Delivery } from './pages/delivery'
+import Delivery from './pages/delivery'
 import { Dashboard } from './pages/dashboard'
 import Home from './pages/home'
 import Documentation from './pages/documentation'
-import AuthSuccess from './pages/authSuccess'
-import Login from './pages/login'
-import RoleSelection from './pages/roleSelection'
-import Signup from './pages/signup'
+import AuthSuccess from './pages/auth/authSuccess'
+import Login from './pages/auth/login'
+import RoleSelection from './pages/auth/roleSelection'
+import Signup from './pages/auth/signup'
 import ProtectedRoute from './components/protectedRoute'
-import Unauthorized from './pages/unauthorized'
+import Unauthorized from './pages/auth/unauthorized'
 
 
 function App() {
