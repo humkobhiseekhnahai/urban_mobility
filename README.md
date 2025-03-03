@@ -53,7 +53,7 @@ This guide provides instructions for setting up the complete Urban Mobility proj
 5. **Run the Python Backend**
    ```bash
    cd delivery
-   uvicorn main:app --reload
+   uvicorn app.main:app --reload
    ```
 
 ## Node.js Backend Setup
