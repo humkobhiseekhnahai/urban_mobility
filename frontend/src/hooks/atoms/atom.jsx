@@ -15,5 +15,5 @@ export const markerAtom = atom((get) => {
         .filter(coords => coords.length === 2);
 });
 
-
+export const apiResponseAtom = atom(null);
 
