@@ -32,11 +32,16 @@ export const collectRouteData = async (stops, markers, vehicleCapacity, numVehic
                 console.error(`Error processing stop ${index + 1}:`, error);
             }
 
+            // Capitalize priority if provided, default to "Low"
+            const priority = stop.priority 
+                ? stop.priority.charAt(0).toUpperCase() + stop.priority.slice(1).toLowerCase() 
+                : "Low";
+
             return {
                 lat: coords[0],
                 lon: coords[1],
                 address: address,
-                priority: stop.priority || "low",
+                priority: priority,
                 load_weight: stop.capacity || 0
             };
         })
@@ -59,6 +64,6 @@ export const collectRouteData = async (stops, markers, vehicleCapacity, numVehic
         delivery_locations: deliveryLocations.filter(Boolean),
         num_vehicles: numVehicles || 1,
         vehicle_capacity: vehicleCapacity || 0,
-        real_time_data: realTimeData
+        real_time_data: realTimeData // Fixed: no array wrapper
     };
 };
