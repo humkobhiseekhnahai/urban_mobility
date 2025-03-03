@@ -8,11 +8,34 @@ import user4 from "../assets/profile-pictures/user4.jpg";
 import user5 from "../assets/profile-pictures/user5.jpg";
 import user6 from "../assets/profile-pictures/user6.jpg";
 
+
+export const founders = [
+  {
+    name: "Pratham Sharma",
+    image: user1,
+    bio: "Tech visionary with 10+ years in logistics optimization. Passionate about building sustainable transportation solutions."
+  },
+  {
+    name: "Aman Raj",
+    image: user2,
+    bio: "Full-stack architect specializing in AI-driven route optimization. Loves turning complex problems into elegant code."
+  },
+  {
+    name: "Abhinav Singh",
+    image: user3,
+    bio: "Operations expert focused on scalable infrastructure. Believes in technology that serves real-world needs."
+  },
+  {
+    name: "Kabeer Arora",
+    image: user4,
+    bio: "User experience strategist driven by human-centered design. Advocates for accessible mobility solutions."
+  }
+];
+
 export const navItems = [
+  { label: "Home", href: "#" },
   { label: "Features", href: "#" },
-  { label: "Workflow", href: "#" },
-  { label: "Pricing", href: "#" },
-  { label: "Testimonials", href: "#" },
+  { label: "About Us", href: "#" },
 ];
 
 export const testimonials = [
@@ -41,7 +64,7 @@ export const testimonials = [
     text: "Working with the team at XYZ Company was a game-changer for our project. Their attention to detail and innovative solutions helped us achieve our goals faster than we thought possible. We are grateful for their expertise and professionalism!",
   },
   {
-    user: "Michael Wilson",
+    user: "Akshat Saini",
     company: "Visionary Creations",
     image: user5,
     text: "I am amazed by the level of professionalism and dedication shown by the team. They were able to exceed our expectations and deliver outstanding results.",
@@ -118,33 +141,33 @@ export const checklistItems = [
 
 export const pricingOptions = [
   {
-    title: "Free",
-    price: "$0",
+    title: "User",
+    // price: "$0",
     features: [
-      "Private board sharing",
-      "5 Gb Storage",
-      "Web Analytics",
-      "Private Mode",
+      "Dashboard Access",
+      "Interactive Heatmap",
+      "Weather Updates",
+      "Live Traffic Incidents",
     ],
   },
   {
-    title: "Pro",
-    price: "$10",
+    title: "Delivery Partner",
+    // price: "$10",
     features: [
-      "Private board sharing",
-      "10 Gb Storage",
-      "Web Analytics (Advance)",
-      "Private Mode",
+      "Dashboard Access",
+      "Shipment Tracking",
+      "Route Optimization",
+      "Fleet Management",
     ],
   },
   {
-    title: "Enterprise",
-    price: "$200",
+    title: "Bus Operator",
+    // price: "$200",
     features: [
-      "Private board sharing",
-      "Unlimited Storage",
-      "High Performance Network",
-      "Private Mode",
+      "Dashboard Access",
+      "Bus timetables",
+      "Route Optimization",
+      "Transhipment Nodes",
     ],
   },
 ];
@@ -152,23 +175,18 @@ export const pricingOptions = [
 export const resourcesLinks = [
   { href: "#", text: "Getting Started" },
   { href: "#", text: "Documentation" },
-  { href: "#", text: "Tutorials" },
-  { href: "#", text: "API Reference" },
-  { href: "#", text: "Community Forums" },
+
 ];
 
 export const platformLinks = [
   { href: "#", text: "Features" },
   { href: "#", text: "Supported Devices" },
-  { href: "#", text: "System Requirements" },
-  { href: "#", text: "Downloads" },
-  { href: "#", text: "Release Notes" },
+  
+
 ];
 
 export const communityLinks = [
   { href: "#", text: "Events" },
   { href: "#", text: "Meetups" },
-  { href: "#", text: "Conferences" },
-  { href: "#", text: "Hackathons" },
-  { href: "#", text: "Jobs" },
+ 
 ];
