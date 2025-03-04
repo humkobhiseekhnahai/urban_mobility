@@ -16,6 +16,7 @@ export const Delivery_new = () => {
   const [error, setError] = useState(null);
   const [isOptimized, setIsOptimized] = useState(false); // New state
   const [apiResponse, setApiResponse] = useAtom(apiResponseAtom);
+  const [routeData, setRouteData] = useState(null); // State to hold route data
 
   const stops = useAtomValue(inputAtom);
   const markers = useAtomValue(markerAtom);
@@ -26,16 +27,18 @@ export const Delivery_new = () => {
       setError(null);
       setApiResponse(null);
 
-      const routeData = await collectRouteData(
+      const data = await collectRouteData(
         stops,
         markers,
         totalCapacity,
         numberOfVehicles
       );
 
+      setRouteData(data); // Store route data in state
+
       const response = await axios.post(
         'http://127.0.0.1:8000/optimize_delivery?method=ga',
-        routeData,
+        data,
         {
           headers: { 'Content-Type': 'application/json' },
         }
@@ -129,6 +132,23 @@ export const Delivery_new = () => {
             transition={{ duration: 0.5, delay: 0.6 }}
           >
             <Inventory />
+          </motion.div>
+
+          {/* Route Data Display */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.7 }}
+            className="my-6"
+          >
+            {routeData && (
+              <div className="text-white">
+                <h2 className="text-lg font-light mb-2">Route Data:</h2>
+                <pre className="bg-neutral-800 p-4 rounded-lg">
+                  {JSON.stringify(routeData, null, 2)}
+                </pre>
+              </div>
+            )}
           </motion.div>
 
           {/* Optimize Button */}
