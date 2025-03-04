@@ -54,7 +54,8 @@ const Navbar_home = () => {
           animate={controls}
           exit={{ y: -100 }}
         >
-          <div className="container px-4 mx-auto relative lg:text-base bg-white/10 backdrop-blur-3xl drop-shadow-xl rounded-4xl mt-2">
+          <div className='flex justify-center mx-10'>
+          <div className="container px-4 relative lg:text-base bg-white/10 backdrop-blur-3xl drop-shadow-xl rounded-4xl mt-2">
             <div className="flex justify-between items-center">
               <motion.div className="flex items-center flex-shrink-0">
                 <motion.img
@@ -171,6 +172,7 @@ const Navbar_home = () => {
                 </>
               )}
             </AnimatePresence>
+          </div>
           </div>
         </motion.nav>
       )}
