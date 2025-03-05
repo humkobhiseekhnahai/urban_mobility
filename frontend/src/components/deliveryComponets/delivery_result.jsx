@@ -3,17 +3,31 @@ import { useAtomValue } from 'jotai';
 import { apiResponseAtom, startingLocationAtom } from '../../hooks/atoms/atom';
 import TruckLoadingBar from './TruckLoadingBar';
 import RouteMap from './routeDeliveryMap';
+import { getRouteCoordinates } from '../../lib/getRouteCoordinates';
 
 const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => {
     const apiResponse = useAtomValue(apiResponseAtom);
-    const startingLocation = useAtomValue(startingLocationAtom); // e.g., { lat: 17.385, lon: 78.4867 }
+    const startingLocation = useAtomValue(startingLocationAtom); // e.g., { lat: 12.9784, lon: 77.6419 }
 
-    // Return null if no API response
     if (!apiResponse) return null;
 
     const { optimized_routes, loading_plan } = apiResponse;
 
-    // Create a map of items by location for weight and address lookup
+    // Parse startingLocation
+    let parsedStartingLocation;
+    if (typeof startingLocation === 'string') {
+        const [lon, lat] = startingLocation.split(',').map(Number);
+        parsedStartingLocation = { lat, lon, address: 'Warehouse' };
+    } else if (startingLocation && typeof startingLocation === 'object' && 'lat' in startingLocation && 'lon' in startingLocation) {
+        parsedStartingLocation = { ...startingLocation, address: 'Warehouse' };
+    } else {
+        console.error('Invalid startingLocation:', startingLocation);
+        return null;
+    }
+
+    const routeData = getRouteCoordinates(startingLocation,apiResponse);
+    console.log(routeData)
+    // Create itemMap for weight and address lookup
     const itemMap = {};
     loading_plan.forEach((bin) => {
         bin.items.forEach((item) => {
@@ -22,33 +36,38 @@ const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => 
         });
     });
 
-    // Since backend returns only stops, prepend starting location to each route
-    const fullRoutes = optimized_routes.map((route) => [startingLocation, ...route]);
+    // Construct fullRoutes with addresses
+    const fullRoutes = optimized_routes.map((route) => [
+        parsedStartingLocation,
+        ...route.map((point) => {
+            const key = `${point.lat},${point.lon}`;
+            const item = itemMap[key];
+            return { ...point, address: item ? item.address : 'Unknown' };
+        }),
+    ]);
 
-    // Limit the number of routes to numberOfVehicles
     const limitedRoutes = fullRoutes.slice(0, numberOfVehicles);
 
     // Calculate total weight for each route (exclude starting location)
     const routeWeights = limitedRoutes.map((route) => {
         let totalWeight = 0;
         route.forEach((point, index) => {
-            const key = `${point.lat},${point.lon}`;
-            // Skip the starting location (first point in each route)
-            if (index > 0 && itemMap[key]) {
-                totalWeight += itemMap[key].weight;
+            if (index > 0) { // Skip starting location
+                const key = `${point.lat},${point.lon}`;
+                if (itemMap[key]) {
+                    totalWeight += itemMap[key].weight;
+                }
             }
         });
         return totalWeight;
     });
 
-    // Scroll to top when component mounts
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
     return (
         <div className="max-w-6xl mx-auto px-4 py-8 bg-neutral-900 text-gray-200 min-h-screen">
-            {/* Header Section */}
             <div className="flex justify-between items-center mb-8">
                 <h1 className="text-2xl font-light">Optimized Delivery Routes</h1>
                 <button
@@ -59,18 +78,18 @@ const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => 
                 </button>
             </div>
 
-            {/* Warning if routes exceed numberOfVehicles */}
             {optimized_routes.length > numberOfVehicles && (
                 <div className="mb-6 p-4 bg-yellow-600 text-white rounded-lg">
                     Warning: The backend returned {optimized_routes.length} routes, but only {numberOfVehicles} vehicle(s) are specified. Displaying the first {numberOfVehicles} route(s).
                 </div>
             )}
 
-            {/* Truck Cards with Maps */}
             <div className="grid grid-cols-1 gap-8">
                 {limitedRoutes.map((route, index) => {
                     const totalWeight = routeWeights[index];
-                    const percentage = totalCapacity > 0 ? (totalWeight / totalCapacity) * 100 : 0;
+                    const percentage = totalCapacity > 0
+                        ? Math.min((totalWeight / totalCapacity) * 100, 100)
+                        : 0;
 
                     return (
                         <div
@@ -80,7 +99,6 @@ const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => 
                             <div className="p-6">
                                 <h2 className="text-xl font-light mb-4">Vehicle {index + 1}</h2>
                                 <div className="flex flex-col md:flex-row gap-6">
-                                    {/* Truck Visualization and Route Details */}
                                     <div className="w-full md:w-1/2 space-y-4">
                                         <div>
                                             <h3 className="text-lg font-light mb-2">Current Truck Capacity</h3>
@@ -92,20 +110,14 @@ const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => 
                                         <div>
                                             <h3 className="text-lg font-light mb-2">Route Stops</h3>
                                             <ul className="list-disc list-inside text-gray-400 space-y-1">
-                                                {route.map((point, idx) => {
-                                                    const key = `${point.lat},${point.lon}`;
-                                                    const item = itemMap[key];
-                                                    const label = idx === 0 ? 'Warehouse' : (item ? item.address : `Lat: ${point.lat}, Lon: ${point.lon}`);
-                                                    return <li key={idx}>{label}</li>;
-                                                })}
+                                                {route.map((point, idx) => (
+                                                    <li key={idx}>{point.address || `Lat: ${point.lat}, Lon: ${point.lon}`}</li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>
-                                    {/* Map for this Route */}
-                                    <div className="w-full md:w-1/2 h-80">
-                                        <RouteMap
-                                            route={route}
-                                        />
+                                    <div className="w-full md:w-1/2">
+                                        <RouteMap route={routeData[index]} />
                                     </div>
                                 </div>
                             </div>

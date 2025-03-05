@@ -41,7 +41,7 @@ export default function RouteInput({ attemptedOptimize }) {
               type="text"
               value={startingLocation}
               onChange={(e) => handleStartLocationChange(e.target.value)}
-              placeholder="Warehouse (e.g., 40.7128,-74.0060)"
+              placeholder="Warehouse"
               className={`bg-neutral-800 text-gray-200 px-2 md:px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-36 md:w-48 text-sm md:text-base ${
                 attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''
               }`}
