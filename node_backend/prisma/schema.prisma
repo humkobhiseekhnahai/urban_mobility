@@ -83,3 +83,11 @@ model Trip {
   Route         Route    @relation(fields: [route_id], references: [route_id])
   Calendar      Calendar @relation(fields: [service_id], references: [service_id])
 }
+
+model SuggestedRoute {
+  id          String   @id @default(cuid())
+  source      String
+  destination String
+  coordinates String
+  createdAt   DateTime @default(now())
+}
