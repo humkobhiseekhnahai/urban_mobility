@@ -30,51 +30,56 @@ model Agency {
   agency_lang     String?
   agency_timezone String
   agency_url      String
+  Routes          Route[]
 }
 
 model Calendar {
-  service_id String @id
+  service_id String  @id
   start_date Int
   end_date   Int
-  monday     Int // 1 = true, 0 = false (adjusting for JSON format)
-  tuesday    Int
-  wednesday  Int
-  thursday   Int
-  friday     Int
-  saturday   Int
-  sunday     Int
+  monday     Boolean
+  tuesday    Boolean
+  wednesday  Boolean
+  thursday   Boolean
+  friday     Boolean
+  saturday   Boolean
+  sunday     Boolean
+  Trips      Trip[]
 }
 
-model Stops {
-  stop_id             String  @id
+model Route {
+  route_id   String  @id
+  short_name String
+  long_name  String
+  route_desc String?
+  text_color String?
+  type       Int
+  url        String?
+  agency_id  String
+  Agency     Agency  @relation(fields: [agency_id], references: [agency_id])
+  Trips      Trip[]
+}
+
+model Stop {
+  stop_id             String   @id
   stop_name           String
-  stop_lat            Float
-  stop_lon            Float
+  stop_lat            String
+  stop_lon            String
   stop_code           String?
   stop_desc           String?
   stop_timezone       String?
   stop_url            String?
-  wheelchair_boarding String?
+  wheelchair_boarding Boolean?
   zone_id             String?
 }
 
-model Trips {
-  trip_id       Int     @id
-  trip_headsign String?
-  routeId       String  @map("route_id")
+model Trip {
+  trip_id       Int      @id
+  trip_headsign String
+  route_id      String
   direction_id  Int
   service_id    String
   shape_id      String?
-}
-
-model Routes {
-  id         String  @id @default(uuid())
-  shortName  String
-  longName   String
-  routeColor String? @map("route_color") // Maps `route_color` from JSON
-  routeDesc  String? @map("route_desc") // Maps `route_desc` from JSON
-  textColor  String? @map("textColor") // Maps `textColor` from JSON
-  type       Int     @map("type") // Maps `type` from JSON
-  url        String? @map("url") // Maps `url` from JSON
-  agencyId   String  @map("agencyId") // Maps `agencyId` from JSON
+  Route         Route    @relation(fields: [route_id], references: [route_id])
+  Calendar      Calendar @relation(fields: [service_id], references: [service_id])
 }
