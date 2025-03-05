@@ -51,17 +51,22 @@ const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => 
     // Calculate total weight for each route (exclude starting location)
     const routeWeights = limitedRoutes.map((route) => {
         let totalWeight = 0;
+        const visitedStops = new Set(); // Track visited stops to avoid duplicates
+    
         route.forEach((point, index) => {
             if (index > 0) { // Skip starting location
                 const key = `${point.lat},${point.lon}`;
-                if (itemMap[key]) {
+                if (itemMap[key] && !visitedStops.has(key)) {
                     totalWeight += itemMap[key].weight;
+                    visitedStops.add(key); // Mark stop as visited
                 }
             }
         });
-        return totalWeight;
+    
+        // Ensure weight does not exceed truck capacity
+        return Math.min(totalWeight, totalCapacity);
     });
-
+    
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
