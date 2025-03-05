@@ -53,6 +53,52 @@ app.get("/api/routes", async (req, res) => {
   }
 });
 
+app.get("/api/suggested-routes", async (req, res) => {
+  try {
+    const suggestedRoutes = await prisma.suggestedRoute.findMany();
+    res.json(suggestedRoutes);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch suggested routes" });
+  }
+});
+
+// Add a new suggested route
+app.post("/api/suggested-routes", async (req, res) => {
+  try {
+    const { source, destination, coordinates } = req.body;
+    if (!source || !destination || !coordinates) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    const newRoute = await prisma.suggestedRoute.create({
+      data: {
+        source,
+        destination,
+        coordinates: JSON.stringify(coordinates), // Store as JSON string
+      },
+    });
+
+    res.status(201).json(newRoute);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add suggested route" });
+  }
+});
+
+// Delete a suggested route by ID
+app.delete("/api/suggested-routes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await prisma.suggestedRoute.delete({
+      where: { id },
+    });
+
+    res.json({ message: "Suggested route deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete suggested route" });
+  }
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
