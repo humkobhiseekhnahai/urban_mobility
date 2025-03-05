@@ -2,7 +2,7 @@
   {
     "trip_headsign": "Outer Circle",
     "trip_id": 1001,
-    "routeId": "E2",
+    "route_id": "E2",
     "direction_id": 0,
     "service_id": "FULLW",
     "shape_id": null
