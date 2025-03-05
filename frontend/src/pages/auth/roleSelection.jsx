@@ -16,6 +16,7 @@ export default function RoleSelection() {
       localStorage.setItem('authToken', token);
       window.history.replaceState({}, document.title, window.location.pathname);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRoleSelect = async (role) => {
