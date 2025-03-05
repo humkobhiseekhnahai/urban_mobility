@@ -1,18 +1,15 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { useAtomValue } from 'jotai';
-import { markerAtom } from '../../hooks/atoms/atom';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 // Initialize Mapbox
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const RouteMap = () => {
+const RouteMap = ({ route }) => {
   const mapContainerRef = useRef(null);
   const mapRef = useRef(null);
   const markersRef = useRef([]);
   const [isSatellite, setIsSatellite] = useState(false);
-  const markers = useAtomValue(markerAtom);
   const routeSourceId = 'route-source';
   const routeLayerId = 'route-layer';
 
@@ -23,21 +20,25 @@ const RouteMap = () => {
   };
 
   const addRouteLayer = useCallback(async () => {
-    if (!mapRef.current || markers.length < 2) return;
+    if (!mapRef.current || !route || route.length < 2) return;
 
     try {
-      // Convert markers to [lon, lat] format
-      const coordinates = markers.map(point => [point[0], point[1]]);
-      
+      // Convert route to [lon, lat] format
+      const coordinates = route.map(point => [point[0], point[1]]);
+      const query = coordinates.map(coord => coord.join(',')).join(';');
+
       // Get directions from Mapbox API
       const response = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/${coordinates.join(';')}?geometries=geojson&access_token=${mapboxgl.accessToken}`
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${query}?geometries=geojson&access_token=${mapboxgl.accessToken}`
       );
-      
+
       if (!response.ok) throw new Error('Failed to fetch directions');
-      
+
       const data = await response.json();
-      const route = data.routes[0].geometry;
+      if (!data.routes || data.routes.length === 0) {
+        throw new Error('No routes found');
+      }
+      const routeGeometry = data.routes[0].geometry;
 
       // Remove existing route layer if it exists
       if (mapRef.current.getLayer(routeLayerId)) {
@@ -51,7 +52,7 @@ const RouteMap = () => {
         data: {
           type: 'Feature',
           properties: {},
-          geometry: route
+          geometry: routeGeometry
         }
       });
 
@@ -78,27 +79,42 @@ const RouteMap = () => {
     } catch (error) {
       console.error('Error updating route:', error);
     }
-  }, [markers, isSatellite]);
+  }, [route, isSatellite]);
 
   const updateMarkers = useCallback(() => {
-    if (!mapRef.current) return;
-
+    if (!mapRef.current || !route) return;
+  
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
-
-    // Add new markers
-    markers.forEach((coordinates, index) => {
+  
+    // Add new markers with styled popups
+    route.forEach((coordinates, index) => {
+      const popupContent = index === 0 ? 'Warehouse' : `Stop ${index}`;
+      const popupHtml = `
+        <div style="
+          background-color: ${isSatellite ? '#333' : 'white'};
+          color: ${isSatellite ? 'white' : '#1a1a1a'};
+          padding: 8px;
+          border-radius: 4px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+          font-size: 14px;
+          font-family: Arial, sans-serif;
+        ">
+          ${popupContent}
+        </div>
+      `;
+  
       const marker = new mapboxgl.Marker({
         color: isSatellite ? '#ff4444' : '#3b82f6'
       })
         .setLngLat(coordinates)
-        .setPopup(new mapboxgl.Popup().setHTML(`Location ${index + 1}`))
+        .setPopup(new mapboxgl.Popup().setHTML(popupHtml))
         .addTo(mapRef.current);
-
+  
       markersRef.current.push(marker);
     });
-  }, [markers, isSatellite]);
+  }, [route, isSatellite]);
 
   useEffect(() => {
     if (!mapContainerRef.current) return;
@@ -107,7 +123,7 @@ const RouteMap = () => {
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: STYLE_URLS.streets,
-      center: [77.5946, 12.9716],
+      center: [77.5946, 12.9716], // Default center
       zoom: 11
     });
 
@@ -132,7 +148,7 @@ const RouteMap = () => {
     if (!mapRef.current) return;
 
     const newStyle = isSatellite ? STYLE_URLS.satellite : STYLE_URLS.streets;
-    
+
     mapRef.current.once('styledata', () => {
       updateMarkers();
       addRouteLayer();
@@ -146,7 +162,7 @@ const RouteMap = () => {
       updateMarkers();
       addRouteLayer();
     }
-  }, [markers]);
+  }, [route]);
 
   return (
     <div className="relative w-full h-full">
