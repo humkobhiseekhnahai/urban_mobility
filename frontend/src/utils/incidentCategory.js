@@ -1,0 +1,16 @@
+export const IncidentCategory = {
+  0: ["Unknown", 1],
+  1: ["Accident", 2],
+  2: ["Fog", 1],
+  3: ["Dangerous Conditions", 2],
+  4: ["Rain", 1],
+  5: ["Ice", 1],
+  6: ["Jam", 1],
+  7: ["Lane Closed", 2],
+  8: ["Road Closed", 2],
+  9: ["Road Works", 1],
+  10: ["Wind", 1],
+  11: ["Flooding", 1],
+  13: ["Cluster (Multiple Categories)", 2],
+  14: ["Broken Down Vehicle", 1],
+};
