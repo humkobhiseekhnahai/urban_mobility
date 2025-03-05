@@ -3,7 +3,7 @@ import fs from "fs";
 
 const prisma = new PrismaClient();
 
-// Function to read JSON safely
+// Read JSON safely
 const readJson = (filePath) => {
   try {
     const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
@@ -11,53 +11,74 @@ const readJson = (filePath) => {
     return data;
   } catch (err) {
     console.error(`❌ Error reading ${filePath}:`, err.message);
-    return []; // Return empty array to avoid breaking createMany()
+    return [];
   }
 };
+
+// Transform Calendar Data
+const transformCalendarData = (data) =>
+  data.map((entry) => ({
+    ...entry,
+    monday: !!entry.monday,
+    tuesday: !!entry.tuesday,
+    wednesday: !!entry.wednesday,
+    thursday: !!entry.thursday,
+    friday: !!entry.friday,
+    saturday: !!entry.saturday,
+    sunday: !!entry.sunday,
+  }));
+
+// Validate and Fix Route Data
+const validateRoutes = (data) =>
+  data
+    .filter((route) => route.route_id) // Remove null IDs
+    .map((route) => ({
+      ...route,
+      text_color: route.textColor || null, // Fix key mismatch
+    }));
 
 async function main() {
   try {
     console.log("🚀 Starting Database Seeding...");
 
-    // Load data
+    // Load Data
     const agencyData = readJson("prisma/data/agency.json");
-    const calendarData = readJson("prisma/data/calendar.json"); // Fixed typo
+    const calendarData = readJson("prisma/data/calendar.json");
     const stopsData = readJson("prisma/data/stops.json");
     const tripsData = readJson("prisma/data/trips.json");
-    const routesData = readJson("prisma/data/routes.json");
+    const routesData = validateRoutes(readJson("prisma/data/routes.json")); // Fixed
 
-    console.log("🗑️  Deleting existing records...");
+    console.log("🗑️ Deleting existing records...");
 
-    // Delete existing records in order (to avoid FK constraint issues)
     await prisma.$transaction([
-      prisma.trips.deleteMany(),
-      prisma.routes.deleteMany(),
-      prisma.stops.deleteMany(),
+      prisma.trip.deleteMany(),
+      prisma.route.deleteMany(),
+      prisma.stop.deleteMany(),
       prisma.calendar.deleteMany(),
       prisma.agency.deleteMany(),
     ]);
 
     console.log("✅ Existing records deleted.");
 
-    // Insert new data (only if data is available)
+    // Insert Function
     const insertData = async (model, data, name) => {
       if (data.length) {
         try {
           await prisma[model].createMany({ data });
           console.log(`✅ Inserted ${data.length} records into ${name}`);
         } catch (err) {
-          console.error(`❌ Error inserting data into ${name}:`, err.message);
+          console.error(`❌ Error inserting into ${name}:`, err.message);
         }
       } else {
-        console.warn(`⚠️ No data found for ${name}, skipping insertion.`);
+        console.warn(`⚠️ No data for ${name}, skipping.`);
       }
     };
 
     await insertData("agency", agencyData, "Agency");
-    await insertData("calendar", calendarData, "Calendar");
-    await insertData("stops", stopsData, "Stops");
-    await insertData("trips", tripsData, "Trips");
-    await insertData("routes", routesData, "Routes");
+    await insertData("calendar", transformCalendarData(calendarData), "Calendar");
+    await insertData("stop", stopsData, "Stops");
+    await insertData("route", routesData, "Routes");
+    await insertData("trip", tripsData, "Trips"); // Now Trips will have valid route_ids
 
     console.log("🎉 Database seeding completed!");
   } catch (error) {
