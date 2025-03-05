@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import video from "../assets/video1.mp4";
+import video from "../../assets/video1.mp4";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -55,6 +55,7 @@ export default function Login() {
       localStorage.setItem('authToken', token);
       navigate('/role-select');
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -208,7 +209,7 @@ export default function Login() {
             </div>
 
             <p className="mt-3 text-center text-gray-400 text-xs sm:text-sm">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link to="/signup" className="text-orange-400 hover:text-orange-300 font-medium">
                 Sign up
               </Link>

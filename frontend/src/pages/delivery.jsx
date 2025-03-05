@@ -1,45 +1,79 @@
-// Delivery.js
-import RouteInput from "../components/deliveryComponets/routeInput"
-import { NavBar } from "../components/navBar"
-import DeliveryMap from "../components/deliveryComponets/deliveryMap"
-import { Inventory } from "../components/deliveryComponets/inventory"
+import { useState } from 'react';
+import { NavBarComponent } from '../components/navBarComponent';
+import { Delivery_new } from '../components/deliveryComponets/delivery_main';
+import { motion, AnimatePresence } from 'framer-motion';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
-export const Delivery = () => {
+function Delivery() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <div className="w-screen min-h-screen bg-neutral-900 overflow-x-hidden">
-      <div className="max-w-6xl mx-auto min-h-screen w-full px-4">
-        <NavBar />
+    <div className="flex min-h-screen bg-neutral-900">
+      {/* Sidebar for larger screens */}
+      <div className="hidden md:block fixed top-0 left-0 h-full w-56 bg-neutral-900">
+        <NavBarComponent />
+      </div>
 
-        {/* Map Section */}
-        <div className="flex flex-col md:flex-row justify-between items-stretch m-5 gap-4">
-          <RouteInput />
-          <div className="text-white border-2 flex-grow h-fit w-full">
-            <DeliveryMap />
-          </div>
-        </div>
+      {/* Burger menu for smaller screens */}
+      <div className="md:hidden">
+        <button
+          onClick={() => setIsMenuOpen(true)}
+          className="fixed top-4 right-4 z-50 p-2 rounded-md bg-neutral-800 text-white"
+        >
+          <svg
+            className="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
 
-        {/* Inputs */}
-        <div className="flex justify-center mt-10">
-          <input
-            disabled
-            placeholder="Sample Vehicle"
-            className="text-white text-center border-2 p-2 m-2 mr-5 cursor-not-allowed"
-          />
-          <input
-            type="number"
-            placeholder="Enter capacity*"
-            className="text-white text-center border-2 p-2 m-2"
-          />
-        </div>
+        {/* Animated Mobile Menu */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black bg-opacity-50 z-50"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <motion.div
+                initial={{ x: -256 }}
+                animate={{ x: 0 }}
+                exit={{ x: -256 }}
+                transition={{ type: 'tween', duration: 0.3 }}
+                className="fixed top-0 left-0 h-full w-64 bg-neutral-900 z-50"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <NavBarComponent />
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  className="absolute top-4 right-4 text-white"
+                >
+                  <XMarkIcon className="w-6 h-6" />
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
-        <Inventory />
-        
-        <div className="flex justify-center items-center m-2">
-          <button className="text-white bg-blue-500 py-3 px-20 rounded-md">
-            OPTIMIZE
-          </button>
-        </div>
+      {/* Main Content */}
+      <div className="flex-1 ml-0 md:ml-56">
+        <Delivery_new />
       </div>
     </div>
-  )
+  );
 }
+
+export default Delivery;

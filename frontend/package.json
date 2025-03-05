@@ -10,20 +10,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.0.1",
     "@tomtom-international/web-sdk-maps": "^6.25.0",
     "@tomtom-international/web-sdk-services": "^6.25.0",
+    "axios": "^1.8.1",
     "babel-plugin-react-compiler": "^19.0.0-beta-30d8a17-20250209",
+    "framer-motion": "^12.4.7",
+    "jotai": "^2.12.0",
     "leaflet": "^1.9.4",
     "leaflet.heat": "^0.2.0",
-    "jotai": "^2.12.0",
     "lucide-react": "^0.475.0",
-    "mapbox-gl": "^3.9.4",
+    "mapbox-gl": "^3.10.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-error-boundary": "^5.0.0",
     "react-leaflet": "^5.0.0",
     "react-map-gl": "^8.0.1",
     "react-router-dom": "^7.1.4",
+    "tailwind-scrollbar": "^4.0.1",
     "tailwindcss": "^4.0.1"
   },
   "devDependencies": {
