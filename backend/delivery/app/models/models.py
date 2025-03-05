@@ -11,7 +11,7 @@ class DeliveryLocation(BaseModel):
     load_weight: float
 
 class RealTimeData(BaseModel):
-    traffic: str
+    traffic: Dict[str, str]  # Change from `str` to `Dict[str, str]`
     road_closures: List[str]
 
 class DeliveryRequest(BaseModel):
