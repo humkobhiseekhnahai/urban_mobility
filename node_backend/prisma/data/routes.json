@@ -1,13 +1,12 @@
 [
   {
-    "route_color": "E2",
+    "route_id": "E2", 
     "route_desc": "Outer Circle",
-    "route_id": null,
-    "longName": "Outer Circle",
-    "shortName": "E2",
-    "textColor": null,
+    "long_name": "Outer Circle",
+    "short_name": "E2",
+    "text_color": null,
     "type": 3,
     "url": null,
-    "agencyId": "BMTC"
+    "agency_id": "BMTC"
   }
 ]
