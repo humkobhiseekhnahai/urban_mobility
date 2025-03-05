@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,17 +8,73 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(cuid())
-  name        String
-  email       String    @unique
-  password    String?
-  googleId    String?   @unique
-  user_type   UserType  @default(user)
-  roleSelected Boolean   @default(false) 
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  password     String?
+  googleId     String?  @unique
+  user_type    UserType @default(user)
+  roleSelected Boolean  @default(false)
 }
 
 enum UserType {
   user
   operator
   partner
+}
+
+model Agency {
+  agency_id       String  @id
+  agency_name     String
+  agency_phone    String?
+  agency_lang     String?
+  agency_timezone String
+  agency_url      String
+}
+
+model Calendar {
+  service_id String @id
+  start_date Int
+  end_date   Int
+  monday     Int // 1 = true, 0 = false (adjusting for JSON format)
+  tuesday    Int
+  wednesday  Int
+  thursday   Int
+  friday     Int
+  saturday   Int
+  sunday     Int
+}
+
+model Stops {
+  stop_id             String  @id
+  stop_name           String
+  stop_lat            Float
+  stop_lon            Float
+  stop_code           String?
+  stop_desc           String?
+  stop_timezone       String?
+  stop_url            String?
+  wheelchair_boarding String?
+  zone_id             String?
+}
+
+model Trips {
+  trip_id       Int     @id
+  trip_headsign String?
+  routeId       String  @map("route_id")
+  direction_id  Int
+  service_id    String
+  shape_id      String?
+}
+
+model Routes {
+  id         String  @id @default(uuid())
+  shortName  String
+  longName   String
+  routeColor String? @map("route_color") // Maps `route_color` from JSON
+  routeDesc  String? @map("route_desc") // Maps `route_desc` from JSON
+  textColor  String? @map("textColor") // Maps `textColor` from JSON
+  type       Int     @map("type") // Maps `type` from JSON
+  url        String? @map("url") // Maps `url` from JSON
+  agencyId   String  @map("agencyId") // Maps `agencyId` from JSON
 }
