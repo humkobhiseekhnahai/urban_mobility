@@ -24,7 +24,7 @@ const Testimonials = () => {
         What People are saying
       </motion.h2>
 
-      <div className="relative h-[600px] overflow-hidden">
+      <div className="relative h-[500px] overflow-hidden">
         <motion.div
           className="flex absolute top-0 left-0"
           animate={{

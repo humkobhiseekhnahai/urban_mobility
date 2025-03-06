@@ -13,29 +13,30 @@ export const founders = [
   {
     name: "Pratham Sharma",
     image: user1,
-    bio: "Tech visionary with 10+ years in logistics optimization. Passionate about building sustainable transportation solutions."
+    bio: "Lead Full-Stack Developer - Architecting AI-integrated enterprise solutions with modern tech stacks"
   },
   {
     name: "Aman Raj",
     image: user2,
-    bio: "Full-stack architect specializing in AI-driven route optimization. Loves turning complex problems into elegant code."
+    bio: "Front-End Engineer - Crafting responsive interfaces using ReactJs with focus on user experience"
   },
   {
     name: "Abhinav Singh",
     image: user3,
-    bio: "Operations expert focused on scalable infrastructure. Believes in technology that serves real-world needs."
+    bio: "Back-End Specialist - Designing scalable REST APIs and database architectures with cloud integration"
   },
   {
     name: "Kabeer Arora",
     image: user4,
-    bio: "User experience strategist driven by human-centered design. Advocates for accessible mobility solutions."
+    bio: "Frontend Developer - Building cross-platform apps focused on clean code practices and intuitive UX"
   }
 ];
 
 export const navItems = [
-  { label: "Home", href: "#" },
-  { label: "Features", href: "#" },
-  { label: "About Us", href: "#" },
+  { label: "Home", href: "#home" },
+  { label: "Features", href: "#features" },
+  { label: "Documentation", href: "Documentation" },
+  { label: "About Us", href: "#about" },
 ];
 
 export const testimonials = [
@@ -82,37 +83,37 @@ export const features = [
     icon: <Route />,
     text: "Dynamic Route Optimization",
     description:
-      "Leverages AI algorithms (Genetic Algorithm + TSP) to generate fuel-efficient routes in real-time, adjusting for traffic, weather, and road closures. Reduces delivery time by 30% and fuel costs by 20%.",
+      "AI-Optimized Routing: Reduces delivery time by 30% and fuel costs by 20% using Genetic Algorithm + TSP.",
   },
   {
     icon: <TrafficCone />,
     text: "AI-Powered Traffic Heatmaps",
     description:
-      "Identifies traffic hotspots using DBSCAN clustering and time-series analysis. Helps city planners reroute traffic during peak hours, reducing congestion by 25%.",
+      "Smart Traffic Management: DBSCAN clustering and time-series analysis cut congestion by 25%.",
   },
   {
     icon: <TriangleAlert />,
     text: "Accident Hotspot Detection",
     description:
-      "Maps accident-prone zones using spatial clustering and historical data. Recommends infrastructure upgrades (e.g., speed bumps, traffic lights) to reduce accidents by 40% in high-risk areas.",
+      "Accident Risk Mapping: Spatial analysis lowers high-risk accidents by 40%.",
   },
   {
     icon: <Weight />,
     text: "Loading Sequence Planner",
     description:
-      " Uses bin-packing algorithms to organize goods by delivery priority and fragility, minimizing unloading steps and product damage. Ensures 95% truck space utilization.",
+      "Optimized Load Distribution: Bin-packing ensures 95% truck space utilization and minimal product damage",
   },
   {
     icon: <Bus />,
     text:  "Public Transport Load Balancing",
     description:
-      "Creates transshipment nodes using PageRank and spatial clustering to redistribute passengers across buses/metros. Reduces overcrowding by 35% during peak hours.",
+      "Efficient Passenger Flow: PageRank-based transshipment reduces peak-hour overcrowding by 35%.",
   },
   {
     icon: <LayoutDashboard />,
     text: "Interactive Dashboard",
     description:
-      "A user-friendly interface that visualizes key metrics, traffic patterns, and optimization insights with interactive charts and heatmaps. Provides real-time monitoring and weather updates.",
+      "Real-Time Insights: Interactive dashboard with live traffic, weather, and optimization analytics.",
   },
 ];
 
@@ -141,33 +142,30 @@ export const checklistItems = [
 
 export const pricingOptions = [
   {
-    title: "User",
-    // price: "$0",
+    title: "Personal User",
     features: [
-      "Dashboard Access",
-      "Interactive Heatmap",
-      "Weather Updates",
-      "Live Traffic Incidents",
+     "🌐 Real-time Traffic Heatmap",      
+  "🌦️ Live Weather Integration",       
+  "🚨 Incident Alert System",         
+  "🔄 Multi-device Dashboard Sync" 
     ],
   },
   {
     title: "Delivery Partner",
-    // price: "$10",
     features: [
-      "Dashboard Access",
-      "Shipment Tracking",
-      "Route Optimization",
-      "Fleet Management",
+      "📦 Smart Package Tracking",
+      "🛣️ AI Route Optimization", 
+      "📊 Fleet Analytics Suite",
+      "🔒 Secure Delivery Auth"
     ],
   },
   {
     title: "Bus Operator",
-    // price: "$200",
     features: [
-      "Dashboard Access",
-      "Bus timetables",
-      "Route Optimization",
-      "Transhipment Nodes",
+      "📊 Dashboard Access",
+      "🕒 Bus Timetables",
+      "🔄 Route Optimization",
+      "🚏 Transhipment Nodes"
     ],
   },
 ];

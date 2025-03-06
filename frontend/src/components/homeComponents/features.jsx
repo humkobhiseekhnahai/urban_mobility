@@ -5,7 +5,7 @@ import { features } from '../../constants';
 const Features = () => {
   return (
     <motion.div
-      className="relative mt-20 border-b border-[#1a1a2e] min-h-[800px]"
+      className="relative mt-20 min-h-[600px]"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}

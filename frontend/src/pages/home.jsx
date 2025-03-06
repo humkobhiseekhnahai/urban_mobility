@@ -11,13 +11,20 @@ import AboutUs from '../components/homeComponents/aboutUs';
 const HomePage = () => {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      <StarBackground /> {/* Fixed position, full-screen, z-index: -10 */}
-      {/* <Navbar_home /> */}
-      <HeroSection />
-      <Features />
-      <Cards />
+      <StarBackground />
+      <Navbar_home />
+      <div id="home">
+        <HeroSection />
+      </div>
+      
+        <Features />
+        <div id="features">
+        <Cards />
+      </div>
       <Testimonials />
-      <AboutUs />
+      <div id="about">
+        <AboutUs />
+      </div>
       <Footer />
     </div>
   );
