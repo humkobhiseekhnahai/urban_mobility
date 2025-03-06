@@ -2,6 +2,7 @@ import numpy as np
 import random
 from scipy.spatial.distance import euclidean
 from app.models.models import DeliveryRequest
+from app.api.routing import tsp_solver
 
 def calculate_distance(route):
     """Calculate total route distance."""
@@ -48,12 +49,18 @@ def fitness_function(population):
     
     return sorted(fitness_scores, key=lambda x: x[0])
 
-def genetic_algorithm(request: DeliveryRequest, generations=200, population_size=50, num_vehicles=2):
+def genetic_algorithm(request: DeliveryRequest, generations=200, population_size=50):
     """Optimize delivery routes using Genetic Algorithm for VRP."""
     locations = [(loc.lat, loc.lon) for loc in request.delivery_locations]
-    
+
+    # ✅ If only one vehicle, directly solve TSP instead of GA
+    if request.num_vehicles == 1:
+        return [[{"lat": lat, "lon": lon} for lat, lon in tsp_solver([(i, loc) for i, loc in enumerate(locations)])]]
+
+    # ✅ Otherwise, proceed with Genetic Algorithm
+    num_vehicles = request.num_vehicles
     if len(locations) < num_vehicles:
-        return [[{"lat": loc[0], "lon": loc[1]}] for loc in locations]  # Handle edge case
+        return [[{"lat": loc[0], "lon": loc[1]}] for loc in locations]  # Edge case handling
 
     population = create_initial_population(locations, num_vehicles, population_size)
     
