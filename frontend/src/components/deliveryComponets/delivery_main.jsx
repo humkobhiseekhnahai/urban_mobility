@@ -15,7 +15,7 @@ export const Delivery_new = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isOptimized, setIsOptimized] = useState(false);
-  const [attemptedOptimize, setAttemptedOptimize] = useState(false);
+  const [attemptedOptimize, setAttemptedOptimize] = useState(false); // Track optimization attempt
   const [apiResponse, setApiResponse] = useAtom(apiResponseAtom);
 
   const startingLocation = useAtomValue(startingLocationAtom);
@@ -32,13 +32,11 @@ export const Delivery_new = () => {
   );
   const isVehicleInfoValid = numberOfVehicles >= 1 && totalCapacity > 0;
   const isCapacitySufficient = totalCapacity * numberOfVehicles >= totalWeight;
-  // New constraint: no single delivery weight exceeds truck capacity
-  const isIndividualCapacityValid = deliveryStops.every(stop => stop.capacity <= totalCapacity);
-  const isFormValid = isStartingLocationValid && allStopsValid && isVehicleInfoValid && isCapacitySufficient && isIndividualCapacityValid;
+  const isFormValid = isStartingLocationValid && allStopsValid && isVehicleInfoValid && isCapacitySufficient;
 
   const handleOptimize = async () => {
-    setAttemptedOptimize(true);
-    if (!isFormValid) return;
+    setAttemptedOptimize(true); // Mark that optimization was attempted
+    if (!isFormValid) return; // Stop if form is invalid
 
     try {
       setLoading(true);
@@ -127,9 +125,9 @@ export const Delivery_new = () => {
             </div>
           </motion.div>
 
-          {/* Inventory - Pass totalCapacity */}
+          {/* Inventory */}
           <motion.div>
-            <Inventory attemptedOptimize={attemptedOptimize} totalCapacity={totalCapacity} />
+            <Inventory attemptedOptimize={attemptedOptimize} />
           </motion.div>
 
           {/* Optimize Button */}
@@ -138,7 +136,7 @@ export const Delivery_new = () => {
               whileTap={{ scale: 0.95 }}
               className="bg-blue-600 hover:bg-blue-700 text-white font-light py-3 px-16 rounded-lg transition-colors disabled:opacity-50"
               onClick={handleOptimize}
-              disabled={loading || !isFormValid}
+              disabled={loading || !isFormValid} // Disable unless form is valid
             >
               {loading ? (
                 <span className="flex items-center">
@@ -161,9 +159,8 @@ export const Delivery_new = () => {
               <ul className="list-disc list-inside">
                 {!isStartingLocationValid && <li>Please provide the warehouse location.</li>}
                 {!allStopsValid && <li>All delivery stops must have both location and weight greater than 0.</li>}
-                {!isVehicleInfoValid && <li>Please provide valid vehicle information (number of vehicles >= 1 and capacity > 0).</li>}
+                {!isVehicleInfoValid && <li>Please provide valid vehicle information (number of vehicles &gt;= 1 and capacity &gt; 0).</li>}
                 {!isCapacitySufficient && <li>Total vehicle capacity must be greater than or equal to the total delivery weight.</li>}
-                {!isIndividualCapacityValid && <li>No single delivery weight should exceed the truck's capacity.</li>}
               </ul>
             </div>
           )}
