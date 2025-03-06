@@ -1,14 +1,14 @@
 [
   {
     "end_date": 20201231,
-    "friday": 1,
-    "monday": 1,
-    "saturday": 1,
+    "friday": true,
+    "monday": true,
+    "saturday": true,
     "service_id": "FULLW",
     "start_date": 20150101,
-    "sunday": 1,
-    "thursday": 1,
-    "tuesday": 1,
-    "wednesday": 1
+    "sunday": true,
+    "thursday": true,
+    "tuesday": true,
+    "wednesday": true
   }
 ]
