@@ -1,0 +1,12 @@
+[
+  {
+    "route_id": "E2", 
+    "route_desc": "Outer Circle",
+    "long_name": "Outer Circle",
+    "short_name": "E2",
+    "text_color": null,
+    "type": 3,
+    "url": null,
+    "agency_id": "BMTC"
+  }
+]

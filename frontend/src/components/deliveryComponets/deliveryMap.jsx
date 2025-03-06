@@ -20,10 +20,10 @@ const DeliveryMap = () => {
     satellite: 'mapbox://styles/mapbox/satellite-v9'
   };
 
+  // Initialize the map
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialize map with default style
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: STYLE_URLS.streets,
@@ -34,6 +34,7 @@ const DeliveryMap = () => {
     // Add navigation controls
     mapRef.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
+    // Cleanup on unmount
     return () => {
       if (mapRef.current) {
         mapRef.current.remove();
@@ -42,45 +43,63 @@ const DeliveryMap = () => {
     };
   }, []);
 
+  // Update map style when satellite toggle changes
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Update map style when toggle changes
     const newStyle = isSatellite ? STYLE_URLS.satellite : STYLE_URLS.streets;
-    
+
     mapRef.current.once('styledata', () => {
-      // Re-add markers after style change
-      updateMarkers();
+      updateMarkers(); // Re-add markers after style change
     });
 
     mapRef.current.setStyle(newStyle);
   }, [isSatellite]);
 
+  // Update markers when marker data changes
   useEffect(() => {
     if (mapRef.current) {
       updateMarkers();
     }
   }, [markers]);
 
+  // Function to update markers with styled popups
   const updateMarkers = () => {
     // Clear existing markers
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
 
-    // Add new markers
+    // Add new markers with styled popups
     const bounds = new mapboxgl.LngLatBounds();
     markers.forEach((coordinates, index) => {
+      // Set popup content: "Warehouse" for the first marker, "Location X" for others
+      const popupContent = index === 0 ? 'Warehouse' : `Location ${index}`;
+      const popupHtml = `
+        <div style="
+          background-color: ${isSatellite ? '#333' : '#F5F5F5'};
+          color: ${isSatellite ? 'white' : '#1a1a1a'};
+          padding: 8px;
+          border-radius: 4px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+          font-size: 14px;
+          font-family: Arial, sans-serif;
+        ">
+          ${popupContent}
+        </div>
+      `;
+
       const marker = new mapboxgl.Marker({
         color: isSatellite ? '#ff4444' : '#3b82f6'
       })
         .setLngLat(coordinates)
-        .setPopup(new mapboxgl.Popup().setHTML(`Location ${index + 1}`))
+        .setPopup(new mapboxgl.Popup().setHTML(popupHtml))
         .addTo(mapRef.current);
 
       markersRef.current.push(marker);
       bounds.extend(coordinates);
     });
 
+    // Adjust map view to fit all markers
     if (markers.length > 0) {
       mapRef.current.fitBounds(bounds, { padding: 50, maxZoom: 15 });
     }
