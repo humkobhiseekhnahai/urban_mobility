@@ -1,11 +1,9 @@
-const dotenv = require('dotenv');
-const cors = require('cors');
+require('dotenv').config();
+const cors = require('cors')
 const express = require('express');
 const passport = require('./config/passport.js');
 const authRoutes = require('./routes/auth.js');
 const { authMiddleware } = require('./middlewares/auth.js');
-
-dotenv.config();
 
 const app = express();
 

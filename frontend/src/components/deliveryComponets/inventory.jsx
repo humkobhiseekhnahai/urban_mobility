@@ -4,7 +4,7 @@ import { deliveryStopsAtom } from '../../hooks/atoms/atom';
 import { motion } from 'framer-motion';
 import { fetchLocationName } from '../../lib/fetch_location_name';
 
-export const Inventory = ({ totalCapacity, attemptedOptimize }) => {
+export const Inventory = () => {
   const [deliveryStops, setDeliveryStops] = useAtom(deliveryStopsAtom);
   const [addresses, setAddresses] = useState([]);
 
@@ -85,7 +85,7 @@ export const Inventory = ({ totalCapacity, attemptedOptimize }) => {
                         value={stop.capacity || ''}
                         onChange={(e) => handleCapacityChange(index, e.target.value)}
                         className={`w-full bg-transparent text-gray-200 placeholder-gray-500 focus:outline-none border-b border-neutral-600 md:border-none text-xs md:text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${
-                          stop.capacity <= 0 || (totalCapacity > 0 && stop.capacity > totalCapacity) ? 'border-red-500' : ''
+                          stop.capacity <= 0 ? 'border-red-500' : ''
                         }`}
                       />
                     </td>
