@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, MapPin } from "lucide-react";
 import { Input } from "../components/dashboardComponents/Input";
 import { MapBox } from "../components/dashboardComponents/Map";
@@ -13,19 +13,76 @@ import {
   TabsBody,
   Tab,
   TabPanel,
+  Button,
   Dialog,
   DialogHeader,
   DialogBody,
-  DialogFooter,
-  Button,
+  Input as DialogInput,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Typography,
 } from "@material-tailwind/react";
 import { SuggestedList } from "../components/dashboardComponents/SuggestedRoutes/SuggestedList";
+import { routeAtom } from "../hooks/atoms/atom";
 
 export const Dashboard = () => {
+  const serverUrl = "http://localhost:8080";
+
   const location = useGeolocation();
   const [open, setIsOpen] = useState(false);
+  const [source, setSource] = useState("");
+  const [destination, setDestination] = useState("");
+  const [stops, setStops] = useState([
+    { latitude: "", longitude: "" }, // Initial stop
+  ]);
 
-  const handleOpen = () => setIsOpen(!open);
+  const [suggestedRoutes, setSuggestedRoutes] = useState([]);
+
+  const addStop = () => {
+    setStops([...stops, { latitude: "", longitude: "" }]);
+  };
+
+  const handleOpen = () => {
+    setStops([{ latitude: "", longitude: "" }]);
+    setIsOpen(!open);
+  };
+
+  const getAllSuggestedRoutes = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/api/suggested-routes`);
+      const data = await response.json();
+      setSuggestedRoutes(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const addOptimizedRoute = async () => {
+    try {
+      await fetch(`${serverUrl}/api/suggested-routes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          source: source,
+          destination: destination,
+          coordinates: stops,
+        }),
+      });
+      handleOpen();
+      alert("Route added successfully!");
+    } catch (error) {
+      alert("Failed to add route");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getAllSuggestedRoutes();
+  }, []);
 
   if (location.loading || location.error) return <LocationLoading />;
   return (
@@ -33,7 +90,7 @@ export const Dashboard = () => {
       <div className="w-full h-screen flex">
         <section className="w-[45%] h-full bg-neutral-800 border-r border-r-neutral-700">
           {/* Search */}
-          <div className="w-full h-[20%] bg-neutral-900 border-b border-b-neutral-700">
+          <div className="w-full h-[20%] bg-neutral-900 border-b border-b-neutral-70 ">
             {/* Top */}
             <section className="w-full h-1/2 flex items-center justify-center px-4 gap-3">
               <div className="w-full h-full flex items-center justify-center">
@@ -59,11 +116,16 @@ export const Dashboard = () => {
           </div>
 
           {/* Timings List */}
-          <SuggestedList />
+          <div className="w-full p-4 h-[80%] overflow-y-auto">
+            <SuggestedList routes={suggestedRoutes} />
+          </div>
         </section>
         <section className="w-[55%] h-full bg-neutral-900">
           <div className="w-full h-1/2 p-5 rounded-lg">
-            <MapBox lng={"77.5946"} lat={"12.9716"} />
+            <MapBox
+              lng={routeAtom?.coordinates?.[0].longitude || location.longitude}
+              lat={routeAtom?.coordinates?.[0].latitude || location.latitude}
+            />
           </div>
 
           {/* Open Modal Text */}
@@ -164,30 +226,108 @@ export const Dashboard = () => {
           </div>
         </section>
       </div>
-      <Dialog
-        open={open}
-        handler={handleOpen}
-        className="bg-neutral-800"
-        animate={{
-          mount: { scale: 1, y: 0 },
-          unmount: { scale: 0.9, y: -100 },
-        }}
-      >
-        <DialogHeader>Add an Optimized Route</DialogHeader>
-        <DialogBody></DialogBody>
-        <DialogFooter>
-          <Button
-            variant="text"
-            color="red"
-            onClick={handleOpen}
-            className="mr-1"
-          >
-            <span>Cancel</span>
-          </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
-            <span>Add Route</span>
-          </Button>
-        </DialogFooter>
+      <Dialog open={open} handler={handleOpen} size="md">
+        <DialogBody className="overflow-y-auto max-h-[80vh]">
+          <Card className="w-full">
+            <CardBody className="flex flex-col gap-4">
+              <Typography variant="h4" color="blue-gray">
+                Add an Optimized Route
+              </Typography>
+              <Typography
+                className="mb-3 font-normal"
+                variant="paragraph"
+                color="gray"
+              >
+                Help improve the transport network by suggesting an optimized
+                route between the source and destination.
+              </Typography>
+              <div className="flex gap-x-4">
+                <div className="w-1/2">
+                  <DialogInput
+                    label="Source"
+                    size="lg"
+                    required
+                    onChange={(e) => setSource(e.target.value)}
+                  />
+                </div>
+                <div className="w-1/2">
+                  <DialogInput
+                    label="Destination"
+                    size="lg"
+                    required
+                    onChange={(e) => setDestination(e.target.value)}
+                  />
+                </div>
+              </div>
+              <Typography
+                color="gray"
+                className="mb-3 font-bold"
+                variant="paragraph"
+              >
+                Add Stops
+              </Typography>
+              {stops.map((stop, index) => (
+                <div key={index} className="flex gap-x-4 mb-4">
+                  <div className="w-1/2">
+                    <DialogInput
+                      label="Latitude"
+                      size="lg"
+                      value={stop.latitude}
+                      onChange={(e) =>
+                        setStops(
+                          stops.map((s, i) =>
+                            i === index ? { ...s, latitude: e.target.value } : s
+                          )
+                        )
+                      }
+                      required
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <DialogInput
+                      label="Longitude"
+                      size="lg"
+                      value={stop.longitude}
+                      onChange={(e) =>
+                        setStops(
+                          stops.map((s, i) =>
+                            i === index
+                              ? { ...s, longitude: e.target.value }
+                              : s
+                          )
+                        )
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+              ))}
+
+              {/* Add Stop Button */}
+              <Button
+                variant="outlined"
+                color="blue"
+                size="sm"
+                className="w-fit"
+                onClick={addStop}
+              >
+                Add Another Stop
+              </Button>
+            </CardBody>
+            <CardFooter className="pt-0">
+              <Button variant="gradient" onClick={addOptimizedRoute} fullWidth>
+                Add Route
+              </Button>
+              <Typography
+                variant="small"
+                className="mt-4 flex justify-center font-bold"
+                onClick={handleOpen}
+              >
+                Cancel
+              </Typography>
+            </CardFooter>
+          </Card>
+        </DialogBody>
       </Dialog>
     </main>
   );
