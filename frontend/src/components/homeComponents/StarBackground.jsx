@@ -35,7 +35,7 @@ const StarBackground = () => {
             top: `${star.y}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
-            boxShadow: '0 0 15px rgba(255, 255, 255, 0.3)' // Add subtle glow
+            boxShadow: '0 0 25px rgba(255, 255, 255, 0.8)' // Add subtle glow
           }}
           initial={{
             opacity: 0,
