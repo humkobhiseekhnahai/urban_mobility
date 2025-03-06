@@ -106,9 +106,8 @@ export const Delivery_new = () => {
                   step="0.1"
                   placeholder="Enter capacity"
                   onChange={(e) => setTotalCapacity(Number(e.target.value))}
-                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 ${
-                    attemptedOptimize && totalCapacity <= 0 ? 'border-red-500' : ''
-                  }`}
+                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 ${attemptedOptimize && totalCapacity <= 0 ? 'border-red-500' : ''
+                    }`}
                 />
               </div>
               <div className="flex-1 md:max-w-xs border-b border-neutral-700 md:border-b-0 px-4 md:px-0 py-4 md:py-0">
@@ -119,9 +118,8 @@ export const Delivery_new = () => {
                   step="1"
                   placeholder="Enter quantity"
                   onChange={(e) => setNumberOfVehicles(Number(e.target.value))}
-                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 ${
-                    attemptedOptimize && numberOfVehicles < 1 ? 'border-red-500' : ''
-                  }`}
+                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 ${attemptedOptimize && numberOfVehicles < 1 ? 'border-red-500' : ''
+                    }`}
                 />
               </div>
             </div>
@@ -161,7 +159,7 @@ export const Delivery_new = () => {
               <ul className="list-disc list-inside">
                 {!isStartingLocationValid && <li>Please provide the warehouse location.</li>}
                 {!allStopsValid && <li>All delivery stops must have both location and weight greater than 0.</li>}
-                {!isVehicleInfoValid && <li>Please provide valid vehicle information (number of vehicles >= 1 and capacity > 0).</li>}
+                {!isVehicleInfoValid && <li>Please provide valid vehicle information (number of vehicles &gt;= 1 and capacity &gt; 0).</li>}
                 {!isCapacitySufficient && <li>Total vehicle capacity must be greater than or equal to the total delivery weight.</li>}
                 {!isIndividualCapacityValid && <li>No single delivery weight should exceed the truck's capacity.</li>}
               </ul>
