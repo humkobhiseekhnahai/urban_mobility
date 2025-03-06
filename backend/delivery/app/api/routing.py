@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.cluster import KMeans
 from scipy.spatial.distance import euclidean
 from itertools import permutations
-from app.models.models import DeliveryRequest, DeliveryLocation
+from app.models.models import DeliveryRequest
 
 def tsp_solver(locations):
     min_distance = float('inf')
@@ -17,14 +17,20 @@ def tsp_solver(locations):
     return list(best_route)
 
 def optimize_route(request: DeliveryRequest):
-    locations = [(loc.id, (loc.lat, loc.lon)) for loc in request.delivery_locations]  # Store IDs with coordinates
+    locations = [(loc.id, (loc.lat, loc.lon)) for loc in request.delivery_locations]
+
+    # ✅ If only one vehicle, directly solve TSP on all locations
+    if request.num_vehicles == 1:
+        sorted_route = tsp_solver(locations)
+        return [[{"id": loc_id, "lat": coords[0], "lon": coords[1]} for loc_id, coords in sorted_route]]
+
+    # ✅ Otherwise, apply K-Means clustering
     num_clusters = min(request.num_vehicles, len(locations))
-
     kmeans = KMeans(n_clusters=num_clusters, random_state=42, n_init=10).fit([coords for _, coords in locations])
+    
     clusters = {i: [] for i in range(num_clusters)}
-
     for i, label in enumerate(kmeans.labels_):
-        clusters[label].append(locations[i])  # Store (ID, (lat, lon)) in clusters
+        clusters[label].append(locations[i])
 
     optimized_routes = []
     for cluster in clusters.values():

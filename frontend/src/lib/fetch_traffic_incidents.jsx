@@ -1,4 +1,3 @@
-
 const tomtomApiKey = import.meta.env.VITE_TOMTOM_API_KEY;
 export const FetchRoadClosures = async (startLat, startLng, endLat, endLng) => {
     try {
@@ -53,4 +52,3 @@ export const FetchRoadClosures = async (startLat, startLng, endLat, endLng) => {
       return { real_time_data: { traffic: "Unknown", road_closures: [] } };
     }
   };
-  

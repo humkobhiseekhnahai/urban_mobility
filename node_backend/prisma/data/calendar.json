@@ -1,0 +1,14 @@
+[
+  {
+    "end_date": 20201231,
+    "friday": true,
+    "monday": true,
+    "saturday": true,
+    "service_id": "FULLW",
+    "start_date": 20150101,
+    "sunday": true,
+    "thursday": true,
+    "tuesday": true,
+    "wednesday": true
+  }
+]

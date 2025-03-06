@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,17 +8,86 @@ datasource db {
 }
 
 model User {
-  id          String    @id @default(cuid())
-  name        String
-  email       String    @unique
-  password    String?
-  googleId    String?   @unique
-  user_type   UserType  @default(user)
-  roleSelected Boolean   @default(false) 
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  password     String?
+  googleId     String?  @unique
+  user_type    UserType @default(user)
+  roleSelected Boolean  @default(false)
 }
 
 enum UserType {
   user
   operator
   partner
+}
+
+model Agency {
+  agency_id       String  @id
+  agency_name     String
+  agency_phone    String?
+  agency_lang     String?
+  agency_timezone String
+  agency_url      String
+  Routes          Route[]
+}
+
+model Calendar {
+  service_id String  @id
+  start_date Int
+  end_date   Int
+  monday     Boolean
+  tuesday    Boolean
+  wednesday  Boolean
+  thursday   Boolean
+  friday     Boolean
+  saturday   Boolean
+  sunday     Boolean
+  Trips      Trip[]
+}
+
+model Route {
+  route_id   String  @id
+  short_name String
+  long_name  String
+  route_desc String?
+  text_color String?
+  type       Int
+  url        String?
+  agency_id  String
+  Agency     Agency  @relation(fields: [agency_id], references: [agency_id])
+  Trips      Trip[]
+}
+
+model Stop {
+  stop_id             String   @id
+  stop_name           String
+  stop_lat            String
+  stop_lon            String
+  stop_code           String?
+  stop_desc           String?
+  stop_timezone       String?
+  stop_url            String?
+  wheelchair_boarding Boolean?
+  zone_id             String?
+}
+
+model Trip {
+  trip_id       Int      @id
+  trip_headsign String
+  route_id      String
+  direction_id  Int
+  service_id    String
+  shape_id      String?
+  Route         Route    @relation(fields: [route_id], references: [route_id])
+  Calendar      Calendar @relation(fields: [service_id], references: [service_id])
+}
+
+model SuggestedRoute {
+  id          String   @id @default(cuid())
+  source      String
+  destination String
+  coordinates Json // Array of coordinate arrays
+  createdAt   DateTime @default(now())
 }
