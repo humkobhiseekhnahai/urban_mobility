@@ -7,7 +7,7 @@ import { getRouteCoordinates } from '../../lib/getRouteCoordinates';
 
 const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => {
     const apiResponse = useAtomValue(apiResponseAtom);
-    const startingLocation = useAtomValue(startingLocationAtom); // e.g., { lat: 12.9784, lon: 77.6419 }
+    const startingLocation = useAtomValue(startingLocationAtom);
 
     if (!apiResponse) return null;
 
@@ -25,48 +25,52 @@ const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => 
         return null;
     }
 
-    const routeData = getRouteCoordinates(startingLocation,apiResponse);
-    console.log(routeData)
-    // Create itemMap for weight and address lookup
+    // Create itemMap with corrected coordinate keys
     const itemMap = {};
     loading_plan.forEach((bin) => {
         bin.items.forEach((item) => {
-            const key = `${item.lat},${item.lon}`;
+            const key = `${item.lon},${item.lat}`; // Fix: Swap lat/lon for correct mapping
             itemMap[key] = { weight: item.weight, address: item.address };
         });
     });
 
-    // Construct fullRoutes with addresses
+    // Process routes with corrected coordinates
     const fullRoutes = optimized_routes.map((route) => [
         parsedStartingLocation,
         ...route.map((point) => {
-            const key = `${point.lat},${point.lon}`;
-            const item = itemMap[key];
-            return { ...point, address: item ? item.address : 'Unknown' };
+            // Handle array-based coordinates from backend
+            const [lon, lat] = Array.isArray(point.lon) ? point.lon : [point.lon, point.lat];
+            const key = `${lat},${lon}`; // Use correct lat/lon order
+            return {
+                lat,
+                lon,
+                address: itemMap[key]?.address || 'Unknown'
+            };
         }),
     ]);
 
     const limitedRoutes = fullRoutes.slice(0, numberOfVehicles);
 
-    // Calculate total weight for each route (exclude starting location)
+    // Calculate weights with corrected coordinate mapping
     const routeWeights = limitedRoutes.map((route) => {
         let totalWeight = 0;
-        const visitedStops = new Set(); // Track visited stops to avoid duplicates
-    
+        const visitedStops = new Set();
+        
         route.forEach((point, index) => {
-            if (index > 0) { // Skip starting location
+            if (index > 0) {
                 const key = `${point.lat},${point.lon}`;
                 if (itemMap[key] && !visitedStops.has(key)) {
                     totalWeight += itemMap[key].weight;
-                    visitedStops.add(key); // Mark stop as visited
+                    visitedStops.add(key);
                 }
             }
         });
-    
-        // Ensure weight does not exceed truck capacity
+        
         return Math.min(totalWeight, totalCapacity);
     });
-    
+
+    const routeData = getRouteCoordinates(parsedStartingLocation, apiResponse);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
