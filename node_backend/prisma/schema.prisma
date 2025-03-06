@@ -88,6 +88,6 @@ model SuggestedRoute {
   id          String   @id @default(cuid())
   source      String
   destination String
-  coordinates String
+  coordinates Json // Array of coordinate arrays
   createdAt   DateTime @default(now())
 }
