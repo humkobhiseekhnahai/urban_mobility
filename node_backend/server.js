@@ -28,7 +28,7 @@ app.get("/api/calendar", async (req, res) => {
 
 app.get("/api/stops", async (req, res) => {
   try {
-    const stops = await prisma.stop.findMany(); // Fixed "stops" → "stop"
+    const stops = await prisma.stop.findMany(); 
     res.json(stops);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch stops" });
@@ -37,7 +37,7 @@ app.get("/api/stops", async (req, res) => {
 
 app.get("/api/trips", async (req, res) => {
   try {
-    const trips = await prisma.trip.findMany(); // Fixed "trips" → "trip"
+    const trips = await prisma.trip.findMany(); 
     res.json(trips);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch trips" });
@@ -46,7 +46,7 @@ app.get("/api/trips", async (req, res) => {
 
 app.get("/api/routes", async (req, res) => {
   try {
-    const routes = await prisma.route.findMany(); // Fixed "routes" → "route"
+    const routes = await prisma.route.findMany(); 
     res.json(routes);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch routes" });
