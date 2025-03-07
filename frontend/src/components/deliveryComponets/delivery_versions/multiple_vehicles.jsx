@@ -7,7 +7,7 @@ import { getRouteCoordinates } from '../../../lib/getRouteCoordinates';
 
 const DeliveryResult_multiple = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => {
     const apiResponse = useAtomValue(apiResponseAtom);
-    const startingLocation = useAtomValue(startingLocationAtom); // e.g., { lat: 12.9784, lon: 77.6419 }
+    const startingLocation = useAtomValue(startingLocationAtom);
 
     if (!apiResponse) return null;
 
@@ -25,9 +25,10 @@ const DeliveryResult_multiple = ({ totalCapacity, numberOfVehicles, setIsOptimiz
         return null;
     }
 
-    const routeData = getRouteCoordinates(startingLocation,apiResponse);
-    console.log(routeData)
-    // Create itemMap for weight and address lookup
+    const routeData = getRouteCoordinates(startingLocation, apiResponse);
+    console.log(routeData);
+
+    // Create itemMap for address lookup (optional, if needed elsewhere)
     const itemMap = {};
     loading_plan.forEach((bin) => {
         bin.items.forEach((item) => {
@@ -48,25 +49,16 @@ const DeliveryResult_multiple = ({ totalCapacity, numberOfVehicles, setIsOptimiz
 
     const limitedRoutes = fullRoutes.slice(0, numberOfVehicles);
 
-    // Calculate total weight for each route (exclude starting location)
-    const routeWeights = limitedRoutes.map((route) => {
-        let totalWeight = 0;
-        const visitedStops = new Set(); // Track visited stops to avoid duplicates
-    
-        route.forEach((point, index) => {
-            if (index > 0) { // Skip starting location
-                const key = `${point.lat},${point.lon}`;
-                if (itemMap[key] && !visitedStops.has(key)) {
-                    totalWeight += itemMap[key].weight;
-                    visitedStops.add(key); // Mark stop as visited
-                }
-            }
-        });
-    
-        // Ensure weight does not exceed truck capacity
-        return Math.min(totalWeight, totalCapacity);
+    // Calculate total weight for each vehicle based on loading_plan
+    const routeWeights = Array.from({ length: numberOfVehicles }, (_, index) => {
+        const bin = loading_plan.find(b => b.bin_id === index + 1);
+        if (bin) {
+            const totalWeight = bin.items.reduce((sum, item) => sum + item.weight, 0);
+            return Math.min(totalWeight, totalCapacity);
+        }
+        return 0;
     });
-    
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
