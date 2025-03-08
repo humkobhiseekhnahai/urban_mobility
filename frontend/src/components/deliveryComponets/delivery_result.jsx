@@ -12,6 +12,4 @@ const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => 
     );
   }
 };
-
 export default DeliveryResult;
-
