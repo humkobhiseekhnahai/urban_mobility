@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import logo from '../assets/UPLYFT.svg';
 
 const Documentation = () => {
   // State to track the currently active section
@@ -42,8 +43,9 @@ const Documentation = () => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-black text-white">
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-1/4 p-6 h-auto md:h-screen sticky top-0 overflow-y-auto border-r border-gray-700">
-        <h1 className="text-xl font-bold mb-6">UPLYFT Docs</h1>
+      <aside className="w-full md:w-1/5 p-6 h-auto md:h-screen sticky top-0 overflow-y-auto border-r border-gray-700">
+
+        <img src={logo} alt="UPLYFT Logo" className="-mt-7 h-22 w-22 object-contain mb-1"/>
         <ul className="space-y-4">
           {sections.map((section) => (
             <li key={section.id}>

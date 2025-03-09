@@ -10,6 +10,7 @@ import RoleSelection from './pages/auth/roleSelection'
 import Signup from './pages/auth/signup'
 import ProtectedRoute from './components/protectedRoute'
 import Unauthorized from './pages/auth/unauthorized'
+import Test from './components/test/test'
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
+          <Route path="/test" element={<Test />} />
           
           {/* Protected routes */}
           <Route path="/dashboard" element={
