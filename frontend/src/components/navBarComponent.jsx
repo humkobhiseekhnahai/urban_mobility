@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import logo from '../assets/UPLYFT.svg';
 
 export const NavBarComponent = () => {
   const [isTrackingOpen, setTrackingOpen] = useState(false);
 
   return (
     <div className="bg-white/10 backdrop-blur-md w-56 min-h-screen rounded-lg flex-shrink-0">
-      <div className="h-15 border-b-2 border-neutral-700 mx-4 mb-10 flex justify-center items-center">
-        UPLYFT
+      <div className="h-30 border-b-2 border-neutral-700 mx-4 mb-10 flex justify-center items-center">
+      <img src={logo} alt="UPLYFT Logo" className="-mt-7 h-30 w-22 object-contain mb-1"/>
       </div>
+      
 
       {/* Documentation */}
       <div className="h-12 w-full flex justify-start items-center space-x-2 text-lg font-medium text-gray-300 mb-3 pl-4 select-none cursor-pointer">
