@@ -24,8 +24,10 @@ import {
   CardFooter,
   Typography,
 } from "@material-tailwind/react";
-import { SuggestedList } from "../components/dashboardComponents/SuggestedRoutes/SuggestedList";
-import { routeAtom } from "../hooks/atoms/atom";
+import { useAtom } from "jotai";
+import { selectedRouteAtom } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
+import { BusRouteModal } from "../components/dashboardComponents/BusRoutes/BusRouteModal";
+import { BusRouteCard } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
 
 export const Dashboard = () => {
   const serverUrl = "http://localhost:8080";
@@ -37,8 +39,9 @@ export const Dashboard = () => {
   const [stops, setStops] = useState([
     { latitude: "", longitude: "" }, // Initial stop
   ]);
-
-  const [suggestedRoutes, setSuggestedRoutes] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [busRoutes, setBusRoutes] = useState([]);
+  const [selectedRoute] = useAtom(selectedRouteAtom);
 
   const addStop = () => {
     setStops([...stops, { latitude: "", longitude: "" }]);
@@ -49,11 +52,23 @@ export const Dashboard = () => {
     setIsOpen(!open);
   };
 
-  const getAllSuggestedRoutes = async () => {
+  const handleViewRouteDetails = (route) => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const getAllBusRoutes = async () => {
     try {
-      const response = await fetch(`${serverUrl}/api/suggested-routes`);
+      const response = await fetch(`${serverUrl}/api/bus-routes`);
       const data = await response.json();
-      setSuggestedRoutes(data);
+      const busRoutes = data.map((route) => ({
+        ...route,
+        mapJsonContent: JSON.parse(route.mapJsonContent),
+      }));
+      setBusRoutes(busRoutes);
     } catch (error) {
       console.error(error);
     }
@@ -81,7 +96,7 @@ export const Dashboard = () => {
   };
 
   useEffect(() => {
-    getAllSuggestedRoutes();
+    getAllBusRoutes();
   }, []);
 
   if (location.loading || location.error) return <LocationLoading />;
@@ -117,15 +132,22 @@ export const Dashboard = () => {
 
           {/* Timings List */}
           <div className="w-full p-4 h-[80%] overflow-y-auto">
-            <SuggestedList routes={suggestedRoutes} />
+            <div className="w-full flex flex-col space-y-4 items-center">
+              {busRoutes.map((route) => {
+                return (
+                  <BusRouteCard
+                    route={route}
+                    onViewDetails={() => handleViewRouteDetails(route)}
+                  />
+                );
+              })}
+            </div>
+            {/* <MapComponent /> */}
           </div>
         </section>
         <section className="w-[55%] h-full bg-neutral-900">
           <div className="w-full h-1/2 p-5 rounded-lg">
-            <MapBox
-              lng={routeAtom?.coordinates?.[0].longitude || location.longitude}
-              lat={routeAtom?.coordinates?.[0].latitude || location.latitude}
-            />
+            <MapBox lng={location.longitude} lat={location.latitude} />
           </div>
 
           {/* Open Modal Text */}
@@ -329,6 +351,13 @@ export const Dashboard = () => {
           </Card>
         </DialogBody>
       </Dialog>
+      {selectedRoute && (
+        <BusRouteModal
+          route={selectedRoute}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
     </main>
   );
 };
