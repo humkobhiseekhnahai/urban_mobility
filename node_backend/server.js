@@ -1,4 +1,4 @@
-const express= require( "express");
+const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
 
@@ -28,7 +28,7 @@ app.get("/api/calendar", async (req, res) => {
 
 app.get("/api/stops", async (req, res) => {
   try {
-    const stops = await prisma.stop.findMany(); 
+    const stops = await prisma.stop.findMany();
     res.json(stops);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch stops" });
@@ -37,7 +37,7 @@ app.get("/api/stops", async (req, res) => {
 
 app.get("/api/trips", async (req, res) => {
   try {
-    const trips = await prisma.trip.findMany(); 
+    const trips = await prisma.trip.findMany();
     res.json(trips);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch trips" });
@@ -46,7 +46,7 @@ app.get("/api/trips", async (req, res) => {
 
 app.get("/api/routes", async (req, res) => {
   try {
-    const routes = await prisma.route.findMany(); 
+    const routes = await prisma.route.findMany();
     res.json(routes);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch routes" });
@@ -96,6 +96,34 @@ app.delete("/api/suggested-routes/:id", async (req, res) => {
     res.json({ message: "Suggested route deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete suggested route" });
+  }
+});
+
+// Get all bus routes
+app.get("/api/bus-routes", async (req, res) => {
+  try {
+    const busRoutes = await prisma.busRoute.findMany();
+    res.json(busRoutes);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch bus routes" });
+  }
+});
+
+// Get a specific bus route by routeNumber (supports alphanumeric IDs like "1", "1E", etc.)
+app.get("/api/bus-routes/:routeNumber", async (req, res) => {
+  try {
+    const { routeNumber } = req.params;
+    const busRoute = await prisma.busRoute.findUnique({
+      where: { routeNumber: routeNumber },
+    });
+
+    if (!busRoute) {
+      return res.status(404).json({ error: "Bus route not found" });
+    }
+
+    res.json(busRoute);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch bus route" });
   }
 });
 
