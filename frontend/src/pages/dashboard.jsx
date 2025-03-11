@@ -65,11 +65,14 @@ export const Dashboard = () => {
     try {
       const response = await fetch(`${serverUrl}/api/bus-routes`);
       const data = await response.json();
-      console.log(data);
       const busRoutes = data.map((route) => ({
         ...route,
         mapJsonContent: JSON.parse(route.mapJsonContent),
+        destination: JSON.parse(route.mapJsonContent)
+          .pop()
+          ?.busstop.split(",")[0],
       }));
+      console.log(busRoutes);
       setBusRoutes(busRoutes);
     } catch (error) {
       console.error(error);
@@ -140,6 +143,7 @@ export const Dashboard = () => {
                 return (
                   <BusRouteCard
                     route={route}
+                    key={route.routeNumber}
                     onViewDetails={() => handleViewRouteDetails(route)}
                   />
                 );
