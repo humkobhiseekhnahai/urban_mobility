@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, MapPin } from "lucide-react";
+import { Search, MapPin, Route } from "lucide-react";
 import { Input } from "../components/dashboardComponents/Input";
 import { MapBox } from "../components/dashboardComponents/Map";
 import { useGeolocation } from "@uidotdev/usehooks";
@@ -15,11 +15,9 @@ import {
   TabPanel,
   Button,
   Dialog,
-  DialogHeader,
   DialogBody,
   Input as DialogInput,
   Card,
-  CardHeader,
   CardBody,
   CardFooter,
   Typography,
@@ -28,6 +26,8 @@ import { useAtom } from "jotai";
 import { selectedRouteAtom } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
 import { BusRouteModal } from "../components/dashboardComponents/BusRoutes/BusRouteModal";
 import { BusRouteCard } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
+import { NavBarComponent } from "../components/navBarComponent";
+import { hoveredRouteAtom } from "../hooks/atoms/atom";
 
 export const Dashboard = () => {
   const serverUrl = "http://localhost:8080";
@@ -42,6 +42,7 @@ export const Dashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [busRoutes, setBusRoutes] = useState([]);
   const [selectedRoute] = useAtom(selectedRouteAtom);
+  const [hoveredRoute] = useAtom(hoveredRouteAtom);
 
   const addStop = () => {
     setStops([...stops, { latitude: "", longitude: "" }]);
@@ -64,6 +65,7 @@ export const Dashboard = () => {
     try {
       const response = await fetch(`${serverUrl}/api/bus-routes`);
       const data = await response.json();
+      console.log(data);
       const busRoutes = data.map((route) => ({
         ...route,
         mapJsonContent: JSON.parse(route.mapJsonContent),
@@ -103,6 +105,7 @@ export const Dashboard = () => {
   return (
     <main className="bg-neutral-900">
       <div className="w-full h-screen flex">
+        <NavBarComponent />
         <section className="w-[45%] h-full bg-neutral-800 border-r border-r-neutral-700">
           {/* Search */}
           <div className="w-full h-[20%] bg-neutral-900 border-b border-b-neutral-70 ">
@@ -148,6 +151,7 @@ export const Dashboard = () => {
         <section className="w-[55%] h-full bg-neutral-900">
           <div className="w-full h-1/2 p-5 rounded-lg">
             <MapBox lng={location.longitude} lat={location.latitude} />
+            {/* <RouteMap route={hoveredRoute} /> */}
           </div>
 
           {/* Open Modal Text */}
