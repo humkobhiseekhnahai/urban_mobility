@@ -57,6 +57,56 @@ app.get("/api/bus-routes/all", async (req, res) => {
   }
 });
 
+app.get("/api/bus-routes/stops", async (req, res) => {
+  try {
+    const { page = 1, limit = 10, search = "" } = req.query;
+
+    const busRoutes = await prisma.busRoute.findMany({
+      select: { mapJsonContent: true },
+    });
+
+    const stopNamesSet = new Set();
+
+    busRoutes.forEach(route => {
+      let mapContent = route.mapJsonContent;
+
+      // Ensure it's parsed JSON
+      if (typeof mapContent === "string") {
+        try {
+          mapContent = JSON.parse(mapContent);
+        } catch (error) {
+          console.error("Invalid JSON format in mapJsonContent:", error);
+          return;
+        }
+      }
+
+      if (Array.isArray(mapContent)) {
+        mapContent.forEach(stop => stopNamesSet.add(stop.busstop));
+      }
+    });
+
+    let stopNames = [...stopNamesSet]; // Convert Set to Array
+
+    // Apply regex filter if `search` is provided
+    if (search) {
+      const regex = new RegExp(search, "i");
+      stopNames = stopNames.filter(name => regex.test(name));
+    }
+
+    // Pagination
+    const startIndex = (page - 1) * limit;
+    const paginatedStops = stopNames.slice(startIndex, startIndex + parseInt(limit));
+
+    res.json(paginatedStops);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch bus stop names" });
+  }
+});
+
+
+
+
 // ✅ Get bus routes with Pagination and Filtering
 app.get("/api/bus-routes", async (req, res) => {
   try {
