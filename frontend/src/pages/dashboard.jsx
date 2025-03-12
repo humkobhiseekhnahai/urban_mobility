@@ -5,27 +5,19 @@ import { LocationLoading } from "../components/dashboardComponents/LocationLoadi
 import { Weather } from "../components/dashboardComponents/Weather";
 import { HeatMap } from "../components/dashboardComponents/HeatMap/HeatMap";
 import { IncidentList } from "../components/dashboardComponents/TrafficIncidents/IncidentList";
+import { BusRouteModal } from "../components/dashboardComponents/BusRoutes/BusRouteModal";
+import { NavBarComponent } from "../components/navBarComponent";
+import { Filter } from "../components/dashboardComponents/Filter";
+import { BusRouteList } from "../components/dashboardComponents/BusRoutes/BusRouteList";
+import { selectedRouteAtom } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
 import {
   Tabs,
   TabsHeader,
   TabsBody,
   Tab,
   TabPanel,
-  Button,
-  Dialog,
-  DialogBody,
-  Input as DialogInput,
-  Card,
-  CardBody,
-  CardFooter,
-  Typography,
 } from "@material-tailwind/react";
 import { useAtom } from "jotai";
-import { selectedRouteAtom } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
-import { BusRouteModal } from "../components/dashboardComponents/BusRoutes/BusRouteModal";
-import { NavBarComponent } from "../components/navBarComponent";
-import { Filter } from "../components/dashboardComponents/Filter";
-import { BusRouteList } from "../components/dashboardComponents/BusRoutes/BusRouteList";
 
 // Functions
 import { filterRoutesByTime } from "../utils/dashboard/filterRoutesByTime";
@@ -39,18 +31,18 @@ export const Dashboard = () => {
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
-  const [stops, setStops] = useState([
-    { latitude: "", longitude: "" }, // Initial stop
-  ]);
+  // const [stops, setStops] = useState([
+  //   { latitude: "", longitude: "" }, // Initial stop
+  // ]);
 
   const [routeModalOpen, setIsRouteModalOpen] = useState(false);
   const [busRoutes, setBusRoutes] = useState([]);
   const [selectedRoute] = useAtom(selectedRouteAtom);
   const [filteredRoutes, setFilteredRoutes] = useState([]);
 
-  const addStop = () => {
-    setStops([...stops, { latitude: "", longitude: "" }]);
-  };
+  // const addStop = () => {
+  //   setStops([...stops, { latitude: "", longitude: "" }]);
+  // };
 
   const handleOpen = () => {
     setStops([{ latitude: "", longitude: "" }]);
@@ -86,26 +78,26 @@ export const Dashboard = () => {
     }
   };
 
-  const addOptimizedRoute = async () => {
-    try {
-      await fetch(`${serverUrl}/api/suggested-routes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          source: source,
-          destination: destination,
-          coordinates: stops,
-        }),
-      });
-      handleOpen();
-      alert("Route added successfully!");
-    } catch (error) {
-      alert("Failed to add route");
-      console.error(error);
-    }
-  };
+  // const addOptimizedRoute = async () => {
+  //   try {
+  //     await fetch(`${serverUrl}/api/suggested-routes`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         source: source,
+  //         destination: destination,
+  //         coordinates: stops,
+  //       }),
+  //     });
+  //     handleOpen();
+  //     alert("Route added successfully!");
+  //   } catch (error) {
+  //     alert("Failed to add route");
+  //     console.error(error);
+  //   }
+  // };
 
   useEffect(() => {
     const filteredRoutes = filterRoutesByTime(busRoutes, selectedTime);
@@ -242,7 +234,7 @@ export const Dashboard = () => {
           </div>
         </section>
       </div>
-      <Dialog open={isOptimizedModalOpen} handler={handleOpen} size="md">
+      {/* <Dialog open={isOptimizedModalOpen} handler={handleOpen} size="md">
         <DialogBody className="overflow-y-auto max-h-[80vh]">
           <Card className="w-full">
             <CardBody className="flex flex-col gap-4">
@@ -318,8 +310,6 @@ export const Dashboard = () => {
                   </div>
                 </div>
               ))}
-
-              {/* Add Stop Button */}
               <Button
                 variant="outlined"
                 color="blue"
@@ -344,7 +334,7 @@ export const Dashboard = () => {
             </CardFooter>
           </Card>
         </DialogBody>
-      </Dialog>
+      </Dialog> */}
       {selectedRoute && (
         <BusRouteModal
           route={selectedRoute}

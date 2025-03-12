@@ -1,4 +1,12 @@
-export const OptimizedRouteModal = ({ isOpen, onClose, route }) => {
+export const OptimizedRouteModal = ({
+  open,
+  handleOpen,
+  setSource,
+  setDestination,
+  setStops,
+  addStop,
+  addOptimizedRoute,
+}) => {
   return (
     <Dialog open={open} handler={handleOpen} size="md">
       <DialogBody className="overflow-y-auto max-h-[80vh]">
