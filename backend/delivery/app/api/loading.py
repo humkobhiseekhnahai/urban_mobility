@@ -20,14 +20,30 @@ def first_fit(weights, capacity):
 
     return bins
 
-def optimize_loading(request: DeliveryRequest):
-    """Assign loads to vehicles while respecting weight constraints."""
-    load_weights = sorted(
-        [{"id": i + 1, "lat": loc.lat, "lon": loc.lon, "address": loc.address, "weight": loc.load_weight} 
-         for i, loc in enumerate(request.delivery_locations)], 
-        key=lambda x: x["weight"], reverse=True  # Sort by heaviest first
-    )
+def optimize_loading(request: DeliveryRequest, optimized_routes):
+    """Assign loads to vehicles while respecting weight constraints and route clustering."""
 
-    bins = first_fit(load_weights, request.vehicle_capacity)
-
-    return bins  # Returns vehicles with their assigned deliveries
+    # Map each location to its respective route
+    route_bins = []
+    
+    for route_idx, route in enumerate(optimized_routes):
+        vehicle_load = []
+        
+        for loc in route:
+            matching_location = next(
+                (l for l in request.delivery_locations if l.lat == loc["lat"] and l.lon == loc["lon"]), None
+            )
+            
+            if matching_location:
+                vehicle_load.append({
+                    "id": matching_location.id,
+                    "lat": matching_location.lat,
+                    "lon": matching_location.lon,
+                    "address": matching_location.address,
+                    "weight": matching_location.load_weight
+                })
+        
+        if vehicle_load:
+            route_bins.append({"bin_id": route_idx + 1, "items": vehicle_load})
+    
+    return route_bins
