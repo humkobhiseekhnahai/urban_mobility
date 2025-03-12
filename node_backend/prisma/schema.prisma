@@ -91,3 +91,14 @@ model SuggestedRoute {
   coordinates Json // Array of coordinate arrays
   createdAt   DateTime @default(now())
 }
+
+model BusRoute {
+  id             Int      @id @default(autoincrement())
+  routeNumber    String   @unique
+  routeName      String
+  origin         String
+  departureTimes String // Store departure times as a comma-separated string or as Json if needed
+  mapJsonContent Json // Store detailed stop information as JSON
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
