@@ -23,7 +23,7 @@ import { useAtom } from "jotai";
 import { filterRoutesByTime } from "../utils/dashboard/filterRoutesByTime";
 
 export const Dashboard = () => {
-  const serverUrl = "http://localhost:8080";
+  const serverUrl = import.meta.env.VITE_SERVER_URL;
 
   const location = useGeolocation();
   const [isOptimizedModalOpen, setIsOptimizedModalOpen] = useState(false);
@@ -39,6 +39,7 @@ export const Dashboard = () => {
   const [busRoutes, setBusRoutes] = useState([]);
   const [selectedRoute] = useAtom(selectedRouteAtom);
   const [filteredRoutes, setFilteredRoutes] = useState([]);
+  const [busRoutesLimit, setBusRoutesLimit] = useState(10);
 
   // const addStop = () => {
   //   setStops([...stops, { latitude: "", longitude: "" }]);
@@ -59,7 +60,9 @@ export const Dashboard = () => {
 
   const getAllBusRoutes = async () => {
     try {
-      const response = await fetch(`${serverUrl}/api/bus-routes`);
+      const response = await fetch(
+        `${serverUrl}/api/bus-routes?limit=${busRoutesLimit}`
+      );
       let data = await response.json();
 
       const busRoutes = data.data.map((route) => ({
@@ -106,7 +109,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     getAllBusRoutes();
-  }, []);
+  }, [busRoutesLimit]);
 
   if (location.loading || location.error) return <LocationLoading />;
   return (
@@ -129,6 +132,8 @@ export const Dashboard = () => {
             filteredRoutes={filteredRoutes}
             handleViewRouteDetails={handleViewRouteDetails}
             busRoutes={busRoutes}
+            limit={busRoutesLimit}
+            setLimit={setBusRoutesLimit}
           />
         </section>
         <section className="w-[55%] h-full bg-neutral-900">
