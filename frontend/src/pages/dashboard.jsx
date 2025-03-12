@@ -1,99 +1,108 @@
 import { useState, useEffect } from "react";
-import { Search, MapPin } from "lucide-react";
-import { Input } from "../components/dashboardComponents/Input";
 import { MapBox } from "../components/dashboardComponents/Map";
 import { useGeolocation } from "@uidotdev/usehooks";
 import { LocationLoading } from "../components/dashboardComponents/LocationLoading";
 import { Weather } from "../components/dashboardComponents/Weather";
 import { HeatMap } from "../components/dashboardComponents/HeatMap/HeatMap";
 import { IncidentList } from "../components/dashboardComponents/TrafficIncidents/IncidentList";
+import { BusRouteModal } from "../components/dashboardComponents/BusRoutes/BusRouteModal";
+import { NavBarComponent } from "../components/navBarComponent";
+import { Filter } from "../components/dashboardComponents/Filter";
+import { BusRouteList } from "../components/dashboardComponents/BusRoutes/BusRouteList";
+import { selectedRouteAtom } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
 import {
   Tabs,
   TabsHeader,
   TabsBody,
   Tab,
   TabPanel,
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  Input as DialogInput,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Typography,
 } from "@material-tailwind/react";
 import { useAtom } from "jotai";
-import { selectedRouteAtom } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
-import { BusRouteModal } from "../components/dashboardComponents/BusRoutes/BusRouteModal";
-import { BusRouteCard } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
+
+// Functions
+import { filterRoutesByTime } from "../utils/dashboard/filterRoutesByTime";
 
 export const Dashboard = () => {
   const serverUrl = "http://localhost:8080";
 
   const location = useGeolocation();
-  const [open, setIsOpen] = useState(false);
+  const [isOptimizedModalOpen, setIsOptimizedModalOpen] = useState(false);
+
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
-  const [stops, setStops] = useState([
-    { latitude: "", longitude: "" }, // Initial stop
-  ]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTime, setSelectedTime] = useState("");
+  // const [stops, setStops] = useState([
+  //   { latitude: "", longitude: "" }, // Initial stop
+  // ]);
+
+  const [routeModalOpen, setIsRouteModalOpen] = useState(false);
   const [busRoutes, setBusRoutes] = useState([]);
   const [selectedRoute] = useAtom(selectedRouteAtom);
+  const [filteredRoutes, setFilteredRoutes] = useState([]);
 
-  const addStop = () => {
-    setStops([...stops, { latitude: "", longitude: "" }]);
-  };
+  // const addStop = () => {
+  //   setStops([...stops, { latitude: "", longitude: "" }]);
+  // };
 
   const handleOpen = () => {
     setStops([{ latitude: "", longitude: "" }]);
-    setIsOpen(!open);
+    setIsOptimizedModalOpen(!isOptimizedModalOpen);
   };
 
   const handleViewRouteDetails = (route) => {
-    setIsModalOpen(true);
+    setIsRouteModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setIsRouteModalOpen(false);
   };
 
   const getAllBusRoutes = async () => {
     try {
       const response = await fetch(`${serverUrl}/api/bus-routes`);
-      const data = await response.json();
-      const busRoutes = data.map((route) => ({
+      let data = await response.json();
+
+      const busRoutes = data.data.map((route) => ({
         ...route,
         mapJsonContent: JSON.parse(route.mapJsonContent),
+        destination: JSON.parse(route.mapJsonContent)
+          .pop()
+          ?.busstop.split(",")[0],
       }));
+
       setBusRoutes(busRoutes);
+      setFilteredRoutes(busRoutes); // Initialize filtered list with all routes
     } catch (error) {
+      setBusRoutes(null);
       console.error(error);
     }
   };
 
-  const addOptimizedRoute = async () => {
-    try {
-      await fetch(`${serverUrl}/api/suggested-routes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          source: source,
-          destination: destination,
-          coordinates: stops,
-        }),
-      });
-      handleOpen();
-      alert("Route added successfully!");
-    } catch (error) {
-      alert("Failed to add route");
-      console.error(error);
-    }
-  };
+  // const addOptimizedRoute = async () => {
+  //   try {
+  //     await fetch(`${serverUrl}/api/suggested-routes`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         source: source,
+  //         destination: destination,
+  //         coordinates: stops,
+  //       }),
+  //     });
+  //     handleOpen();
+  //     alert("Route added successfully!");
+  //   } catch (error) {
+  //     alert("Failed to add route");
+  //     console.error(error);
+  //   }
+  // };
+
+  useEffect(() => {
+    const filteredRoutes = filterRoutesByTime(busRoutes, selectedTime);
+    setFilteredRoutes(filteredRoutes);
+  }, [selectedTime]);
 
   useEffect(() => {
     getAllBusRoutes();
@@ -103,47 +112,24 @@ export const Dashboard = () => {
   return (
     <main className="bg-neutral-900">
       <div className="w-full h-screen flex">
+        <NavBarComponent />
         <section className="w-[45%] h-full bg-neutral-800 border-r border-r-neutral-700">
-          {/* Search */}
-          <div className="w-full h-[20%] bg-neutral-900 border-b border-b-neutral-70 ">
-            {/* Top */}
-            <section className="w-full h-1/2 flex items-center justify-center px-4 gap-3">
-              <div className="w-full h-full flex items-center justify-center">
-                <Input placeholder="From:" icon={MapPin} />
-              </div>
-
-              <div className="w-full h-full flex items-center justify-center">
-                <Input placeholder="To:" icon={MapPin} />
-              </div>
-
-              <div>
-                <button
-                  className="w-[40px] h-[40px] bg-blue-600 rounded-md flex items-center justify-center hover:cursor-pointer hover:bg-blue-700 transition-colors"
-                  type="button"
-                >
-                  <Search size={20} className="text-white" />
-                </button>
-              </div>
-            </section>
-
-            {/* Bottom */}
-            <section className="w-full h-1/2 flex items-center justify-center px-4 gap-3"></section>
-          </div>
+          <Filter
+            busRoutes={busRoutes}
+            setSource={setSource}
+            source={source}
+            destination={destination}
+            setDestination={setDestination}
+            setSelectedTime={setSelectedTime}
+            setFilteredRoutes={setFilteredRoutes}
+          />
 
           {/* Timings List */}
-          <div className="w-full p-4 h-[80%] overflow-y-auto">
-            <div className="w-full flex flex-col space-y-4 items-center">
-              {busRoutes.map((route) => {
-                return (
-                  <BusRouteCard
-                    route={route}
-                    onViewDetails={() => handleViewRouteDetails(route)}
-                  />
-                );
-              })}
-            </div>
-            {/* <MapComponent /> */}
-          </div>
+          <BusRouteList
+            filteredRoutes={filteredRoutes}
+            handleViewRouteDetails={handleViewRouteDetails}
+            busRoutes={busRoutes}
+          />
         </section>
         <section className="w-[55%] h-full bg-neutral-900">
           <div className="w-full h-1/2 p-5 rounded-lg">
@@ -248,7 +234,7 @@ export const Dashboard = () => {
           </div>
         </section>
       </div>
-      <Dialog open={open} handler={handleOpen} size="md">
+      {/* <Dialog open={isOptimizedModalOpen} handler={handleOpen} size="md">
         <DialogBody className="overflow-y-auto max-h-[80vh]">
           <Card className="w-full">
             <CardBody className="flex flex-col gap-4">
@@ -324,8 +310,6 @@ export const Dashboard = () => {
                   </div>
                 </div>
               ))}
-
-              {/* Add Stop Button */}
               <Button
                 variant="outlined"
                 color="blue"
@@ -350,11 +334,11 @@ export const Dashboard = () => {
             </CardFooter>
           </Card>
         </DialogBody>
-      </Dialog>
+      </Dialog> */}
       {selectedRoute && (
         <BusRouteModal
           route={selectedRoute}
-          isOpen={isModalOpen}
+          isOpen={routeModalOpen}
           onClose={handleCloseModal}
         />
       )}
