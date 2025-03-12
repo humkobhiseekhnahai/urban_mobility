@@ -39,6 +39,7 @@ export const Dashboard = () => {
   const [busRoutes, setBusRoutes] = useState([]);
   const [selectedRoute] = useAtom(selectedRouteAtom);
   const [filteredRoutes, setFilteredRoutes] = useState([]);
+  const [busRoutesPage, setBusRoutesPage] = useState(1);
 
   // const addStop = () => {
   //   setStops([...stops, { latitude: "", longitude: "" }]);
@@ -59,7 +60,9 @@ export const Dashboard = () => {
 
   const getAllBusRoutes = async () => {
     try {
-      const response = await fetch(`${serverUrl}/api/bus-routes`);
+      const response = await fetch(
+        `${serverUrl}/api/bus-routes?page=${busRoutesPage}`
+      );
       let data = await response.json();
 
       const busRoutes = data.data.map((route) => ({
