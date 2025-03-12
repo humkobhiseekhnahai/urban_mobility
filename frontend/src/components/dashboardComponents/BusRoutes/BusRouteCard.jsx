@@ -53,8 +53,8 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
             >
               {route.routeName}
             </Typography>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-gray-600 mt-1">
-              <div className="flex items-center gap-1 min-w-0">
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2 text-gray-600 mt-1">
+              <div className="flex items-start gap-1 min-w-0">
                 <MapPinIcon className="h-5 w-5 text-blue-500 flex-shrink-0" />
                 <Typography
                   variant="small"
@@ -65,12 +65,12 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
                 </Typography>
               </div>
               <div className="hidden sm:block text-gray-400">•</div>
-              <div className="flex items-center gap-1 min-w-0">
+              <div className="flex items-start gap-1 min-w-0">
                 <MapPinIcon className="h-5 w-5 text-blue-500 flex-shrink-0" />
                 <Typography
                   variant="small"
                   color="gray"
-                  className="truncate whitespace-normal break-words"
+                  className="whitespace-normal break-words"
                 >
                   Destination: {route.destination}
                 </Typography>
