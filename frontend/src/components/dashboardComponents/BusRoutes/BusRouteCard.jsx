@@ -26,7 +26,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
 
   return (
     <Card
-      className="w-full md:w-[80%] overflow-hidden rounded-xl shadow-lg hover:shadow-xl bg-gray-100 border border-gray-300"
+      className="w-full md:w-[90%] overflow-hidden rounded-xl shadow-lg hover:shadow-xl bg-gray-100 border border-gray-300"
       onMouseEnter={() => {
         const formattedRoute = route.mapJsonContent.map((r) => [
           parseFloat(r.latlons[1]),
