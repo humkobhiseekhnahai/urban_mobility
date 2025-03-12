@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import logo from '../assets/UPLYFT.svg';
+import { useNavigate } from 'react-router-dom';
 
 export const NavBarComponent = () => {
   const [isTrackingOpen, setTrackingOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="bg-white/10 backdrop-blur-md w-56 min-h-screen rounded-lg flex-shrink-0">
@@ -14,7 +16,10 @@ export const NavBarComponent = () => {
       
 
       {/* Documentation */}
-      <div className="h-12 w-full flex justify-start items-center space-x-2 text-lg font-medium text-gray-300 mb-3 pl-4 select-none cursor-pointer">
+      <div 
+        className="h-12 w-full flex justify-start items-center space-x-2 text-lg font-medium text-gray-300 mb-3 pl-4 select-none cursor-pointer hover:text-white transition-colors"
+        onClick={() => navigate('/documentation')}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -41,7 +46,10 @@ export const NavBarComponent = () => {
       </div>
 
       {/* Dashboard */}
-      <div className="h-12 w-full flex justify-start items-center space-x-2 text-lg font-medium text-gray-300 mb-3 pl-4 select-none cursor-pointer">
+      <div 
+        className="h-12 w-full flex justify-start items-center space-x-2 text-lg font-medium text-gray-300 mb-3 pl-4 select-none cursor-pointer hover:text-white transition-colors"
+        onClick={() => navigate('/dashboard')}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
@@ -55,7 +63,7 @@ export const NavBarComponent = () => {
       {/* Tracking with Dropdown */}
       <div className="w-full select-none">
         <div
-          className="h-12 w-full flex justify-between items-center text-lg font-medium text-gray-300 mb-3 pl-4 pr-4 cursor-pointer"
+          className="h-12 w-full flex justify-between items-center text-lg font-medium text-gray-300 mb-3 pl-4 pr-4 cursor-pointer hover:text-white transition-colors"
           onClick={() => setTrackingOpen(!isTrackingOpen)}
         >
           <div className="flex items-center space-x-2">
@@ -89,7 +97,9 @@ export const NavBarComponent = () => {
               transition={{ duration: 0.3 }}
               className="ml-8 space-y-3 text-gray-300 text-sm"
             >
-              <div className="cursor-pointer hover:text-white mb-8 flex items-center space-x-2">
+              <div 
+                className="cursor-pointer hover:text-white mb-8 flex items-center space-x-2"
+              >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 64 64"
@@ -111,17 +121,22 @@ export const NavBarComponent = () => {
                 </svg>
                 <span className="text-gray-100">Saved Routes</span>
               </div>
-              <div className="cursor-pointer hover:text-white flex items-center space-x-2 mb-8">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 96 96"
-                  className="w-5 h-5 text-gray-100 fill-current"
+              <div className="mb-8 space-y-3">
+                <div 
+                  className="cursor-pointer hover:text-white flex items-center space-x-2"
+                  onClick={() => navigate('/delivery')}
                 >
-                  <g>
-                    <path d="M79.753 16.246 53.566 73.381l-7.142-23.806-23.806-7.142 57.135-26.187M96 0 0 44l40 12 12 40L96 0z"></path>
-                  </g>
-                </svg>
-                <span className="text-gray-100">New Route</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 96 96"
+                    className="w-5 h-5 text-gray-100 fill-current"
+                  >
+                    <g>
+                      <path d="M79.753 16.246 53.566 73.381l-7.142-23.806-23.806-7.142 57.135-26.187M96 0 0 44l40 12 12 40L96 0z"></path>
+                    </g>
+                  </svg>
+                  <span className="text-gray-100">New Route</span>
+                </div>
               </div>
             </motion.div>
           )}

@@ -28,13 +28,22 @@ const DeliveryResult_multiple = ({ totalCapacity, numberOfVehicles, setIsOptimiz
     const routeData = getRouteCoordinates(startingLocation, apiResponse);
     console.log(routeData);
 
-    // Create itemMap for address lookup (optional, if needed elsewhere)
+    // Create itemMap for weight and address lookup
     const itemMap = {};
     loading_plan.forEach((bin) => {
         bin.items.forEach((item) => {
             const key = `${item.lat},${item.lon}`;
             itemMap[key] = { weight: item.weight, address: item.address };
         });
+    });
+
+    // Calculate total weight for each route based on items in the route
+    const routeWeights = optimized_routes.map((route) => {
+        return route.reduce((sum, point) => {
+            const key = `${point.lat},${point.lon}`;
+            const item = itemMap[key];
+            return sum + (item ? item.weight : 0);
+        }, 0);
     });
 
     // Construct fullRoutes with addresses
@@ -48,16 +57,6 @@ const DeliveryResult_multiple = ({ totalCapacity, numberOfVehicles, setIsOptimiz
     ]);
 
     const limitedRoutes = fullRoutes.slice(0, numberOfVehicles);
-
-    // Calculate total weight for each vehicle based on loading_plan
-    const routeWeights = Array.from({ length: numberOfVehicles }, (_, index) => {
-        const bin = loading_plan.find(b => b.bin_id === index + 1);
-        if (bin) {
-            const totalWeight = bin.items.reduce((sum, item) => sum + item.weight, 0);
-            return Math.min(totalWeight, totalCapacity);
-        }
-        return 0;
-    });
 
     useEffect(() => {
         window.scrollTo(0, 0);
