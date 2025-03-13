@@ -274,7 +274,7 @@ export default function Signup() {
             transition={{ duration: 0.3 }}
           >
             <motion.div
-              className="flex justify-center mb-2"
+              className="flex justify-center mb-1"
               variants={itemVariants}
             >
               
