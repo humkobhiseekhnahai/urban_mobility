@@ -5,6 +5,7 @@ export const startingLocationAtom = atom("");
 export const deliveryStopsAtom = atom([]);
 export const apiResponseAtom = atom(null);
 export const routeAtom = atom(null);
+export const hoveredRouteAtom = atom(null);
 
 export const markerAtom = atom((get) => {
   const start = get(startingLocationAtom);

@@ -1,3 +1,5 @@
+
+import React from "react";
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Delivery from "./pages/delivery";
@@ -10,6 +12,7 @@ import RoleSelection from "./pages/auth/roleSelection";
 import Signup from "./pages/auth/signup";
 import ProtectedRoute from "./components/protectedRoute";
 import Unauthorized from "./pages/auth/unauthorized";
+import { Public } from "./pages/public";
 
 function App() {
   return (
@@ -25,10 +28,11 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/public" element={<Public />} />
 
           {/* Protected routes */}
           <Route
-            path="/dashboard-p"
+            path="/dashboard"
             element={
               <ProtectedRoute role={"user" | "operator" | "partner"}>
                 <Dashboard />
