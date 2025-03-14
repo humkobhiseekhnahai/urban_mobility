@@ -1,3 +1,4 @@
+//route input
 import { useState, useRef, useEffect } from 'react';
 import { useAtom } from 'jotai';
 import { startingLocationAtom, deliveryStopsAtom } from '../../hooks/atoms/atom';
@@ -152,11 +153,11 @@ export default function RouteInput({ attemptedOptimize }) {
   };
 
   return (
-    <div className="relative mt-4">
+    <div className="relative mt-2 sm:mt-4">
       {/* Toggle Button */}
-      <div className="flex justify-end mb-2">
+      <div className="flex justify-end mb-1 sm:mb-2 px-2 sm:px-0">
         <div
-          className="relative w-56 h-8 bg-neutral-800 border border-gray-600 rounded-full flex items-center justify-between cursor-pointer"
+          className="relative w-44 sm:w-56 h-7 sm:h-8 bg-neutral-800 border border-gray-600 rounded-full flex items-center justify-between cursor-pointer"
           onClick={toggleInputType}
         >
           <motion.div
@@ -165,13 +166,13 @@ export default function RouteInput({ attemptedOptimize }) {
             transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           />
           <span
-            className={`z-10 w-1/2 text-center text-sm ${inputType === 'address' ? 'text-white font-bold' : 'text-gray-400'
+            className={`z-10 w-1/2 text-center text-xs sm:text-sm ${inputType === 'address' ? 'text-white font-bold' : 'text-gray-400'
               }`}
           >
             Address
           </span>
           <span
-            className={`z-10 w-1/2 text-center text-sm ${inputType === 'coordinates' ? 'text-white font-bold' : 'text-gray-400'
+            className={`z-10 w-1/2 text-center text-xs sm:text-sm ${inputType === 'coordinates' ? 'text-white font-bold' : 'text-gray-400'
               }`}
           >
             Coordinates
@@ -192,7 +193,7 @@ export default function RouteInput({ attemptedOptimize }) {
           >
             <div 
               ref={scrollContainerRef}
-              className="flex items-center space-x-4 py-4 px-4 overflow-x-auto scrollbar-thin scrollbar-track-neutral-800 scrollbar-thumb-neutral-600 max-w-[90vw]"
+              className="flex items-center space-x-2 sm:space-x-4 py-2 sm:py-4 px-2 sm:px-4 overflow-x-auto scrollbar-thin scrollbar-track-neutral-800 scrollbar-thumb-neutral-600 max-w-[90vw]"
             >
               {/* Starting Location */}
               <div className="relative flex-shrink-0">
@@ -202,20 +203,22 @@ export default function RouteInput({ attemptedOptimize }) {
                   onChange={(e) => setStartInputValue(e.target.value)}
                   onBlur={handleStartBlur}
                   placeholder="Warehouse (address)"
-                  className={`bg-neutral-950 text-gray-200 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-64 text-base ${attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''
+
+                  className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''
+
                     }`}
                   required
                 />
                 {attemptedOptimize && startingLocation.trim() === '' && (
-                  <span className="absolute left-0 bottom-[-1.25rem] text-red-500 text-sm">Required</span>
+                  <span className="absolute left-0 bottom-[-1.25rem] text-red-500 text-xs sm:text-sm">Required</span>
                 )}
               </div>
               <div className="text-gray-500 flex-shrink-0">
-                <span className="text-xl">→</span>
+                <span className="text-base sm:text-xl">→</span>
               </div>
               {/* Delivery Stops */}
               {deliveryStops.map((stop, index) => (
-                <div key={index} className="relative flex flex-col gap-2 flex-shrink-0">
+                <div key={index} className="relative flex flex-col gap-1 sm:gap-2 flex-shrink-0">
                   <input
                     ref={el => inputRefs.current[index] = el}
                     type="text"
@@ -223,7 +226,9 @@ export default function RouteInput({ attemptedOptimize }) {
                     onChange={(e) => handleDeliveryLocationChange(index, e.target.value)}
                     onBlur={() => handleDeliveryBlur(index)}
                     placeholder={`Stop ${index + 1} (address)`}
-                    className={`bg-neutral-950 text-gray-200 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-64 text-base ${attemptedOptimize && stop.location.trim() === '' ? 'border border-red-500' : ''
+
+                    className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.location.trim() === '' ? 'border border-red-500' : ''
+
                       }`}
                   />
                   <input
@@ -233,7 +238,9 @@ export default function RouteInput({ attemptedOptimize }) {
                     value={stop.capacity || ''}
                     onChange={(e) => handleCapacityChange(index, e.target.value)}
                     placeholder="Weight (kg)"
-                    className={`bg-neutral-950 text-gray-200 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-64 text-base ${attemptedOptimize && stop.capacity <= 0 ? 'border border-red-500' : ''
+
+                    className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.capacity <= 0 ? 'border border-red-500' : ''
+
                       }`}
                   />
                   <motion.button
@@ -242,7 +249,7 @@ export default function RouteInput({ attemptedOptimize }) {
                     onClick={() => removeStop(index)}
                     className="absolute -right-2 -top-2 bg-neutral-700 rounded-full p-1 hover:bg-red-500 transition-colors"
                   >
-                    <XMarkIcon className="w-4 h-4 text-white" />
+                    <XMarkIcon className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   </motion.button>
                 </div>
               ))}
@@ -251,9 +258,9 @@ export default function RouteInput({ attemptedOptimize }) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={addStop}
-                  className="flex items-center text-blue-500 hover:text-blue-400 transition-colors text-base flex-shrink-0"
+                  className="flex items-center text-blue-500 hover:text-blue-400 transition-colors text-xs sm:text-base flex-shrink-0"
                 >
-                  <PlusCircleIcon className="w-6 h-6 mr-2" />
+                  <PlusCircleIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2" />
                   <span>Add Stop</span>
                 </motion.button>
               )}
@@ -261,14 +268,14 @@ export default function RouteInput({ attemptedOptimize }) {
             
             {/* Add Stop Button Below */}
             {showButtonBelow && (
-              <div className="flex justify-center mt-4">
+              <div className="flex justify-center mt-2 sm:mt-4">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={addStop}
-                  className="flex items-center text-blue-500 hover:text-blue-400 transition-colors text-base"
+                  className="flex items-center text-blue-500 hover:text-blue-400 transition-colors text-xs sm:text-base"
                 >
-                  <PlusCircleIcon className="w-6 h-6 mr-2" />
+                  <PlusCircleIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2" />
                   <span>Add Stop</span>
                 </motion.button>
               </div>
@@ -286,7 +293,7 @@ export default function RouteInput({ attemptedOptimize }) {
           >
             <div 
               ref={scrollContainerRef}
-              className="flex items-center space-x-4 py-4 px-4 overflow-x-auto scrollbar-thin scrollbar-track-neutral-800 scrollbar-thumb-neutral-600 max-w-[90vw]"
+              className="flex items-center space-x-2 sm:space-x-4 py-2 sm:py-4 px-2 sm:px-4 overflow-x-auto scrollbar-thin scrollbar-track-neutral-800 scrollbar-thumb-neutral-600 max-w-[90vw]"
             >
               {/* Starting Location */}
               <div className="relative flex-shrink-0">
@@ -296,19 +303,21 @@ export default function RouteInput({ attemptedOptimize }) {
                   onChange={(e) => setStartInputValue(e.target.value)}
                   onBlur={handleStartBlur}
                   placeholder="Warehouse (lon,lat)"
-                  className={`bg-neutral-950 text-gray-200 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-64 text-base ${attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''}`}
+
+                  className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''}`}
+
                   required
                 />
                 {attemptedOptimize && startingLocation.trim() === '' && (
-                  <span className="absolute left-0 bottom-[-1.25rem] text-red-500 text-sm">Required</span>
+                  <span className="absolute left-0 bottom-[-1.25rem] text-red-500 text-xs sm:text-sm">Required</span>
                 )}
               </div>
               <div className="text-gray-500 flex-shrink-0">
-                <span className="text-xl">→</span>
+                <span className="text-base sm:text-xl">→</span>
               </div>
               {/* Delivery Stops */}
               {deliveryStops.map((stop, index) => (
-                <div key={index} className="relative flex flex-col gap-2 flex-shrink-0">
+                <div key={index} className="relative flex flex-col gap-1 sm:gap-2 flex-shrink-0">
                   <input
                     ref={el => inputRefs.current[index] = el}
                     type="text"
@@ -316,7 +325,9 @@ export default function RouteInput({ attemptedOptimize }) {
                     onChange={(e) => handleDeliveryLocationChange(index, e.target.value)}
                     onBlur={() => handleDeliveryBlur(index)}
                     placeholder={`Stop ${index + 1} (lon,lat)`}
-                    className={`bg-neutral-950 text-gray-200 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-64 text-base ${attemptedOptimize && stop.location.trim() === '' ? 'border border-red-500' : ''}`}
+
+                    className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.location.trim() === '' ? 'border border-red-500' : ''}`}
+
                   />
                   <input
                     type="number"
@@ -325,7 +336,9 @@ export default function RouteInput({ attemptedOptimize }) {
                     value={stop.capacity || ''}
                     onChange={(e) => handleCapacityChange(index, e.target.value)}
                     placeholder="Weight (kg)"
-                    className={`bg-neutral-950 text-gray-200 px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-64 text-base ${attemptedOptimize && stop.capacity <= 0 ? 'border border-red-500' : ''}`}
+
+                    className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.capacity <= 0 ? 'border border-red-500' : ''}`}
+
                   />
                   <motion.button
                     whileHover={{ scale: 1.1 }}
@@ -333,7 +346,7 @@ export default function RouteInput({ attemptedOptimize }) {
                     onClick={() => removeStop(index)}
                     className="absolute -right-2 -top-2 bg-neutral-700 rounded-full p-1 hover:bg-red-500 transition-colors"
                   >
-                    <XMarkIcon className="w-4 h-4 text-white" />
+                    <XMarkIcon className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
                   </motion.button>
                 </div>
               ))}
@@ -342,9 +355,9 @@ export default function RouteInput({ attemptedOptimize }) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={addStop}
-                  className="flex items-center text-blue-500 hover:text-blue-400 transition-colors text-base flex-shrink-0"
+                  className="flex items-center text-blue-500 hover:text-blue-400 transition-colors text-xs sm:text-base flex-shrink-0"
                 >
-                  <PlusCircleIcon className="w-6 h-6 mr-2" />
+                  <PlusCircleIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2" />
                   <span>Add Stop</span>
                 </motion.button>
               )}
@@ -352,14 +365,14 @@ export default function RouteInput({ attemptedOptimize }) {
             
             {/* Add Stop Button Below */}
             {showButtonBelow && (
-              <div className="flex justify-center mt-4">
+              <div className="flex justify-center mt-2 sm:mt-4">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={addStop}
-                  className="flex items-center text-blue-500 hover:text-blue-400 transition-colors text-base"
+                  className="flex items-center text-blue-500 hover:text-blue-400 transition-colors text-xs sm:text-base"
                 >
-                  <PlusCircleIcon className="w-6 h-6 mr-2" />
+                  <PlusCircleIcon className="w-4 h-4 sm:w-6 sm:h-6 mr-1 sm:mr-2" />
                   <span>Add Stop</span>
                 </motion.button>
               </div>
