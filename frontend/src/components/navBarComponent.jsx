@@ -30,12 +30,12 @@ export const NavBarComponent = () => {
   };
 
   return (
-    <div className="bg-white/10 backdrop-blur-md w-56 min-h-screen rounded-lg flex-shrink-0">
-      <div className="h-30 border-b-2 border-neutral-700 mx-4 mb-10 flex justify-center items-center">
-      <img src={logo} alt="UPLYFT Logo" className="-mt-7 h-30 w-22 object-contain mb-1"/>
+    <div className="bg-neutral-950 backdrop-blur-md w-56 min-h-screen rounded-lg flex-shrink-0">
+      {/* Logo container with reduced bottom margin and padding */}
+      <div className="h-20 border-b-2 border-neutral-700 mx-4 mb-4 flex justify-center items-center cursor-pointer" onClick={() => navigate('/')}>
+        <img src={logo} alt="UPLYFT Logo" className="h-16 w-16 object-contain"/>
       </div>
       
-
       {/* Home */}
       <div 
         className={`h-12 w-full flex justify-start items-center space-x-2 text-lg font-medium mb-3 pl-4 select-none cursor-pointer transition-colors ${getActiveClass('/')}`}
@@ -148,11 +148,12 @@ export const NavBarComponent = () => {
             </svg>
             <span>Deliveries</span>
           </div>
-          {isDeliveryOpen ? (
-            <ChevronDown className="w-5 h-5" />
-          ) : (
+          <motion.div
+            animate={{ rotate: isDeliveryOpen ? 90 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
             <ChevronRight className="w-5 h-5" />
-          )}
+          </motion.div>
         </div>
 
         {/* Animated Dropdown */}
