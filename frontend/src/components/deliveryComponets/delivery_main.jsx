@@ -93,7 +93,9 @@ export const Delivery_new = () => {
                 <input
                   disabled
                   value="Sample Truck"
-                  className="w-full bg-transparent text-gray-200 border-b border-gray-600 py-1 sm:py-2 px-1 focus:outline-none cursor-not-allowed text-sm sm:text-base"
+
+                  className="w-full bg-neutral-800 text-gray-300 border-b border-neutral-600 py-1 sm:py-2 px-1 focus:outline-none cursor-not-allowed text-sm sm:text-base"
+
                 />
               </div>
               <div className="flex-1 sm:max-w-xs border-b border-neutral-700 sm:border-b-0 px-4 sm:px-0 py-3 sm:py-4">
@@ -104,8 +106,10 @@ export const Delivery_new = () => {
                   step="0.1"
                   placeholder="Enter capacity"
                   onChange={(e) => setTotalCapacity(Number(e.target.value))}
-                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-1 sm:py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 text-sm sm:text-base ${
-                    attemptedOptimize && totalCapacity <= 0 ? "border-red-500" : ""
+
+                  className={`w-full bg-neutral-800 text-gray-200 border-b border-gray-600 py-1 sm:py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 text-sm sm:text-base ${
+                    attemptedOptimize && totalCapacity <= 0 ? "border-red-500 ring-1 ring-red-500" : ""
+
                   }`}
                 />
               </div>
@@ -117,8 +121,10 @@ export const Delivery_new = () => {
                   step="1"
                   placeholder="Enter quantity"
                   onChange={(e) => setNumberOfVehicles(Number(e.target.value))}
-                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-1 sm:py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 text-sm sm:text-base ${
-                    attemptedOptimize && numberOfVehicles < 1 ? "border-red-500" : ""
+
+                  className={`w-full bg-neutral-800 text-gray-200 border-b border-gray-600 py-1 sm:py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 text-sm sm:text-base ${
+                    attemptedOptimize && numberOfVehicles < 1 ? "border-red-500 ring-1 ring-red-500" : ""
+
                   }`}
                 />
               </div>
@@ -135,7 +141,9 @@ export const Delivery_new = () => {
             {/* Optimize Route Button */}
             <motion.button
               whileTap={{ scale: 0.95 }}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-light py-2 sm:py-3 px-8 sm:px-12 rounded-lg transition-colors disabled:opacity-50 w-full sm:w-auto text-sm sm:text-base"
+
+              className="bg-blue-600 hover:bg-blue-700 text-white font-light py-2 sm:py-3 px-8 sm:px-12 rounded-lg transition-colors disabled:bg-blue-800disabled:opacity-50 w-full sm:w-auto text-sm sm:text-base"
+
               onClick={handleOptimize}
               disabled={loading || !isFormValid}
             >
@@ -169,8 +177,10 @@ export const Delivery_new = () => {
               <motion.button
                 onClick={toggleEcoMode}
                 title="Toggle Eco Mode: Optimizes for fuel efficiency"
-                className={`relative flex items-center justify-center h-8 sm:h-7 w-[90px] sm:w-[50px] rounded-full transition-all duration-300 ease-in-out focus:outline-none shadow-inner ${
-                  ecoMode ? "bg-green-500 shadow-green-400/50" : "bg-gray-300 shadow-gray-400/40"
+
+                className={`relative flex items-center justify-center h-8 sm:h-7 w-[90px] sm:w-[50px] rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-neutral-900 shadow-inner ${
+                  ecoMode ? "bg-green-500 shadow-[0_0_10px_2px_rgba(34,197,94,0.5)] focus:ring-green-500" : "bg-neutral-600 focus:ring-blue-500"
+
                 }`}
                 whileTap={{ scale: 0.95 }}
                 aria-pressed={ecoMode}
@@ -187,10 +197,33 @@ export const Delivery_new = () => {
 
                 {/* Leaf Icon Moving Circle */}
                 <motion.div
-                  layout
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  className={`absolute flex items-center justify-center h-[16px] sm:h-[20px] w-[16px] sm:w-[20px] rounded-full shadow-md bg-white ${
-                    ecoMode ? "right-[6px]" : "left-[6px]"
+<motion.div
+  className="absolute flex items-center justify-center w-5 h-5 bg-white rounded-full shadow-md"
+  initial={false}
+  animate={{ x: ecoMode ? "calc(100% - 20px)" : "2px" }}
+  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+>
+  <svg
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="#000000"
+    className="w-3 h-3"
+  >
+    <g id="SVGRepo_iconCarrier">
+      <path d="M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22l1-2.3A4.49,4.49,0,0,0,8,20C19,20,22,3,22,3,21,5,14,5.25,9,6.25S2,11.5,2,13.5a6.22,6.22,0,0,0,1.75,3.75C7,8,17,8,17,8Z"></path>
+      <rect width="24" height="24" fill="none"></rect>
+    </g>
+  </svg>
+</motion.div>
+
+<span
+  className={`absolute text-xs font-bold transition-opacity duration-300 ease-in-out ${
+    ecoMode ? "opacity-100 text-white right-2" : "opacity-0"
+  }`}
+>
+  Eco Mode
+</span>
+
                   }`}
                 >
                   <motion.svg
@@ -214,7 +247,9 @@ export const Delivery_new = () => {
 
           {/* Error Messages */}
           {attemptedOptimize && !isFormValid && (
-            <div className="bg-red-900/20 border border-red-500 text-red-500 p-3 sm:p-4 rounded-lg mt-4 max-w-full overflow-auto text-xs sm:text-sm">
+
+            <div className="bg-red-900/30 border border-red-500/70 text-red-400 p-3 sm:p-4 rounded-lg mt-4 max-w-full overflow-auto text-xs sm:text-sm">
+
               <p className="font-semibold">Please correct the following errors:</p>
               <ul className="list-disc list-inside mt-1 sm:mt-2">
                 {!isStartingLocationValid && <li>Please provide the warehouse location.</li>}
@@ -231,7 +266,9 @@ export const Delivery_new = () => {
           )}
 
           {/* API Error Display */}
-          {error && <div className="text-red-500 text-center mt-4 text-sm sm:text-base">{error}</div>}
+
+          {error && <div className="bg-red-900/30 border border-red-500/70 text-red-400 text-center mt-4 text-sm sm:text-base">{error}</div>}
+
         </div>
       )}
     </div>

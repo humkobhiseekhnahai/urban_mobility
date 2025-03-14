@@ -20,78 +20,106 @@ const RouteMap = ({ route }) => {
     satellite: 'mapbox://styles/mapbox/satellite-v9'
   };
 
+  // This function requests directions for each sequential pair.
+  // It connects only adjacent pairs (without closing the route).
   const addRouteLayer = useCallback(async () => {
     if (!mapRef.current || !route || route.length < 2) return;
 
-    try {
-      // Convert route to [lon, lat] format
-      const coordinates = route.map(point => [point[0], point[1]]);
-      const query = coordinates.map(coord => coord.join(',')).join(';');
-
-      // Get directions from Mapbox API
-      const response = await fetch(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/${query}?geometries=geojson&access_token=${mapboxgl.accessToken}`
-      );
-
-      if (!response.ok) throw new Error('Failed to fetch directions');
-
-      const data = await response.json();
-      if (!data.routes || data.routes.length === 0) {
-        throw new Error('No routes found');
-      }
-      const routeGeometry = data.routes[0].geometry;
-
-      // Remove existing route layer if it exists
-      if (mapRef.current.getLayer(routeLayerId)) {
-        mapRef.current.removeLayer(routeLayerId);
-        mapRef.current.removeSource(routeSourceId);
-      }
-
-      // Add new route source and layer
-      mapRef.current.addSource(routeSourceId, {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          properties: {},
-          geometry: routeGeometry
-        }
-      });
-
-      mapRef.current.addLayer({
-        id: routeLayerId,
-        type: 'line',
-        source: routeSourceId,
-        layout: {
-          'line-join': 'round',
-          'line-cap': 'round'
-        },
-        paint: {
-          'line-color': isSatellite ? '#ff4444' : '#3b82f6',
-          'line-width': 4,
-          'line-opacity': 0.75
-        }
-      });
-
-      // Fit map to route bounds
-      const bounds = new mapboxgl.LngLatBounds();
-      coordinates.forEach(coord => bounds.extend(coord));
-      mapRef.current.fitBounds(bounds, { padding: 50, maxZoom: 15 });
-
-    } catch (error) {
-      console.error('Error updating route:', error);
+    // Remove an existing route layer if it exists
+    if (mapRef.current.getLayer(routeLayerId)) {
+      mapRef.current.removeLayer(routeLayerId);
+      mapRef.current.removeSource(routeSourceId);
     }
+
+    let combinedCoordinates = [];
+
+    // Loop through each adjacent pair of coordinates.
+    for (let i = 0; i < route.length - 1; i++) {
+      const start = route[i];
+      const end = route[i + 1];
+      const query = `${start.join(',')};${end.join(',')}`;
+
+      try {
+        const response = await fetch(
+          `https://api.mapbox.com/directions/v5/mapbox/driving/${query}?geometries=geojson&access_token=${mapboxgl.accessToken}`
+        );
+        if (!response.ok) {
+          throw new Error(`Failed to fetch directions for segment ${i}`);
+        }
+        const data = await response.json();
+        if (!data.routes || data.routes.length === 0) {
+          throw new Error(`No route found for segment ${i}`);
+        }
+        const segmentGeometry = data.routes[0].geometry;
+        // For the first segment, take all coordinates.
+        // For subsequent segments, skip the first coordinate to avoid duplicate points.
+        if (i === 0) {
+          combinedCoordinates = segmentGeometry.coordinates;
+        } else {
+          combinedCoordinates = combinedCoordinates.concat(segmentGeometry.coordinates.slice(1));
+        }
+      } catch (error) {
+        console.error("Error fetching directions for segment", i, error);
+      }
+    }
+
+    // Build GeoJSON with the combined route segments
+    const geojson = {
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: combinedCoordinates
+      }
+    };
+
+    // Add the route as a new source and layer on the map
+    mapRef.current.addSource(routeSourceId, {
+      type: 'geojson',
+      data: geojson
+    });
+
+    mapRef.current.addLayer({
+      id: routeLayerId,
+      type: 'line',
+      source: routeSourceId,
+      layout: {
+        'line-join': 'round',
+        'line-cap': 'round'
+      },
+      paint: {
+        'line-color': isSatellite ? '#ff4444' : '#3b82f6',
+        'line-width': 4,
+        'line-opacity': 0.75
+      }
+    });
+
+    // Fit the map to the route bounds
+    const bounds = new mapboxgl.LngLatBounds();
+    combinedCoordinates.forEach(coord => bounds.extend(coord));
+    mapRef.current.fitBounds(bounds, { padding: 50, maxZoom: 15 });
   }, [route, isSatellite]);
 
   const updateMarkers = useCallback(() => {
     if (!mapRef.current || !route) return;
-  
-    // Clear existing markers
+
+    // Remove existing markers
     markersRef.current.forEach(marker => marker.remove());
     markersRef.current = [];
-  
-    // Add new markers with styled popups
+
+    // Add markers with updated naming convention:
+    // - First point: "Starting Point"
+    // - Last point: "End Point"
+    // - Intermediate points: "Stop 1", "Stop 2", etc.
     route.forEach((coordinates, index) => {
-      const popupContent = index === 0 ? 'Warehouse' : `Stop ${index}`;
+      let popupContent = '';
+      if (index === 0) {
+        popupContent = 'Starting Point';
+      } else if (index === route.length - 1) {
+        popupContent = 'End Point';
+      } else {
+        popupContent = `Stop ${index}`;
+      }
+
       const popupHtml = `
         <div style="
           background-color: ${isSatellite ? '#333' : 'white'};
@@ -105,14 +133,14 @@ const RouteMap = ({ route }) => {
           ${popupContent}
         </div>
       `;
-  
+
       const marker = new mapboxgl.Marker({
         color: isSatellite ? '#ff4444' : '#3b82f6'
       })
         .setLngLat(coordinates)
         .setPopup(new mapboxgl.Popup().setHTML(popupHtml))
         .addTo(mapRef.current);
-  
+
       markersRef.current.push(marker);
     });
   }, [route, isSatellite]);
@@ -120,18 +148,18 @@ const RouteMap = ({ route }) => {
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
-    // Initialize map with default style
+    // Initialize the map
     mapRef.current = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: STYLE_URLS.streets,
-      center: [77.5946, 12.9716], // Default center
+      center: [77.5946, 12.9716],
       zoom: 11
     });
 
     // Add navigation controls
     mapRef.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    // Initial setup
+    // Once the map loads, add markers and the route layer
     mapRef.current.on('load', () => {
       updateMarkers();
       addRouteLayer();
