@@ -1,5 +1,3 @@
-"use client"
-
 import { useRef, useMemo } from "react"
 import { motion } from "framer-motion"
 import { Canvas, useFrame } from "@react-three/fiber"
@@ -108,7 +106,7 @@ const HeroSection = () => {
 
         {/* Navbar */}
         <div className="fixed top-0 left-0 right-0 z-20">
-          <nav className="bg-transparent backdrop-blur-sm bg-[#0f172a]/20">
+          <nav className="backdrop-blur-sm bg-[#0f172a]/20">
             <Navbar_home />
           </nav>
         </div>
@@ -121,7 +119,7 @@ const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
           >
-            {/* Logo with enhanced animation */}
+            {/* Logo with enhanced animation and INCREASED SIZE */}
             <motion.div
               className="flex justify-center mb-1"
               initial={{ opacity: 0, scale: 0.9 }}
@@ -135,12 +133,12 @@ const HeroSection = () => {
               <img
                 src={UplyftLogo || "/placeholder.svg"}
                 alt="UPLYFT"
-                className="h-24 md:h-32 w-auto filter drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+                className="h-32 md:h-44 lg:h-52 w-auto filter drop-shadow-[0_0_15px_rgba(59,130,246,0.5)]"
               />
             </motion.div>
 
-            {/* Enhanced divider */}
-            <div className="h-0.5 w-32 bg-gradient-to-r from-transparent via-[#3b82f6] to-transparent mx-auto my-6"></div>
+            {/* Enhanced divider - adjusted position for larger logo */}
+            <div className="h-0.5 w-32 bg-gradient-to-r from-transparent via-[#3b82f6] to-transparent mx-auto my-4"></div>
 
             <motion.h2
               className="text-xl md:text-2xl font-light tracking-wider text-white max-w-lg mx-auto"
@@ -161,7 +159,7 @@ const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
           >
-            Navigate cities. Conquer chaos. <span className="text-[#60a5fa] font-normal">Redefine</span> city life.
+            Navigate cities. Conquer chaos. <span className="text-[#60a5fa] font-normal"> Redefine</span> city life.
           </motion.p>
 
           {/* Enhanced CTA button */}
@@ -203,7 +201,7 @@ const HeroSection = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
           >
-            {["Smart Navigation", "Real-time Updates", "City Insights"].map((feature, index) => (
+            {/* {["Smart Navigation", "Real-time Updates", "City Insights"].map((feature, index) => (
               <motion.div
                 key={feature}
                 className="flex items-center bg-white/5 backdrop-blur-md px-4 py-2 rounded-full"
@@ -215,7 +213,7 @@ const HeroSection = () => {
                 <div className="w-2 h-2 rounded-full bg-[#3b82f6] mr-2"></div>
                 <span className="text-sm font-light">{feature}</span>
               </motion.div>
-            ))}
+            ))} */}
           </motion.div>
         </div>
 
@@ -267,4 +265,3 @@ const HeroSection = () => {
 }
 
 export default HeroSection
-
