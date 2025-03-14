@@ -42,7 +42,7 @@ export const Inventory = ({ totalCapacity, attemptedOptimize }) => {
       transition={{ duration: 0.5 }}
       className="w-full px-4 py-6"
     >
-      <div className="max-w-4xl mx-auto bg-neutral-800 rounded-xl shadow-lg">
+      <div className="max-w-4xl mx-auto bg-neutral-950 rounded-xl shadow-lg">
         <h2 className="text-lg md:text-xl font-semibold text-gray-200 p-4 md:p-6 border-b border-neutral-700">
           Delivery Inventory
         </h2>

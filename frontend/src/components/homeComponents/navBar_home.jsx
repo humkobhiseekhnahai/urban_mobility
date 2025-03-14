@@ -68,7 +68,7 @@ const Navbar_home = () => {
     <AnimatePresence>
       {(isVisible || mobileDrawerOpen) && (
         <motion.nav
-          className="fixed top-0 left-0 right-0 z-50 border-b border-white/10"
+          className="fixed top-0 left-0 right-0 z-50"
           initial={{ y: -100 }}
           animate={controls}
           exit={{ y: -100 }}
