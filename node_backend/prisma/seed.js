@@ -61,15 +61,58 @@ const insertData = async (model, data, name) => {
   for (let i = 0; i < data.length; i += BATCH_SIZE) {
     const batch = data.slice(i, i + BATCH_SIZE);
     try {
-      await prisma[model].createMany({ data: batch });
-      console.log(`✅ Inserted batch ${i / BATCH_SIZE + 1} of ${Math.ceil(data.length / BATCH_SIZE)} into ${name}`);
+      if (model === "busRoute") {
+        // Use upsert for BusRoute to handle unique constraint
+        for (const record of batch) {
+          await prisma.busRoute.upsert({
+            where: { routeNumber: record.routeNumber },
+            update: {
+              routeName: record.routeName,
+              origin: record.origin,
+              departureTimes: record.departureTimes,
+              mapJsonContent: record.mapJsonContent,
+            },
+            create: {
+              routeNumber: record.routeNumber,
+              routeName: record.routeName,
+              origin: record.origin,
+              departureTimes: record.departureTimes,
+              mapJsonContent: record.mapJsonContent,
+            },
+          });
+        }
+        console.log(`✅ Upserted batch ${i / BATCH_SIZE + 1} of ${Math.ceil(data.length / BATCH_SIZE)} into ${name}`);
+      } else {
+        // Use createMany for other models
+        await prisma[model].createMany({ data: batch });
+        console.log(`✅ Inserted batch ${i / BATCH_SIZE + 1} of ${Math.ceil(data.length / BATCH_SIZE)} into ${name}`);
+      }
     } catch (err) {
       console.error(`❌ Error inserting batch ${i / BATCH_SIZE + 1} into ${name}: ${err.message}`);
       
       // Attempt to insert records individually to find problematic data
       for (const record of batch) {
         try {
-          await prisma[model].create({ data: record });
+          if (model === "busRoute") {
+            await prisma.busRoute.upsert({
+              where: { routeNumber: record.routeNumber },
+              update: {
+                routeName: record.routeName,
+                origin: record.origin,
+                departureTimes: record.departureTimes,
+                mapJsonContent: record.mapJsonContent,
+              },
+              create: {
+                routeNumber: record.routeNumber,
+                routeName: record.routeName,
+                origin: record.origin,
+                departureTimes: record.departureTimes,
+                mapJsonContent: record.mapJsonContent,
+              },
+            });
+          } else {
+            await prisma[model].create({ data: record });
+          }
         } catch (innerErr) {
           console.error(`❌ Failed record: ${JSON.stringify(record)}`);
           console.error(`⚠️ Inner error: ${innerErr.message}`);
