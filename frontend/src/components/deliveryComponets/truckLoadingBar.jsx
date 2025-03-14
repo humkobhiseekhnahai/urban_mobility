@@ -1,4 +1,4 @@
-
+//truck loading
 import { useState, useEffect } from "react"
 
 // eslint-disable-next-line react/prop-types
@@ -21,7 +21,7 @@ const TruckLoadingBar = ({ percentage }) => {
 
   if(!validPercentage){
     return(
-      <div className="text-white text-xl">
+      <div className="text-white text-sm sm:text-xl">
         Not a valid percentage
       </div>
     )
@@ -145,4 +145,3 @@ const TruckLoadingBar = ({ percentage }) => {
 }
 
 export default TruckLoadingBar
-
