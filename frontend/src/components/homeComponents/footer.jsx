@@ -16,9 +16,9 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: <FaTwitter />, href: 'https://twitter.com/uplyftHQ' },
-    { icon: <FaLinkedin />, href: 'https://linkedin.com/company/uplyft' },
-    { icon: <FaInstagram />, href: 'https://instagram.com/uplyft' },
+    { icon: <FaTwitter />, href: '#' },
+    { icon: <FaLinkedin />, href: '#' },
+    { icon: <FaInstagram />, href: '#' },
   ];
 
   const handleSubmit = (e) => {
