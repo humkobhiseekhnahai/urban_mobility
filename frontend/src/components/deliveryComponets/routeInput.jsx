@@ -203,7 +203,9 @@ export default function RouteInput({ attemptedOptimize }) {
                   onChange={(e) => setStartInputValue(e.target.value)}
                   onBlur={handleStartBlur}
                   placeholder="Warehouse (address)"
-                  className={`bg-neutral-800 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''
+
+                  className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''
+
                     }`}
                   required
                 />
@@ -224,7 +226,9 @@ export default function RouteInput({ attemptedOptimize }) {
                     onChange={(e) => handleDeliveryLocationChange(index, e.target.value)}
                     onBlur={() => handleDeliveryBlur(index)}
                     placeholder={`Stop ${index + 1} (address)`}
-                    className={`bg-neutral-800 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.location.trim() === '' ? 'border border-red-500' : ''
+
+                    className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.location.trim() === '' ? 'border border-red-500' : ''
+
                       }`}
                   />
                   <input
@@ -234,7 +238,9 @@ export default function RouteInput({ attemptedOptimize }) {
                     value={stop.capacity || ''}
                     onChange={(e) => handleCapacityChange(index, e.target.value)}
                     placeholder="Weight (kg)"
-                    className={`bg-neutral-800 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.capacity <= 0 ? 'border border-red-500' : ''
+
+                    className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.capacity <= 0 ? 'border border-red-500' : ''
+
                       }`}
                   />
                   <motion.button
@@ -297,7 +303,9 @@ export default function RouteInput({ attemptedOptimize }) {
                   onChange={(e) => setStartInputValue(e.target.value)}
                   onBlur={handleStartBlur}
                   placeholder="Warehouse (lon,lat)"
-                  className={`bg-neutral-800 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''}`}
+
+                  className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && startingLocation.trim() === '' ? 'border border-red-500' : ''}`}
+
                   required
                 />
                 {attemptedOptimize && startingLocation.trim() === '' && (
@@ -317,7 +325,9 @@ export default function RouteInput({ attemptedOptimize }) {
                     onChange={(e) => handleDeliveryLocationChange(index, e.target.value)}
                     onBlur={() => handleDeliveryBlur(index)}
                     placeholder={`Stop ${index + 1} (lon,lat)`}
-                    className={`bg-neutral-800 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.location.trim() === '' ? 'border border-red-500' : ''}`}
+
+                    className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.location.trim() === '' ? 'border border-red-500' : ''}`}
+
                   />
                   <input
                     type="number"
@@ -326,7 +336,9 @@ export default function RouteInput({ attemptedOptimize }) {
                     value={stop.capacity || ''}
                     onChange={(e) => handleCapacityChange(index, e.target.value)}
                     placeholder="Weight (kg)"
-                    className={`bg-neutral-800 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.capacity <= 0 ? 'border border-red-500' : ''}`}
+
+                    className={`bg-neutral-950 text-gray-200 px-2 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-48 sm:w-64 text-xs sm:text-base ${attemptedOptimize && stop.capacity <= 0 ? 'border border-red-500' : ''}`}
+
                   />
                   <motion.button
                     whileHover={{ scale: 1.1 }}
