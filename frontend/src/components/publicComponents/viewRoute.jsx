@@ -1,18 +1,19 @@
 import { useRef, useEffect } from "react";
 import { RotateCw, ArrowUpDown, Bus } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 function getTimeframeColor(timeframe) {
   switch (timeframe) {
     case "Morning Bus":
-      return "bg-yellow-600/20 text-yellow-300";
+      return "bg-amber-600/10 text-amber-300";
     case "Afternoon Bus":
-      return "bg-blue-600/20 text-blue-300";
+      return "bg-blue-600/10 text-blue-300";
     case "Evening Bus":
-      return "bg-purple-600/20 text-purple-300";
+      return "bg-purple-600/10 text-purple-300";
     case "Night Bus":
-      return "bg-indigo-600/20 text-indigo-300";
+      return "bg-indigo-600/10 text-indigo-300";
     default:
-      return "bg-gray-600/20 text-gray-300";
+      return "bg-gray-600/10 text-gray-300";
   }
 }
 
@@ -26,25 +27,18 @@ function getTimeframe(time) {
 }
 
 function transformRoute(apiRoute) {
-  // Add safe parsing with fallback
   const mapJson = JSON.parse(apiRoute.mapJsonContent || "[]");
-  
-  // Add null checks for mapJson structure
-  const lastStop = mapJson?.slice(-1)[0]; // Get last element safely
+  const lastStop = mapJson?.slice(-1)[0];
   const destination = lastStop?.busstop?.split(",")[0] || "Unknown Destination";
-
-  // Add fallback for departureTimes
   const departureTimes = (apiRoute.departureTimes || "").split(",").map(t => t.trim());
   const startTime = departureTimes[0] || "N/A";
-
-  // Add error handling for date parsing
-  const date = apiRoute.createdAt ? 
-    new Date(apiRoute.createdAt).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    }) : "N/A";
-
+  const date = apiRoute.createdAt
+    ? new Date(apiRoute.createdAt).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      })
+    : "N/A";
   return {
     id: apiRoute.routeNumber || "N/A",
     rawId: apiRoute.id,
@@ -64,26 +58,25 @@ export default function ViewRoutes({
   fetchNextPage,
   scrollRef,
 }) {
-  const lastRouteRef = useRef();
+  const loadingRef = useRef();
 
   useEffect(() => {
-    if (!hasMore || loading || !scrollRef.current || !lastRouteRef.current) return;
+    if (!hasMore || !scrollRef.current || !loadingRef.current) return;
 
-    const observer = new IntersectionObserver(
+    const loadingObserver = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !loading && hasMore) {
           fetchNextPage();
         }
       },
-      { root: scrollRef.current, rootMargin: "100px", threshold: 0.1 }
+      { root: scrollRef.current, rootMargin: "300px", threshold: 0.1 }
     );
 
-    observer.observe(lastRouteRef.current);
+    loadingObserver.observe(loadingRef.current);
+    return () => loadingObserver.disconnect();
+  }, [hasMore, loading, fetchNextPage, scrollRef]);
 
-    return () => observer.disconnect();
-  }, [hasMore, loading, fetchNextPage, scrollRef, routes]);
-
-  const displayedRoutes = routes.map(route => {
+  const displayedRoutes = routes.map((route) => {
     try {
       return transformRoute(route);
     } catch (error) {
@@ -95,58 +88,65 @@ export default function ViewRoutes({
         destination: { name: "Error" },
         date: "N/A",
         startTime: "N/A",
-        timeframe: "Error"
+        timeframe: "Error",
       };
     }
   });
 
   return (
-    <div className="space-y-6">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <button
-            className="flex items-center h-10 px-4 border border-neutral-700 text-white rounded-md hover:bg-neutral-700"
-            onClick={refreshRoutes}
-            disabled={loading}
-          >
-            {loading && routes.length === 0 ? (
-              <span className="flex items-center">
-                <svg
-                  className="animate-spin h-5 w-5 mr-3 text-blue-400"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                Loading...
-              </span>
-            ) : (
-              <>
-                <RotateCw className="mr-2 h-4 w-4" />
-                Refresh
-              </>
-            )}
-          </button>
-        </div>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="flex items-center h-10 px-4 bg-neutral-800 text-white rounded-lg hover:bg-neutral-700 transition-colors"
+          onClick={refreshRoutes}
+          disabled={loading}
+        >
+          {loading && routes.length === 0 ? (
+            <span className="flex items-center">
+              <motion.svg
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="h-5 w-5 mr-3 text-blue-400"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </motion.svg>
+              Loading...
+            </span>
+          ) : (
+            <>
+              <RotateCw className="mr-2 h-4 w-4" />
+              Refresh
+            </>
+          )}
+        </motion.button>
       </div>
 
-      <div className="overflow-x-auto">
+      <motion.div
+        className="overflow-x-auto"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
         <div className="w-full inline-block align-middle">
-          <div className="overflow-hidden border border-neutral-700 rounded-lg">
-            <table className="w-full divide-y divide-neutral-700 table-fixed">
-              <thead className="bg-neutral-800">
+          <div className="overflow-hidden rounded-lg shadow-md">
+            <table className="w-full divide-y divide-neutral-800 table-fixed">
+              <thead className="bg-neutral-900 sticky top-0 z-10">
                 <tr>
                   <th scope="col" className="w-1/6 text-left py-3 px-4 text-white font-medium">
                     Route
@@ -160,13 +160,17 @@ export default function ViewRoutes({
                   <th scope="col" className="w-1/6 text-left py-3 px-4 text-white font-medium">
                     <div className="flex items-center">
                       Date
-                      <ArrowUpDown className="ml-2 h-4 w-4" />
+                      <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.3 }}>
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                      </motion.div>
                     </div>
                   </th>
                   <th scope="col" className="w-1/12 text-left py-3 px-4 text-white font-medium">
                     <div className="flex items-center">
                       Time
-                      <ArrowUpDown className="ml-2 h-4 w-4" />
+                      <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.3 }}>
+                        <ArrowUpDown className="ml-2 h-4 w-4" />
+                      </motion.div>
                     </div>
                   </th>
                   <th scope="col" className="w-1/6 text-left py-3 px-4 text-white font-medium">
@@ -174,83 +178,106 @@ export default function ViewRoutes({
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-700 bg-neutral-900">
-                {displayedRoutes.map((route, index) => (
-                  <tr
-                    key={`${route.id}-${index}`}
-                    className="hover:bg-neutral-800"
-                    ref={index === displayedRoutes.length - 1 ? lastRouteRef : null}
-                  >
-                    <td className="py-3 px-4 font-medium text-white">
-                      <div className="flex items-center">
-                        <div className="bg-neutral-700 p-2 rounded-md mr-2 flex-shrink-0">
-                          <Bus className="h-4 w-4 text-blue-400" />
-                        </div>
-                        <span className="truncate">{route.id}</span>
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-gray-300">
-                      <div className="truncate" title={route.origin.name}>
-                        {route.origin.name}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-gray-300">
-                      <div className="truncate" title={route.destination.name}>
-                        {route.destination.name}
-                      </div>
-                    </td>
-                    <td className="py-3 px-4 text-gray-300">
-                      <div className="truncate">{route.date}</div>
-                    </td>
-                    <td className="py-3 px-4 text-gray-300">
-                      <div className="truncate">{route.startTime}</div>
-                    </td>
-                    <td className="py-3 px-4">
-                      <span
-                        className={`px-2 py-1 rounded-md text-xs font-medium ${getTimeframeColor(
-                          route.timeframe
-                        )}`}
-                      >
-                        {route.timeframe}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+              <tbody className="divide-y divide-neutral-800 bg-neutral-900">
+  <AnimatePresence mode="sync">
+    {displayedRoutes.map((route) => (
+      <motion.tr
+        key={route.rawId}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="hover:bg-neutral-800/50 transition-colors"
+      >
+        <td className="py-3 px-4 font-medium text-white">
+          <div className="flex items-center">
+            <motion.div
+              whileHover={{ scale: 1.1, rotate: 5 }}
+              className="bg-neutral-800 p-2 rounded-md mr-2 flex-shrink-0"
+            >
+              <Bus className="h-4 w-4 text-blue-400" />
+            </motion.div>
+            <span className="truncate">{route.id}</span>
+          </div>
+        </td>
+        <td className="py-3 px-4 text-gray-300">
+          <div className="truncate" title={route.origin.name}>
+            {route.origin.name}
+          </div>
+        </td>
+        <td className="py-3 px-4 text-gray-300">
+          <div className="truncate" title={route.destination.name}>
+            {route.destination.name}
+          </div>
+        </td>
+        <td className="py-3 px-4 text-gray-300">
+          <div className="truncate">{route.date}</div>
+        </td>
+        <td className="py-3 px-4 text-gray-300">
+          <div className="truncate">{route.startTime}</div>
+        </td>
+        <td className="py-3 px-4">
+          <motion.span
+            whileHover={{ scale: 1.05 }}
+            className={`px-2 py-1 rounded-md text-xs font-medium ${getTimeframeColor(
+              route.timeframe
+            )}`}
+          >
+            {route.timeframe}
+          </motion.span>
+        </td>
+      </motion.tr>
+    ))}
+  </AnimatePresence>
+</tbody>
             </table>
           </div>
         </div>
-        {hasMore && (
-          <div
-            className="h-10 flex items-center justify-center"
+
+        <div ref={loadingRef} className="h-20 flex items-center justify-center mt-4">
+          {loading && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex items-center text-white"
+            >
+              <motion.svg
+                animate={{ rotate: 360 }}
+                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                className="h-5 w-5 mr-3 text-blue-400"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                  fill="none"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </motion.svg>
+              Loading more routes...
+            </motion.div>
+          )}
+        </div>
+
+        {!hasMore && routes.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-4 text-gray-400 text-sm"
           >
-            {loading && routes.length > 0 && (
-              <span className="flex items-center text-white">
-                <svg
-                  className="animate-spin h-5 w-5 mr-3 text-blue-400"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                Loading more routes...
-              </span>
-            )}
-          </div>
+            End of routes
+          </motion.div>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

@@ -65,25 +65,10 @@ export default function RouteDashboard() {
     return (
         <div className="flex-1 flex flex-col h-screen bg-neutral-900 overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 md:p-6 border-b border-neutral-700">
+            <div className="flex items-center justify-between p-4 border-b border-neutral-700 h-20">
                 <div>
                     <h1 className="text-xl md:text-2xl font-bold text-white">Bus Route Management</h1>
                     <p className="text-sm md:text-base text-gray-400">Manage and optimize bus routes</p>
-                </div>
-                <div className="flex items-center gap-2 md:gap-4">
-                    <div className="relative hidden md:block">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-                        <input
-                            placeholder="Search routes..."
-                            className="pl-10 w-48 lg:w-64 bg-neutral-800 border border-neutral-700 rounded-md h-10 text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-600"
-                        />
-                    </div>
-                    <button
-                        className="md:hidden p-2 text-white bg-neutral-800 rounded-md"
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    >
-                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
                 </div>
             </div>
 
@@ -99,19 +84,19 @@ export default function RouteDashboard() {
                         <div className="flex flex-col">
                             <button
                                 onClick={() => handleTabChange("view")}
-                                className={`py-4 px-6 text-white text-left ${activeTab === "view" ? "bg-neutral-700" : ""}`}
+                                className={`py-4 px-6 text-white text-left hover:bg-neutral-700 ${activeTab === "view" ? "bg-neutral-700" : ""}`}
                             >
                                 View Routes
                             </button>
                             <button
                                 onClick={() => handleTabChange("create")}
-                                className={`py-4 px-6 text-white text-left ${activeTab === "create" ? "bg-neutral-700" : ""}`}
+                                className={`py-4 px-6 text-white text-left hover:bg-neutral-700 ${activeTab === "create" ? "bg-neutral-700" : ""}`}
                             >
                                 Create Route
                             </button>
                             <button
                                 onClick={() => handleTabChange("optimize")}
-                                className={`py-4 px-6 text-white text-left ${activeTab === "optimize" ? "bg-neutral-700" : ""}`}
+                                className={`py-4 px-6 text-white text-left hover:bg-neutral-700 ${activeTab === "optimize" ? "bg-neutral-700" : ""}`}
                             >
                                 Optimize Routes
                             </button>
@@ -121,7 +106,7 @@ export default function RouteDashboard() {
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
                                 <input
                                     placeholder="Search routes..."
-                                    className="pl-10 w-full bg-neutral-800 border border-neutral-700 rounded-md h-10 text-white placeholder:text-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-600"
+                                    className="pl-10 w-full bg-neutral-800 border border-neutral-700 rounded-md h-10 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600"
                                 />
                             </div>
                         </div>
@@ -134,19 +119,19 @@ export default function RouteDashboard() {
                 <div className="grid grid-cols-3 bg-neutral-800 rounded-md overflow-hidden">
                     <button
                         onClick={() => setActiveTab("view")}
-                        className={`py-2 text-white ${activeTab === "view" ? "bg-neutral-700" : ""}`}
+                        className={`py-2 text-white ${activeTab === "view" ? "bg-neutral-700 font-bold" : ""}`}
                     >
                         View Routes
                     </button>
                     <button
                         onClick={() => setActiveTab("create")}
-                        className={`py-2 text-white ${activeTab === "create" ? "bg-neutral-700" : ""}`}
+                        className={`py-2 text-white ${activeTab === "create" ? "bg-neutral-700 font-bold" : ""}`}
                     >
                         Create Route
                     </button>
                     <button
                         onClick={() => setActiveTab("optimize")}
-                        className={`py-2 text-white ${activeTab === "optimize" ? "bg-neutral-700" : ""}`}
+                        className={`py-2 text-white ${activeTab === "optimize" ? "bg-neutral-700 font-bold" : ""}`}
                     >
                         Optimize Routes
                     </button>
