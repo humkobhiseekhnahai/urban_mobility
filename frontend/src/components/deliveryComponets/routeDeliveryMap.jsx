@@ -1,3 +1,4 @@
+//route delivery map
 import { useEffect, useRef, useState, useCallback } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -169,9 +170,9 @@ const RouteMap = ({ route }) => {
       <button 
         onClick={() => setIsSatellite(!isSatellite)}
         className={`
-          absolute top-4 left-4 z-10 
-          px-4 py-2 
-          text-xs font-medium tracking-wider uppercase
+          absolute top-2 sm:top-4 left-2 sm:left-4 z-10 
+          px-2 sm:px-4 py-1 sm:py-2 
+          text-[10px] sm:text-xs font-medium tracking-wider uppercase
           transition-all duration-300 ease-in-out
           rounded-md backdrop-blur-sm 
           border border-gray-200
