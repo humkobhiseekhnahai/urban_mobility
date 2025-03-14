@@ -44,6 +44,9 @@ export const Delivery_new = () => {
 
       const stops = [{ location: startingLocation, capacity: 0 }, ...deliveryStops];
       const data = await collectRouteData(stops, markers, totalCapacity, numberOfVehicles);
+      // Log the payload to verify that 'weight' is included in delivery_locations
+      console.log("Payload to be sent:", JSON.stringify(data, null, 2));
+
       const url = ecoMode
         ? "http://127.0.0.1:8000/optimize_delivery?method=ga&ecomode=true"
         : "http://127.0.0.1:8000/optimize_delivery?method=ga";
@@ -103,8 +106,9 @@ export const Delivery_new = () => {
                   step="0.1"
                   placeholder="Enter capacity"
                   onChange={(e) => setTotalCapacity(Number(e.target.value))}
-                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 ${attemptedOptimize && totalCapacity <= 0 ? "border-red-500" : ""
-                    }`}
+                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 ${
+                    attemptedOptimize && totalCapacity <= 0 ? "border-red-500" : ""
+                  }`}
                 />
               </div>
               <div className="flex-1 md:max-w-xs border-b border-neutral-700 md:border-b-0 px-4 md:px-0 py-4 md:py-0">
@@ -115,8 +119,9 @@ export const Delivery_new = () => {
                   step="1"
                   placeholder="Enter quantity"
                   onChange={(e) => setNumberOfVehicles(Number(e.target.value))}
-                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 ${attemptedOptimize && numberOfVehicles < 1 ? "border-red-500" : ""
-                    }`}
+                  className={`w-full bg-transparent text-gray-200 border-b border-gray-600 py-2 px-1 focus:outline-none focus:border-blue-500 transition-colors placeholder-gray-500 ${
+                    attemptedOptimize && numberOfVehicles < 1 ? "border-red-500" : ""
+                  }`}
                 />
               </div>
             </div>
@@ -164,15 +169,17 @@ export const Delivery_new = () => {
               <motion.button
                 onClick={toggleEcoMode}
                 title="Toggle Eco Mode: Optimizes for fuel efficiency"
-                className={`relative flex items-center h-7 w-16 rounded-full transition-colors duration-300 ease-in-out focus:outline-none ${ecoMode ? "bg-green-500 shadow-[0_0_10px_2px_rgba(34,197,94,0.5)]" : "bg-gray-600"
-                  }`}
+                className={`relative flex items-center h-7 w-16 rounded-full transition-colors duration-300 ease-in-out focus:outline-none ${
+                  ecoMode ? "bg-green-500 shadow-[0_0_10px_2px_rgba(34,197,94,0.5)]" : "bg-gray-600"
+                }`}
                 whileTap={{ scale: 0.95 }}
                 aria-pressed={ecoMode}
                 aria-label="Toggle eco mode"
               >
                 <span
-                  className={`absolute text-xs font-bold transition-opacity duration-300 ease-in-out ${ecoMode ? "opacity-0" : "opacity-100 text-gray-300 left-2"
-                    }`}
+                  className={`absolute text-xs font-bold transition-opacity duration-300 ease-in-out ${
+                    ecoMode ? "opacity-0" : "opacity-100 text-gray-300 left-2"
+                  }`}
                 >
                   ECO
                 </span>
@@ -182,11 +189,19 @@ export const Delivery_new = () => {
                   animate={{ x: ecoMode ? "calc(100% - 20px)" : "2px" }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
-                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22l1-2.3A4.49,4.49,0,0,0,8,20C19,20,22,3,22,3,21,5,14,5.25,9,6.25S2,11.5,2,13.5a6.22,6.22,0,0,0,1.75,3.75C7,8,17,8,17,8Z"></path> <rect width="24" height="24" fill="none"></rect> </g></svg>
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#000000">
+                    <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+                    <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+                    <g id="SVGRepo_iconCarrier">
+                      <path d="M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22l1-2.3A4.49,4.49,0,0,0,8,20C19,20,22,3,22,3,21,5,14,5.25,9,6.25S2,11.5,2,13.5a6.22,6.22,0,0,0,1.75,3.75C7,8,17,8,17,8Z"></path>
+                      <rect width="24" height="24" fill="none"></rect>
+                    </g>
+                  </svg>
                 </motion.div>
                 <span
-                  className={`absolute text-xs font-bold transition-opacity duration-300 ease-in-out ${ecoMode ? "opacity-100 text-white right-2" : "opacity-0"
-                    }`}
+                  className={`absolute text-xs font-bold transition-opacity duration-300 ease-in-out ${
+                    ecoMode ? "opacity-100 text-white right-2" : "opacity-0"
+                  }`}
                 >
                   ECO
                 </span>
@@ -202,7 +217,7 @@ export const Delivery_new = () => {
                 {!isStartingLocationValid && <li>Please provide the warehouse location.</li>}
                 {!allStopsValid && <li>All delivery stops must have both location and weight greater than 0.</li>}
                 {!isVehicleInfoValid && (
-                  <li>Please provide valid vehicle information (number of vehicles &gt;= 1 and capacity &gt; 0).</li>
+                  <li>Please provide valid vehicle information (number of vehicles >= 1 and capacity > 0).</li>
                 )}
                 {!isCapacitySufficient && (
                   <li>Total vehicle capacity must be greater than or equal to the total delivery weight.</li>
