@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronRight, Home } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
+import logo from '../assets/UPLYFT.svg';
 
 export const NavBarComponent = () => {
   const [isDeliveryOpen, setDeliveryOpen] = useState(false);
@@ -30,9 +31,10 @@ export const NavBarComponent = () => {
 
   return (
     <div className="bg-white/10 backdrop-blur-md w-56 min-h-screen rounded-lg flex-shrink-0">
-      <div className="h-15 border-b-2 border-neutral-700 mx-4 mb-10 flex justify-center items-center py-4 text-xl font-bold text-white">
-        UPLYFT
+      <div className="h-30 border-b-2 border-neutral-700 mx-4 mb-10 flex justify-center items-center">
+      <img src={logo} alt="UPLYFT Logo" className="-mt-7 h-30 w-22 object-contain mb-1"/>
       </div>
+      
 
       {/* Home */}
       <div 

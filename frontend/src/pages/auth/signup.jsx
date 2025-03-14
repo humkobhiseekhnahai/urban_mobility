@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import video from "../../assets/video1.mp4";
+import { motion } from 'framer-motion';
+import { Icon } from '@iconify/react';
+import * as THREE from 'three';
+import logo from '../../assets/UPLYFT.svg';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -10,6 +13,159 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const canvasRef = useRef(null);
+  const rendererRef = useRef(null);
+  const sceneRef = useRef(null);
+  const frameIdRef = useRef(null);
+
+  // Three.js setup
+  useEffect(() => {
+    if (!canvasRef.current) return;
+
+    // Clean up any existing renderer to avoid context conflicts
+    if (rendererRef.current) {
+      rendererRef.current.dispose();
+    }
+
+    // Initialize scene
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    // Create renderer with preserveDrawingBuffer to avoid conflicts
+    const renderer = new THREE.WebGLRenderer({
+      canvas: canvasRef.current,
+      antialias: true,
+      alpha: true,
+      preserveDrawingBuffer: true
+    });
+
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // Limit pixel ratio for performance
+
+    // Store renderer reference for cleanup
+    rendererRef.current = renderer;
+
+    // Create particles
+    const particlesGeometry = new THREE.BufferGeometry();
+    const particlesCount = 2000;
+
+    const posArray = new Float32Array(particlesCount * 3);
+    const colorArray = new Float32Array(particlesCount * 3);
+
+    for (let i = 0; i < particlesCount * 3; i++) {
+      // Position
+      posArray[i] = (Math.random() - 0.5) * 10;
+
+      // Colors - blue theme
+      if (i % 3 === 0) {
+        colorArray[i] = Math.random() * 0.2; // R
+      } else if (i % 3 === 1) {
+        colorArray[i] = Math.random() * 0.5 + 0.3; // G
+      } else {
+        colorArray[i] = Math.random() * 0.5 + 0.5; // B
+      }
+    }
+
+    particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+    particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+
+    const particlesMaterial = new THREE.PointsMaterial({
+      size: 0.01,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.8,
+    });
+
+    const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particlesMesh);
+
+    // Position camera
+    camera.position.z = 3;
+
+    // Add ambient light
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+
+    // Add directional light
+    const directionalLight = new THREE.DirectionalLight(0x4169e1, 1);
+    directionalLight.position.set(1, 1, 1);
+    scene.add(directionalLight);
+
+    // Store scene reference
+    sceneRef.current = { scene, camera, particlesMesh };
+
+    // Mouse movement variables
+    let mouseX = 0;
+    let mouseY = 0;
+
+    // Mouse movement handler
+    const onMouseMove = (event) => {
+      mouseX = event.clientX - window.innerWidth / 2;
+      mouseY = event.clientY - window.innerHeight / 2;
+    };
+
+    // Add event listener
+    document.addEventListener('mousemove', onMouseMove);
+
+    // Handle window resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Animation function
+    const animate = () => {
+      if (!sceneRef.current || !rendererRef.current) return;
+
+      const { particlesMesh } = sceneRef.current;
+
+      particlesMesh.rotation.x += 0.0005;
+      particlesMesh.rotation.y += 0.0005;
+
+      // Mouse interaction
+      particlesMesh.rotation.x += (mouseY * 0.00003);
+      particlesMesh.rotation.y += (mouseX * 0.00003);
+
+      // Make sure we're using the correct context
+      renderer.render(scene, camera);
+
+      // Store frame ID for cleanup
+      frameIdRef.current = requestAnimationFrame(animate);
+    };
+
+    // Start animation
+    animate();
+
+    // Cleanup function
+    return () => {
+      // Cancel animation frame
+      if (frameIdRef.current) {
+        cancelAnimationFrame(frameIdRef.current);
+      }
+
+      // Remove event listeners
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('mousemove', onMouseMove);
+
+      // Dispose of Three.js resources
+      if (sceneRef.current) {
+        particlesGeometry.dispose();
+        particlesMaterial.dispose();
+      }
+
+      // Dispose of renderer
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
+        rendererRef.current = null;
+      }
+
+      // Clear scene reference
+      sceneRef.current = null;
+    };
+  }, []);
 
   const handleGoogleSignup = () => {
     window.location.href = 'http://localhost:3000/auth/google';
@@ -57,191 +213,252 @@ export default function Signup() {
     }
   };
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        when: "beforeChildren",
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.4 }
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black">
-      <div className="min-h-screen flex flex-col lg:flex-row">
-        {/* Video section - hidden on mobile */}
-        <div className="hidden lg:block lg:w-1/2 fixed left-0 h-screen">
-          <video
-            src={video}
-            className="w-full h-full object-cover"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
-        </div>
-    {/* Signup form section */}
-    <div className="w-full lg:w-1/2 lg:ml-auto flex items-center justify-center p-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-[95vw] md:max-w-md space-y-4 p-4 sm:p-6 md:p-8 rounded-2xl backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl">
-        
-        {/* Mobile video banner (only on small screens) */}
-        <div className="lg:hidden relative w-full h-[15vh] min-h-[100px] rounded-lg overflow-hidden mb-4">
-          <video
-            src={video}
-            className="w-full h-full object-cover"
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent"></div>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black overflow-hidden relative">
+      {/* Three.js Canvas */}
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 w-full h-full z-0"
+      />
 
-        <div className="space-y-2">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white text-center">
-            Create Account
-          </h2>
-          <p className="text-gray-400 text-center text-xs sm:text-sm">
-            Please fill in your details
-          </p>
-        </div>
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70 z-10"></div>
 
-        {error && (
-          <div className="p-2 rounded-lg bg-red-500/10 border border-red-500/50">
-            <p className="text-red-400 text-xs sm:text-sm text-center">{error}</p>
-          </div>
-        )}
+      {/* Home Button - Fixed position for all screen sizes */}
+      <motion.button
+        onClick={() => navigate('/')}
+        className="fixed top-4 right-4 z-50 flex items-center bg-gray-800/80 hover:bg-gray-700 text-white px-3 py-2 rounded-lg shadow-lg backdrop-blur-sm border border-gray-700/50 transition duration-200"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.4 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Icon icon="mdi:home" className="w-5 h-5" />
+        <span className="ml-1 hidden sm:inline">Home</span>
+      </motion.button>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          {/* Name Field */}
-          <div className="space-y-1">
-            <label className="block text-xs sm:text-sm md:text-base font-medium text-gray-300">
-              Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your name"
-              required
-              className="w-full px-3 py-2 text-xs sm:text-sm md:text-base rounded-lg bg-black/20 border border-gray-600 text-white placeholder-gray-500 focus:border-orange-400 focus:ring-orange-400 transition duration-200"
-            />
-          </div>
-
-          {/* Email Field */}
-          <div className="space-y-1">
-            <label className="block text-xs sm:text-sm md:text-base font-medium text-gray-300">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              className="w-full px-3 py-2 text-xs sm:text-sm md:text-base rounded-lg bg-black/20 border border-gray-600 text-white placeholder-gray-500 focus:border-orange-400 focus:ring-orange-400 transition duration-200"
-            />
-          </div>
-
-          {/* Password Field */}
-          <div className="space-y-1">
-            <label className="block text-xs sm:text-sm md:text-base font-medium text-gray-300">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-              className="w-full px-3 py-2 text-xs sm:text-sm md:text-base rounded-lg bg-black/20 border border-gray-600 text-white placeholder-gray-500 focus:border-orange-400 focus:ring-orange-400 transition duration-200"
-            />
-          </div>
-
-          {/* Confirm Password Field */}
-          <div className="space-y-1">
-            <label className="block text-xs sm:text-sm md:text-base font-medium text-gray-300">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm your password"
-              required
-              className="w-full px-3 py-2 text-xs sm:text-sm md:text-base rounded-lg bg-black/20 border border-gray-600 text-white placeholder-gray-500 focus:border-orange-400 focus:ring-orange-400 transition duration-200"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`w-full py-2 px-4 rounded-lg text-white font-medium text-xs sm:text-sm md:text-base transition duration-200 ${
-              isLoading
-                ? 'bg-orange-500/50 cursor-not-allowed'
-                : 'bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30'
-            }`}
+      <div className="min-h-screen flex items-center justify-center relative z-20">
+        {/* Signup form section */}
+        <motion.div
+          className="w-full max-w-md px-4"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div
+            className="w-full space-y-6 p-8 rounded-2xl backdrop-blur-xl bg-gray-900/50 border border-gray-700/50 shadow-2xl"
+            whileHover={{ boxShadow: "0 0 25px rgba(59, 130, 246, 0.3)" }}
+            transition={{ duration: 0.3 }}
           >
-            {isLoading ? 'Creating Account...' : 'Sign up'}
-          </button>
-        </form>
-
-        <div className="mt-3">
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-600"></div>
-            </div>
-            <div className="relative flex justify-center">
-              <span className="px-2 text-gray-400 text-xs sm:text-sm bg-transparent backdrop-blur-xl">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <div className="flex justify-center items-center mt-3">
-            <button
-              onClick={handleGoogleSignup}
-              className="p-2 rounded-full bg-white hover:bg-gray-100 transition duration-200"
-              aria-label="Sign up with Google"
+            <motion.div
+              className="flex justify-center mb-1"
+              variants={itemVariants}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="25"
-                height="25"
-                viewBox="0 0 48 48"
-                className="w-5 h-5 sm:w-6 sm:h-6"
+              
+                <img src={logo} alt="Logo" className="w-22 h-22" />
+              
+            </motion.div>
+
+            <motion.div className="space-y-2" variants={itemVariants}>
+              <h2 className="text-2xl sm:text-3xl font-bold text-white text-center">
+                Create Account
+              </h2>
+              <p className="text-gray-400 text-center text-sm">
+                Please fill in your details
+              </p>
+            </motion.div>
+
+            {error && (
+              <motion.div
+                className="p-3 rounded-lg bg-red-500/10 border border-red-500/50"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
               >
-                <path
-                  fill="#fbc02d"
-                  d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8
+                <p className="text-red-400 text-sm text-center">{error}</p>
+              </motion.div>
+            )}
+
+            <motion.form
+              className="space-y-5"
+              onSubmit={handleSubmit}
+              variants={itemVariants}
+            >
+              {/* Name Field */}
+              <motion.div className="space-y-2" variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300">
+                  Name
+                </label>
+                <motion.input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Enter your name"
+                  required
+                  className="w-full px-4 py-3 text-sm rounded-lg bg-gray-800/70 border border-gray-700/70 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 transition duration-200"
+                  whileFocus={{ scale: 1.01 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </motion.div>
+
+              {/* Email Field */}
+              <motion.div className="space-y-2" variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300">
+                  Email
+                </label>
+                <motion.input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  className="w-full px-4 py-3 text-sm rounded-lg bg-gray-800/70 border border-gray-700/70 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 transition duration-200"
+                  whileFocus={{ scale: 1.01 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </motion.div>
+
+              {/* Password Field */}
+              <motion.div className="space-y-2" variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300">
+                  Password
+                </label>
+                <motion.input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                  className="w-full px-4 py-3 text-sm rounded-lg bg-gray-800/70 border border-gray-700/70 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 transition duration-200"
+                  whileFocus={{ scale: 1.01 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </motion.div>
+
+              {/* Confirm Password Field */}
+              <motion.div className="space-y-2" variants={itemVariants}>
+                <label className="block text-sm font-medium text-gray-300">
+                  Confirm Password
+                </label>
+                <motion.input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Confirm your password"
+                  required
+                  className="w-full px-4 py-3 text-sm rounded-lg bg-gray-800/70 border border-gray-700/70 text-white placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500 transition duration-200"
+                  whileFocus={{ scale: 1.01 }}
+                  transition={{ duration: 0.2 }}
+                />
+              </motion.div>
+
+              <motion.button
+                type="submit"
+                disabled={isLoading}
+                className={`w-full py-3 px-4 rounded-lg text-white font-medium text-sm transition duration-200 ${isLoading
+                    ? 'bg-blue-600/50 cursor-not-allowed'
+                    : 'bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20'
+                  }`}
+                whileHover={{ scale: isLoading ? 1 : 1.02 }}
+                whileTap={{ scale: isLoading ? 1 : 0.98 }}
+                variants={itemVariants}
+              >
+                {isLoading ? 'Creating Account...' : 'Sign up'}
+              </motion.button>
+            </motion.form>
+
+            <motion.div className="mt-6" variants={itemVariants}>
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-700/50"></div>
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="px-3 text-gray-400 text-sm bg-gray-900/80">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+              <div className="flex justify-center items-center mt-4">
+                <motion.button
+                  onClick={handleGoogleSignup}
+                  className="p-3 rounded-full bg-gray-800/70 hover:bg-gray-700/70 border border-gray-700/50 transition duration-200"
+                  aria-label="Sign up with Google"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 48 48"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      fill="#fbc02d"
+                      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8
                      c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
                      C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20
                      C44,22.659,43.862,21.35,43.611,20.083z"
-                />
-                <path
-                  fill="#e53935"
-                  d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12
-                     c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657
-                     C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-                />
-                <path
-                  fill="#4caf50"
-                  d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238
+                    />
+                    <path
+                      fill="#e53935"
+                      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12
+                     c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4
+                     C16.318,4,9.656,8.337,6.306,14.691z"
+                    />
+                    <path
+                      fill="#4caf50"
+                      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238
                      C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025
-                     C9.505,39.556,16.227,44,24,44z"
-                />
-                <path
-                  fill="#1565c0"
-                  d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
-                     c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238
-                     C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
+                     C9.505,39"/>
 
-        <p className="mt-3 text-center text-gray-400 text-xs sm:text-sm">
-          Already have an account?{' '}
-          <Link to="/login" className="text-orange-400 hover:text-orange-300 font-medium">
-            Sign in
-          </Link>
-        </p>
+                    <path
+                      fill="#1565c0"
+                      d="M43.611,20.083L43.595,20L42,20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571
+                        c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238
+                        C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                    />
+                  </svg>
+                </motion.button>
+              </div>
+            </motion.div>
+
+            <motion.p
+              className="mt-6 text-center text-gray-400 text-sm"
+              variants={itemVariants}
+            >
+              Already have an account?{' '}
+              <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium">
+                Sign in
+              </Link>
+            </motion.p>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
-  </div>
-</div>
-
   );
 }
+
