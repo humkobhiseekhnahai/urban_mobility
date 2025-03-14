@@ -65,7 +65,8 @@ app.get("/api/bus-routes/stops", async (req, res) => {
       select: { mapJsonContent: true },
     });
 
-    const stopNamesSet = new Set();
+    // Use a Map to store unique stops with their coordinates
+    const stopsMap = new Map();
 
     busRoutes.forEach(route => {
       let mapContent = route.mapJsonContent;
@@ -81,29 +82,45 @@ app.get("/api/bus-routes/stops", async (req, res) => {
       }
 
       if (Array.isArray(mapContent)) {
-        mapContent.forEach(stop => stopNamesSet.add(stop.busstop));
+        mapContent.forEach(stop => {
+          // Check if stop has the required properties
+          if (stop.busstop) {
+            let lat = "";
+            let lon = "";
+            // Extract lat and lon from the 'latlons' array if available
+            if (stop.latlons && Array.isArray(stop.latlons) && stop.latlons.length >= 2) {
+              lat = stop.latlons[0];
+              lon = stop.latlons[1];
+            }
+            stopsMap.set(stop.busstop, {
+              name: stop.busstop,
+              lat,
+              lon
+            });
+          }
+        });
       }
     });
 
-    let stopNames = [...stopNamesSet]; // Convert Set to Array
+    // Convert Map to Array
+    let stops = Array.from(stopsMap.values());
 
     // Apply regex filter if `search` is provided
     if (search) {
       const regex = new RegExp(search, "i");
-      stopNames = stopNames.filter(name => regex.test(name));
+      stops = stops.filter(stop => regex.test(stop.name));
     }
 
     // Pagination
     const startIndex = (page - 1) * limit;
-    const paginatedStops = stopNames.slice(startIndex, startIndex + parseInt(limit));
+    const paginatedStops = stops.slice(startIndex, startIndex + parseInt(limit));
 
     res.json(paginatedStops);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch bus stop names" });
+    res.status(500).json({ error: "Failed to fetch bus stop data" });
   }
 });
-
 
 
 
