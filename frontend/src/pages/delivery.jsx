@@ -1,7 +1,7 @@
 //delivery page
 import { useState } from 'react';
 import { NavBarComponent } from '../components/navBarComponent';
-import { Delivery_new } from '../components/deliveryComponets/delivery_main';
+import { Delivery_new } from '../components/deliveryComponents/delivery_main';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
