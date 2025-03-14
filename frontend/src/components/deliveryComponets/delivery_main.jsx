@@ -217,7 +217,7 @@ export const Delivery_new = () => {
                 {!isStartingLocationValid && <li>Please provide the warehouse location.</li>}
                 {!allStopsValid && <li>All delivery stops must have both location and weight greater than 0.</li>}
                 {!isVehicleInfoValid && (
-                  <li>Please provide valid vehicle information (number of vehicles >= 1 and capacity > 0).</li>
+                   <li>Please provide valid vehicle information (number of vehicles &gt;= 1 and capacity &gt; 0).</li>
                 )}
                 {!isCapacitySufficient && (
                   <li>Total vehicle capacity must be greater than or equal to the total delivery weight.</li>
