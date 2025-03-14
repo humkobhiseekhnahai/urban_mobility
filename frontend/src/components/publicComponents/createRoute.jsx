@@ -12,7 +12,7 @@ import {
   RotateCw,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import RouteMap from "../deliveryComponets/routeDeliveryMap";
+import RouteMap from "../deliveryComponents/routeDeliveryMap";
 
 function validateCoordinate(value, type) {
   const num = parseFloat(value);

@@ -144,4 +144,4 @@ const TruckLoadingBar = ({ percentage }) => {
   )
 }
 
-export default TruckLoadingBar
+export default TruckLoadingBar;
