@@ -13,7 +13,7 @@ export const IncidentElement = ({ coordinates, category }) => {
         <Info
           width={20}
           height={20}
-          className="text-blue-300 relative top-1.5 mr-5"
+          className="text-blue-400 relative top-1.5 mr-5"
         />
       ) : (
         <TriangleAlert

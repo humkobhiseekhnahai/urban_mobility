@@ -19,7 +19,8 @@ const fetchData = async (model, res) => {
 };
 
 // CRUD for suggested routes
-app.route("/api/suggested-routes")
+app
+  .route("/api/suggested-routes")
   .get((req, res) => fetchData("suggestedRoute", res))
   .post(async (req, res) => {
     try {
@@ -29,18 +30,43 @@ app.route("/api/suggested-routes")
       }
 
       const newRoute = await prisma.suggestedRoute.create({
-        data: { source, destination, coordinates: JSON.stringify(coordinates) },
+        data: {
+          source,
+          destination,
+          coordinates: JSON.stringify(coordinates),
+          status: "pending",
+        },
       });
       res.status(201).json(newRoute);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: "Failed to add suggested route" });
     }
   });
 
+app.patch("/api/suggested-routes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!status) {
+      return res.status(400).json({ error: "Status field is required" });
+    }
+
+    const updatedRoute = await prisma.suggestedRoute.update({
+      where: { id: id },
+      data: { status },
+    });
+    res.json(updatedRoute);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to update suggested route" });
+  }
+});
+
 app.delete("/api/suggested-routes/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.suggestedRoute.delete({ where: { id: parseInt(id, 10) } });
+    await prisma.suggestedRoute.delete({ where: { id: id } });
     res.json({ message: "Suggested route deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete suggested route" });
@@ -68,7 +94,7 @@ app.get("/api/bus-routes/stops", async (req, res) => {
     // Use a Map to store unique stops with their coordinates
     const stopsMap = new Map();
 
-    busRoutes.forEach(route => {
+    busRoutes.forEach((route) => {
       let mapContent = route.mapJsonContent;
 
       // Ensure it's parsed JSON
@@ -82,20 +108,24 @@ app.get("/api/bus-routes/stops", async (req, res) => {
       }
 
       if (Array.isArray(mapContent)) {
-        mapContent.forEach(stop => {
+        mapContent.forEach((stop) => {
           // Check if stop has the required properties
           if (stop.busstop) {
             let lat = "";
             let lon = "";
             // Extract lat and lon from the 'latlons' array if available
-            if (stop.latlons && Array.isArray(stop.latlons) && stop.latlons.length >= 2) {
+            if (
+              stop.latlons &&
+              Array.isArray(stop.latlons) &&
+              stop.latlons.length >= 2
+            ) {
               lat = stop.latlons[0];
               lon = stop.latlons[1];
             }
             stopsMap.set(stop.busstop, {
               name: stop.busstop,
               lat,
-              lon
+              lon,
             });
           }
         });
@@ -108,12 +138,15 @@ app.get("/api/bus-routes/stops", async (req, res) => {
     // Apply regex filter if `search` is provided
     if (search) {
       const regex = new RegExp(search, "i");
-      stops = stops.filter(stop => regex.test(stop.name));
+      stops = stops.filter((stop) => regex.test(stop.name));
     }
 
     // Pagination
     const startIndex = (page - 1) * limit;
-    const paginatedStops = stops.slice(startIndex, startIndex + parseInt(limit));
+    const paginatedStops = stops.slice(
+      startIndex,
+      startIndex + parseInt(limit)
+    );
 
     res.json(paginatedStops);
   } catch (error) {
@@ -122,27 +155,41 @@ app.get("/api/bus-routes/stops", async (req, res) => {
   }
 });
 
-
-
 // ✅ Get bus routes with Pagination and Filtering
 app.get("/api/bus-routes", async (req, res) => {
   try {
-    const { routeNumber, routeName, origin, timeFrameStart, timeFrameEnd, page = 1, limit = 10 } = req.query;
+    const {
+      routeNumber,
+      routeName,
+      origin,
+      timeFrameStart,
+      timeFrameEnd,
+      page = 1,
+      limit = 10,
+    } = req.query;
     const pageNumber = parseInt(page, 10);
     const pageSize = parseInt(limit, 10);
 
-    if (isNaN(pageNumber) || isNaN(pageSize) || pageNumber < 1 || pageSize < 1) {
+    if (
+      isNaN(pageNumber) ||
+      isNaN(pageSize) ||
+      pageNumber < 1 ||
+      pageSize < 1
+    ) {
       return res.status(400).json({ error: "Invalid pagination parameters" });
     }
 
     const filters = {};
     if (routeNumber) filters.routeNumber = routeNumber;
-    if (routeName) filters.routeName = { contains: routeName, mode: "insensitive" };
+    if (routeName)
+      filters.routeName = { contains: routeName, mode: "insensitive" };
     if (origin) filters.origin = { contains: origin, mode: "insensitive" };
-    
+
     // ✅ Proper time filtering (Ensure departureTimes is an array)
     if (timeFrameStart && timeFrameEnd) {
-      filters.departureTimes = { some: { gte: timeFrameStart, lte: timeFrameEnd } };
+      filters.departureTimes = {
+        some: { gte: timeFrameStart, lte: timeFrameEnd },
+      };
     }
 
     const busRoutes = await prisma.busRoute.findMany({
@@ -153,11 +200,11 @@ app.get("/api/bus-routes", async (req, res) => {
 
     const totalRoutes = await prisma.busRoute.count({ where: filters });
 
-    res.json({ 
-      data: busRoutes, 
-      currentPage: pageNumber, 
-      totalPages: Math.ceil(totalRoutes / pageSize), 
-      totalRoutes 
+    res.json({
+      data: busRoutes,
+      currentPage: pageNumber,
+      totalPages: Math.ceil(totalRoutes / pageSize),
+      totalRoutes,
     });
   } catch (error) {
     console.error(error);
@@ -167,7 +214,15 @@ app.get("/api/bus-routes", async (req, res) => {
 
 app.get("/api/:model", async (req, res) => {
   const { model } = req.params;
-  const validModels = ["agency", "calendar", "stop", "trip", "route", "suggestedRoute", "busRoute"];
+  const validModels = [
+    "agency",
+    "calendar",
+    "stop",
+    "trip",
+    "route",
+    "suggestedRoute",
+    "busRoute",
+  ];
 
   if (!validModels.includes(model)) {
     return res.status(400).json({ error: "Invalid model requested" });

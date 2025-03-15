@@ -1,3 +1,4 @@
+"use client"
 
 //delivery_main
 import { useState } from "react"
@@ -271,4 +272,3 @@ export const Delivery_new = () => {
     </div>
   )
 }
-

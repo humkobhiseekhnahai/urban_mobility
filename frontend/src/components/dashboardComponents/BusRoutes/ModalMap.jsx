@@ -3,7 +3,7 @@ import Map, { Source, Layer, Marker, Popup } from "react-map-gl/mapbox";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 
-export const ModalMap = ({ busStops }) => {
+export const ModalMap = ({ busStops, isOpen }) => {
   const [routeData, setRouteData] = useState(null);
   const [viewState, setViewState] = useState({
     longitude: 77.5923,
@@ -11,8 +11,7 @@ export const ModalMap = ({ busStops }) => {
     zoom: 12,
   });
 
-  const [selectedStop, setSelectedStop] = useState(null);
-
+  const [popupOpen, setPopupOpen] = useState({});
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -50,8 +49,9 @@ export const ModalMap = ({ busStops }) => {
       .catch((err) => console.error("Error fetching route:", err));
   }, [busStops]);
 
+  // Fit map to bus stops when modal is opened
   useEffect(() => {
-    if (busStops.length > 1 && mapRef.current) {
+    if (isOpen && busStops.length > 1 && mapRef.current) {
       const allLons = busStops.map((stop) => stop.latlons[1]);
       const allLats = busStops.map((stop) => stop.latlons[0]);
 
@@ -71,7 +71,7 @@ export const ModalMap = ({ busStops }) => {
         easing: (t) => t,
       });
     }
-  }, [busStops]);
+  }, [isOpen, busStops]);
 
   return (
     <Map
@@ -106,15 +106,16 @@ export const ModalMap = ({ busStops }) => {
           longitude={stop.latlons[1]}
           latitude={stop.latlons[0]}
           anchor="center"
-          onClick={() =>
-            setSelectedStop({
-              name: stop.busstop,
-            })
-          }
+          onClick={(e) => {
+            e.originalEvent.stopPropagation();
+            setPopupOpen({ [stop.busstop]: true });
+            console.log("Clicked on:", stop.busstop);
+            console.log(popupOpen);
+          }}
         >
           <div
             style={{
-              width: "28px", // Slightly increased size for easier clicking
+              width: "28px",
               height: "28px",
               backgroundColor:
                 index === 0
@@ -136,23 +137,21 @@ export const ModalMap = ({ busStops }) => {
           >
             {index + 1}
           </div>
+          {popupOpen[stop.busstop] && (
+            <Popup
+              longitude={stop.latlons[1]}
+              latitude={stop.latlons[0]}
+              onClose={() => setPopupOpen(false)}
+              closeOnClick={true}
+              anchor="top"
+            >
+              <div style={{ padding: "8px", color: "black" }}>
+                <strong>{stop.busstop}</strong>
+              </div>
+            </Popup>
+          )}
         </Marker>
       ))}
-
-      {/* Popup for selected bus stop */}
-      {selectedStop && (
-        <Popup
-          longitude={selectedStop.longitude}
-          latitude={selectedStop.latitude}
-          closeOnClick={true}
-          onClose={() => setSelectedStop(null)}
-          anchor="top"
-        >
-          <div style={{ padding: "8px", color: "black" }}>
-            <strong>{selectedStop.name}</strong>
-          </div>
-        </Popup>
-      )}
     </Map>
   );
 };

@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { useAtomValue } from 'jotai';
 import { apiResponseAtom, startingLocationAtom } from '../../../hooks/atoms/atom';
-import TruckLoadingBar from '../TruckLoadingBar';
+import TruckLoadingBar from '../truckLoadingBar';
 import RouteMap from '../routeDeliveryMap';
 import { getRouteCoordinates } from '../../../lib/getRouteCoordinates';
 
