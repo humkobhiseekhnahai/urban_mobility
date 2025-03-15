@@ -10,8 +10,11 @@ export const HeatMap = ({ lat, lng, radius }) => {
   const [heatmapData, setHeatmapData] = useState([]);
   const [hmerror, setHMError] = useState(false);
 
+  const lati = parseFloat("12.9516");
+  const longi = parseFloat("77.6961");
+
   useEffect(() => {
-    fetchTrafficData(lat, lng, radius)
+    fetchTrafficData(lati, longi, radius)
       .then((data) => {
         setHeatmapData(data);
       })
@@ -22,11 +25,11 @@ export const HeatMap = ({ lat, lng, radius }) => {
 
   return (
     <div className="w-full h-full">
-      {hmerror ? (
+      {hmerror || !heatmapData || heatmapData?.length == 0 ? (
         <p>Error Fetching Heatmap Data</p>
       ) : (
         <MapContainer
-          center={[lat, lng]}
+          center={[lati, longi]}
           zoom={14}
           style={{
             height: "100%",

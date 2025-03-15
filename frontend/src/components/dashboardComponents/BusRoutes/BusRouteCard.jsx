@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   Card,
@@ -26,11 +28,11 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
 
   return (
     <Card
-      className="w-full md:w-[90%] overflow-hidden rounded-xl shadow-lg hover:shadow-xl bg-gray-100 border border-gray-300"
+      className="w-full md:w-[90%] overflow-hidden rounded-xl shadow-lg hover:shadow-xl bg-neutral-800 border border-neutral-700 hover:border-neutral-600 transition-all"
       onMouseEnter={() => {
         const formattedRoute = route.mapJsonContent.map((r) => [
-          parseFloat(r.latlons[1]),
-          parseFloat(r.latlons[0]),
+          Number.parseFloat(r.latlons[1]),
+          Number.parseFloat(r.latlons[0]),
         ]);
 
         setHoveredRoute(formattedRoute);
@@ -45,32 +47,28 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
             value={route.routeNumber}
             className="rounded-full bg-blue-600 py-1.5 text-white font-bold w-auto h-10 flex items-center justify-center text-sm md:text-lg flex-shrink-0"
           />
+          <Typography variant="h6" color="white" className="font-bold truncate">
+            {route.routeName}
+          </Typography>
           <div className="min-w-0">
-            <Typography
-              variant="h6"
-              color="black"
-              className="font-bold truncate"
-            >
-              {route.routeName}
-            </Typography>
-            <div className="flex flex-col sm:flex-row sm:items-start gap-2 text-gray-600 mt-1">
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2 text-gray-300 mt-1">
               <div className="flex items-start gap-1 min-w-0">
-                <MapPinIcon className="h-5 w-5 text-blue-500 flex-shrink-0" />
+                <MapPinIcon className="h-5 w-5 text-blue-400 flex-shrink-0" />
                 <Typography
                   variant="small"
                   color="gray"
-                  className="truncate whitespace-normal break-words"
+                  className="truncate whitespace-normal break-words text-gray-300"
                 >
                   Origin: {route.origin}
                 </Typography>
               </div>
-              <div className="hidden sm:block text-gray-400">•</div>
+              <div className="hidden sm:block text-gray-500">•</div>
               <div className="flex items-start gap-1 min-w-0">
-                <MapPinIcon className="h-5 w-5 text-blue-500 flex-shrink-0" />
+                <MapPinIcon className="h-5 w-5 text-blue-400 flex-shrink-0" />
                 <Typography
                   variant="small"
                   color="gray"
-                  className="whitespace-normal break-words"
+                  className="whitespace-normal break-words text-gray-300"
                 >
                   Destination: {route.destination}
                 </Typography>
@@ -80,10 +78,10 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         </div>
 
         {/* Departure Times */}
-        <div className="mt-3 bg-white rounded-lg p-3 md:p-4 border border-gray-200">
+        <div className="mt-3 bg-neutral-900 rounded-lg p-3 md:p-4 border border-neutral-700">
           <div className="flex items-center mb-2">
-            <ClockIcon className="h-5 w-5 text-blue-500 mr-2" />
-            <Typography variant="h6" className="text-black font-medium">
+            <ClockIcon className="h-5 w-5 text-blue-400 mr-2" />
+            <Typography variant="h6" className="text-white font-medium">
               Departure Times
             </Typography>
           </div>
@@ -93,7 +91,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
               <Tooltip key={index} content={`Departs at ${time.trim()}`}>
                 <Chip
                   value={time.trim()}
-                  className="bg-blue-600 text-white font-medium border border-blue-500 hover:bg-blue-500 flex-shrink-0"
+                  className="bg-blue-500 text-white font-medium border border-blue-500 hover:bg-blue-600 flex-shrink-0"
                 />
               </Tooltip>
             ))}
@@ -101,7 +99,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
             {!expanded && times.length > 3 && (
               <Chip
                 value={`+${times.length - 3} more`}
-                className="bg-gray-300 text-gray-800 cursor-pointer hover:bg-gray-400 flex-shrink-0"
+                className="bg-neutral-700 text-gray-200 cursor-pointer hover:bg-neutral-600 flex-shrink-0"
                 onClick={() => setExpanded(true)}
               />
             )}
@@ -110,7 +108,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
           {expanded && (
             <Button
               variant="text"
-              className="flex items-center gap-2 mt-2 p-0 text-blue-600"
+              className="flex items-center gap-2 mt-2 p-0 text-blue-400 hover:text-blue-300"
               onClick={() => setExpanded(false)}
             >
               <span>Show less</span>
@@ -124,7 +122,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         <Button
           size="lg"
           fullWidth
-          className="bg-blue-700 hover:bg-blue-800 shadow-md flex items-center justify-center gap-2 py-3 text-white"
+          className="bg-blue-600 hover:bg-blue-700 shadow-md flex items-center justify-center gap-2 py-3 text-white"
           onClick={() => {
             setSelectedRoute(route);
             onViewDetails();

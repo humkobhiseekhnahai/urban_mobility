@@ -95,6 +95,7 @@ export const BusRouteModal = ({ isOpen, onClose, route }) => {
                 lng={busStops[0]?.latlons[1]}
                 lat={busStops[0]?.latlons[0]}
                 busStops={busStops}
+                isOpen={isOpen}
               />
             </div>
           </div>
