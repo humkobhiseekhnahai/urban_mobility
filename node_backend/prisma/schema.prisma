@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
 }
 
 datasource db {
@@ -91,6 +90,7 @@ model SuggestedRoute {
   destination String
   coordinates Json // Array of coordinate arrays
   createdAt   DateTime @default(now())
+  status      String
 }
 
 model BusRoute {
@@ -100,6 +100,17 @@ model BusRoute {
   origin         String
   departureTimes String // Store departure times as a comma-separated string or as Json if needed
   mapJsonContent Json // Store detailed stop information as JSON
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model CustomRoute {
+  id             Int      @id @default(autoincrement())
+  routeNumber    String   @unique
+  routeName      String
+  origin         String
+  departureTimes Json
+  mapJsonContent Json
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }

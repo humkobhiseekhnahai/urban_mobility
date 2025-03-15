@@ -30,13 +30,38 @@ app
       }
 
       const newRoute = await prisma.suggestedRoute.create({
-        data: { source, destination, coordinates: JSON.stringify(coordinates) },
+        data: {
+          source,
+          destination,
+          coordinates: JSON.stringify(coordinates),
+          status: "pending",
+        },
       });
       res.status(201).json(newRoute);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: "Failed to add suggested route" });
     }
   });
+
+app.patch("/api/suggested-routes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!status) {
+      return res.status(400).json({ error: "Status field is required" });
+    }
+
+    const updatedRoute = await prisma.suggestedRoute.update({
+      where: { id: id },
+      data: { status },
+    });
+    res.json(updatedRoute);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to update suggested route" });
+  }
+});
 
 app.delete("/api/suggested-routes/:id", async (req, res) => {
   try {

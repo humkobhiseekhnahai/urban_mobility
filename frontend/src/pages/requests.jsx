@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { RouteRequestCard } from "../components/requestsComponents/RequestCard";
 import { NavBarComponent } from "../components/navBarComponent";
@@ -11,81 +11,52 @@ export const Requests = () => {
     `${serverUrl}/api/suggested-routes`
   );
 
-  console.log(data);
+  const [requests, setRequests] = useState([]);
 
-  const [requests, setRequests] = useState([
-    {
-      id: "1",
-      source: "Central Station",
-      destination: "Business District",
-      coordinates: [
-        { lat: 40.7128, lon: -74.006, name: "Central Station" },
-        { lat: 40.7138, lon: -74.013, name: "Market Square" },
-        { lat: 40.7148, lon: -74.02, name: "Business District" },
-      ],
-      status: "pending",
-    },
-    {
-      id: "2",
-      source: "Central Station",
-      destination: "Business District",
-      coordinates: [
-        { lat: 40.7128, lon: -74.006, name: "Central Station" },
-        { lat: 40.7138, lon: -74.013, name: "Market Square" },
-        { lat: 40.7148, lon: -74.02, name: "Business District" },
-      ],
-      status: "pending",
-    },
-    {
-      id: "3",
-      source: "Central Station",
-      destination: "Business District",
-      coordinates: [
-        { lat: 40.7128, lon: -74.006, name: "Central Station" },
-        { lat: 40.7138, lon: -74.013, name: "Market Square" },
-        { lat: 40.7148, lon: -74.02, name: "Business District" },
-      ],
-      status: "pending",
-    },
-    {
-      id: "4",
-      source: "Central Station",
-      destination: "Business District",
-      coordinates: [
-        { lat: 40.7128, lon: -74.006, name: "Central Station" },
-        { lat: 40.7138, lon: -74.013, name: "Market Square" },
-        { lat: 40.7148, lon: -74.02, name: "Business District" },
-      ],
-      status: "pending",
-    },
-    {
-      id: "5",
-      source: "Central Station",
-      destination: "Business District",
-      coordinates: [
-        { lat: 40.7128, lon: -74.006, name: "Central Station" },
-        { lat: 40.7138, lon: -74.013, name: "Market Square" },
-        { lat: 40.7148, lon: -74.02, name: "Business District" },
-      ],
-      status: "pending",
-    },
-    // Other requests...
-  ]);
+  useEffect(() => {
+    if (data) {
+      setRequests(data);
+    }
+  }, [data]);
 
-  const handleApprove = (id) => {
-    setRequests(
-      requests.map((request) =>
-        request.id === id ? { ...request, status: "approved" } : request
-      )
-    );
+  const handleStatusChange = async (id, status) => {
+    try {
+      await fetch(`${serverUrl}/api/suggested-routes/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: status }),
+      });
+    } catch (error) {
+      console.error("Error updating status:", error);
+    }
   };
 
-  const handleDeny = (id) => {
-    setRequests(
-      requests.map((request) =>
-        request.id === id ? { ...request, status: "denied" } : request
-      )
-    );
+  const handleApprove = async (id) => {
+    try {
+      await handleStatusChange(id, "approved");
+      setRequests(
+        requests.map((request) =>
+          request.id === id ? { ...request, status: "approved" } : request
+        )
+      );
+    } catch (error) {
+      console.error("Error denying request:", error);
+    }
+  };
+
+  const handleDeny = async (id) => {
+    try {
+      await handleStatusChange(id, "denied");
+      setRequests(
+        requests.map((request) =>
+          request.id === id ? { ...request, status: "denied" } : request
+        )
+      );
+    } catch (error) {
+      console.error("Error denying request:", error);
+    }
   };
 
   const container = {
@@ -108,22 +79,25 @@ export const Requests = () => {
             Review and manage user-submitted route suggestions
           </p>
         </header>
-
-        <div
+        <motion.div
           className="grid grid-cols-3 gap-6"
           variants={container}
           initial="hidden"
           animate="show"
         >
-          {requests.map((request) => (
-            <RouteRequestCard
-              key={request.id}
-              request={request}
-              onApprove={() => handleApprove(request.id)}
-              onDeny={() => handleDeny(request.id)}
-            />
-          ))}
-        </div>
+          {loading && <p>Loading suggested bus routes...</p>}
+          {error && <p>There was an error loading the data</p>}
+          {requests &&
+            requests.map((request, index) => (
+              <RouteRequestCard
+                key={request.id}
+                request={request}
+                index={index + 1}
+                onApprove={async () => await handleApprove(request.id)}
+                onDeny={async () => await handleDeny(request.id)}
+              />
+            ))}
+        </motion.div>
       </div>
     </div>
   );
