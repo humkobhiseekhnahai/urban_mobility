@@ -79,7 +79,6 @@ export const Requests = () => {
             Review and manage user-submitted route suggestions
           </p>
         </header>
-
         <motion.div
           className="grid grid-cols-3 gap-6"
           variants={container}
