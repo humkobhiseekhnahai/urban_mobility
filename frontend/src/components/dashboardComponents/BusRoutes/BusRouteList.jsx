@@ -46,7 +46,7 @@ export const BusRouteList = ({
   }, [loading, limit]);
 
   return (
-    <div ref={containerRef} className="w-full p-4 h-[75%] overflow-y-auto">
+    <div ref={containerRef} className="w-full p-4 h-[92%] overflow-y-auto">
       <div className="w-full flex flex-col space-y-4 items-center">
         {busRoutes ? (
           busRoutes.length !== 0 ? (

@@ -8,13 +8,15 @@ const tomtomApiKey = import.meta.env.VITE_TOMTOM_API_KEY;
 
 export const IncidentList = ({ lat, lng, radius }) => {
   const lati = parseFloat("12.9516");
-  const longi = parseFloat("77.6961");
-  const bbox = coordsToBbox(lati, longi, radius);
-  // const tempbbox = "77.5726,12.9536,77.6166,12.9896";
+  const lngi = parseFloat("77.6961");
+  const bbox = coordsToBbox(lat, lng, radius);
+  const tempbbox = "77.5726,12.9536,77.6166,12.9896";
 
   const { data, error, loading } = useFetch(
-    `https://api.tomtom.com/traffic/services/5/incidentDetails?key=${tomtomApiKey}&bbox=${bbox}&fields={incidents{type,geometry{type,coordinates},properties{iconCategory}}}&language=en-GB&t=1111&timeValidityFilter=present`
+    `https://api.tomtom.com/traffic/services/5/incidentDetails?key=${tomtomApiKey}&bbox=${tempbbox}&fields={incidents{type,geometry{type,coordinates},properties{iconCategory}}}&language=en-GB&t=1111&timeValidityFilter=present`
   );
+
+  console.log(data);
 
   if (loading)
     return (
@@ -33,7 +35,7 @@ export const IncidentList = ({ lat, lng, radius }) => {
     );
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full overflow-y-auto">
       {data?.incidents.map((incident, indx) => {
         return (
           <IncidentElement

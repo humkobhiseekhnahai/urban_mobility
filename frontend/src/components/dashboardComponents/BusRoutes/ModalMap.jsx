@@ -71,6 +71,7 @@ export const ModalMap = ({ busStops, isOpen }) => {
         easing: (t) => t,
       });
     }
+    console.log(isOpen);
   }, [isOpen, busStops]);
 
   return (
