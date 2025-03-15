@@ -209,7 +209,7 @@ export default function HeroGeometric() {
             </a>
             <a
               href="/documentation"
-              className="group relative border font-sans-serif border-white/20 text-white/90 px-8 py-4 rounded-full font-medium hover:bg-white/5 transition-colors text-center"
+              className="group relative border border-white/20 text-white/90 px-8 py-4 rounded-full font-medium hover:bg-white/5 transition-colors text-center"
             >
               Explore Features
               <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-400 group-hover:w-1/2 transition-all duration-300 -translate-x-1/2"></span>
