@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { MapBox } from "../components/dashboardComponents/Map";
 import { useGeolocation } from "@uidotdev/usehooks";
@@ -17,14 +19,6 @@ import {
   TabsBody,
   Tab,
   TabPanel,
-  Dialog,
-  DialogBody,
-  Card,
-  CardBody,
-  CardFooter,
-  Input,
-  Button,
-  Typography,
 } from "@material-tailwind/react";
 import { useAtom } from "jotai";
 
@@ -39,7 +33,7 @@ export const Dashboard = () => {
 
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedTime, setSelectedTime] = useState([]);
 
   const [suggestedSource, setSuggestedSource] = useState("");
   const [suggestedDestination, setSuggestedDestination] = useState("");
@@ -189,7 +183,7 @@ export const Dashboard = () => {
                   className="text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1"
                   activeClassName="text-blue-400"
                 >
-                  Add Optimized Route
+                  Suggest Route
                 </Tab>
               </TabsHeader>
               <TabsBody className="text-white flex-1">

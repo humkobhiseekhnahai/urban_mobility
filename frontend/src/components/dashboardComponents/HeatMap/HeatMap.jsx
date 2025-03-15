@@ -25,8 +25,8 @@ export const HeatMap = ({ lat, lng, radius }) => {
 
   return (
     <div className="w-full h-full">
-      {hmerror || !heatmapData || heatmapData?.length == 0 ? (
-        <p>Error Fetching Heatmap Data</p>
+      {hmerror || !heatmapData ? (
+        <p className="text-gray-200">Error Fetching Heatmap Data</p>
       ) : (
         <MapContainer
           center={[lati, longi]}

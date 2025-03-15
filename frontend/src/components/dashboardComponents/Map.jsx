@@ -90,7 +90,7 @@ export const MapBox = () => {
         zoom: 8,
       }}
       style={{ borderRadius: "0.25rem" }}
-      mapStyle="mapbox://styles/mapbox/dark-v11"
+      mapStyle="mapbox://styles/mapbox/streets-v12"
       mapboxAccessToken={MAPBOX_TOKEN}
     >
       {/* Show route if hovered */}
