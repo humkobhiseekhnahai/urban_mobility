@@ -10,6 +10,12 @@ export default defineConfig({
       babel: {
         plugins: [ReactCompiler],
       },
+      root: '.',  // Ensure root is the project root, not /src
+      resolve: {
+        alias: {
+          '/src': '/app/src',  // Map /src to /app/src if needed
+        },
+      },
     }),
     tailwindcss(),
   ],
