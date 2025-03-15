@@ -1,7 +1,7 @@
 import { Check, X, MapPin, Navigation, Map } from "lucide-react";
 import { motion } from "framer-motion";
 
-export const RouteRequestCard = ({ request, onApprove, onDeny }) => {
+export const RouteRequestCard = ({ request, onApprove, onDeny, index }) => {
   const item = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
@@ -26,7 +26,7 @@ export const RouteRequestCard = ({ request, onApprove, onDeny }) => {
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-[#3B82F6]/10 to-transparent opacity-30"></div>
           <div className="relative flex justify-between items-start">
             <h3 className="text-xl font-bold text-white truncate">
-              Route Request #{request.id}
+              Route Request #{index}
             </h3>
             <span
               className={`${getStatusColor(
@@ -67,7 +67,7 @@ export const RouteRequestCard = ({ request, onApprove, onDeny }) => {
               <span>Waypoints</span>
             </h4>
             <div className="max-h-[90px] overflow-y-auto pr-2 bg-[#2A2A2A] rounded-lg p-2">
-              {request.coordinates.map((coord, index) => (
+              {JSON.parse(request.coordinates).map((coord, index) => (
                 <div
                   key={index}
                   className="text-xs text-gray-400 mb-2 pl-4 border-l-2 border-[#3B82F6]/50 relative"
