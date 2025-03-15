@@ -7,7 +7,9 @@ import { IncidentElement } from "./IncidentElement";
 const tomtomApiKey = import.meta.env.VITE_TOMTOM_API_KEY;
 
 export const IncidentList = ({ lat, lng, radius }) => {
-  const bbox = coordsToBbox(lat, lng, radius);
+  const lati = parseFloat("12.9516");
+  const longi = parseFloat("77.6961");
+  const bbox = coordsToBbox(lati, longi, radius);
   // const tempbbox = "77.5726,12.9536,77.6166,12.9896";
 
   const { data, error, loading } = useFetch(
@@ -17,7 +19,7 @@ export const IncidentList = ({ lat, lng, radius }) => {
   if (loading)
     return (
       <div>
-        <p className="text-gray-200">Loading Incidents Near 2 KM of you...</p>
+        <p className="text-gray-200">Loading Incidents Near 5 KM of you...</p>
       </div>
     );
 
