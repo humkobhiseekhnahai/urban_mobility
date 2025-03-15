@@ -89,20 +89,11 @@ export const Filter = ({
   };
 
   return (
-    <div className="w-full h-[15%]">
+    <div className="w-full h-auto">
       <Card className="w-full bg-neutral-900 border-b border-neutral-800 shadow-md rounded-none">
         <CardBody className="p-2">
-          {/* Dashboard Heading */}
-          <div className="flex items-center justify-between mb-3">
-            <Typography
-              variant="h6"
-              className="bg-gray-800 text-white font-bold px-4 py-1 rounded-full uppercase tracking-wide shadow-md border border-gray-600"
-            >
-              Dashboard
-            </Typography>
-          </div>
           {/* Main Filter Row */}
-          <div className="flex flex-col sm:flex-row gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 items-center">
             {/* Source & Destination Inputs */}
             <div className="flex flex-1 flex-col sm:flex-row gap-2">
               <div className="flex-1">
@@ -151,7 +142,7 @@ export const Filter = ({
                 </Button>
 
                 {isTimeFilterOpen && (
-                  <Card className="absolute z-10 right-0 sm:left-0 mt-1 bg-neutral-800 border border-neutral-700 w-48">
+                  <Card className="absolute z-10 right-0 sm:left-0 mt-1 bg-neutral-800 border border-neutral-700 w-28">
                     <CardBody className="p-2">
                       {TIME_OPTIONS.map((time) => (
                         <div
