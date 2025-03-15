@@ -1,0 +1,63 @@
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword     
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres         
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  node_app:
+    build:
+      context: ./node_backend
+    # Remove: command: node app.js
+    ports:
+      - "3000:3000"   
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:mysecretpassword@db:5432/postgres?schema=public
+      SCRIPT_TO_RUN: app.js  # Add this to specify which script to run
+
+  node_server:
+    build:
+      context: ./node_backend
+    # Remove: command: node server.js
+    ports:
+      - "3001:3001"   
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:mysecretpassword@db:5432/postgres?schema=public
+      SCRIPT_TO_RUN: server.js  # Add this to specify which script to run
+
+  python_backend:
+    build:
+      context: ./backend/delivery
+      dockerfile: Dockerfile 
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:mysecretpassword@db:5432/postgres?schema=public
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
+    ports:
+      - "5173:5173"
+    depends_on:
+      - python_backend
+      - node_app
+      - node_server
+
+volumes:
+  db_data:

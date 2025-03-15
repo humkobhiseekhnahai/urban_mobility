@@ -1,6 +1,7 @@
+//delivery page
 import { useState } from 'react';
 import { NavBarComponent } from '../components/navBarComponent';
-import { Delivery_new } from '../components/deliveryComponets/delivery_main';
+import { Delivery_new } from '../components/deliveryComponents/delivery_main';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -10,7 +11,7 @@ function Delivery() {
   return (
     <div className="flex min-h-screen bg-neutral-900">
       {/* Sidebar for larger screens */}
-      <div className="hidden md:block fixed top-0 left-0 h-full w-56 bg-neutral-900">
+      <div className="hidden md:block fixed top-0 left-0 h-full w-56 bg-neutral-900 z-40">
         <NavBarComponent />
       </div>
 
@@ -19,6 +20,7 @@ function Delivery() {
         <button
           onClick={() => setIsMenuOpen(true)}
           className="fixed top-4 right-4 z-50 p-2 rounded-md bg-neutral-800 text-white"
+          aria-label="Open menu"
         >
           <svg
             className="w-6 h-6"
@@ -52,13 +54,14 @@ function Delivery() {
                 animate={{ x: 0 }}
                 exit={{ x: -256 }}
                 transition={{ type: 'tween', duration: 0.3 }}
-                className="fixed top-0 left-0 h-full w-64 bg-neutral-900 z-50"
+                className="fixed top-0 left-0 h-full w-64 bg-neutral-900 z-50 overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
               >
                 <NavBarComponent />
                 <button
                   onClick={() => setIsMenuOpen(false)}
                   className="absolute top-4 right-4 text-white"
+                  aria-label="Close menu"
                 >
                   <XMarkIcon className="w-6 h-6" />
                 </button>
@@ -69,7 +72,7 @@ function Delivery() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 ml-0 md:ml-56">
+      <div className="flex-1 w-full md:ml-56">
         <Delivery_new />
       </div>
     </div>
