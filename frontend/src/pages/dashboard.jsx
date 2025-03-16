@@ -24,34 +24,16 @@ import { filterRoutesByTime } from "../utils/dashboard/filterRoutesByTime";
 
 export const Dashboard = () => {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
-
   const location = useGeolocation();
   const [isOptimizedModalOpen, setIsOptimizedModalOpen] = useState(false);
-
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
   const [selectedTime, setSelectedTime] = useState([]);
-
-  const [suggestedSource, setSuggestedSource] = useState("");
-  const [suggestedDestination, setSuggestedDestination] = useState("");
-  const [stops, setStops] = useState([
-    { name: "", latitude: "", longitude: "" }, // Initial stop
-  ]);
-
-  const [routeModalOpen, setIsRouteModalOpen] = useState(false);
   const [busRoutes, setBusRoutes] = useState([]);
-  const [selectedRoute] = useAtom(selectedRouteAtom);
   const [filteredRoutes, setFilteredRoutes] = useState([]);
   const [busRoutesLimit, setBusRoutesLimit] = useState(10);
-
-  const addStop = () => {
-    setStops([...stops, { latitude: "", longitude: "" }]);
-  };
-
-  const handleOpen = () => {
-    setStops([{ latitude: "", longitude: "" }]);
-    setIsOptimizedModalOpen(!isOptimizedModalOpen);
-  };
+  const [selectedRoute] = useAtom(selectedRouteAtom);
+  const [routeModalOpen, setIsRouteModalOpen] = useState(false);
 
   const handleViewRouteDetails = (route) => {
     setIsRouteModalOpen(true);
@@ -77,37 +59,15 @@ export const Dashboard = () => {
       }));
 
       setBusRoutes(busRoutes);
-      setFilteredRoutes(busRoutes); // Initialize filtered list with all routes
+      setFilteredRoutes(busRoutes);
     } catch (error) {
       setBusRoutes(null);
       console.error(error);
     }
   };
 
-  const addOptimizedRoute = async () => {
-    try {
-      await fetch(`${serverUrl}/api/suggested-routes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          source: source,
-          destination: destination,
-          coordinates: stops,
-        }),
-      });
-      handleOpen();
-      alert("Route added successfully!");
-    } catch (error) {
-      alert("Failed to add route");
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    const filteredRoutes = filterRoutesByTime(busRoutes, selectedTime);
-    setFilteredRoutes(filteredRoutes);
+    setFilteredRoutes(filterRoutesByTime(busRoutes, selectedTime));
   }, [selectedTime]);
 
   useEffect(() => {
@@ -115,11 +75,25 @@ export const Dashboard = () => {
   }, [busRoutesLimit]);
 
   if (location.loading || location.error) return <LocationLoading />;
+
   return (
     <main className="bg-neutral-850">
-      <div className="w-full h-screen flex">
-        <NavBarComponent />
-        <section className="w-[45%] h-full bg-neutral-900 border-r border-r-neutral-800">
+      <div className="w-full h-screen flex flex-col md:flex-row">
+        <div className="hidden md:block">
+          <NavBarComponent />
+        </div>
+
+        {/* Sidebar Section (Dashboard Heading, Filter & Bus Routes) */}
+        <section className="w-full md:w-[45%] h-auto md:h-full bg-neutral-900 border-r border-r-neutral-800 p-4">
+          {/* ✅ Added Dashboard Heading */}
+          <div className="mb-4 text-center">
+            <h1 className="text-white text-2xl font-semibold">Dashboard</h1>
+            <p className="text-neutral-400 text-sm">
+              View traffic incidents, weather data, and bus routes in your area
+            </p>
+          </div>
+
+          {/* Filters */}
           <Filter
             busRoutes={busRoutes}
             setSource={setSource}
@@ -130,7 +104,7 @@ export const Dashboard = () => {
             setFilteredRoutes={setFilteredRoutes}
           />
 
-          {/* Timings List */}
+          {/* Bus Route List */}
           <BusRouteList
             filteredRoutes={filteredRoutes}
             handleViewRouteDetails={handleViewRouteDetails}
@@ -139,15 +113,17 @@ export const Dashboard = () => {
             setLimit={setBusRoutesLimit}
           />
         </section>
-        <section className="w-[55%] h-full bg-neutral-900">
-          <div className="w-full h-1/2 p-5 rounded-lg">
+
+        {/* Main Content Section (Map & Tabs) */}
+        <section className="w-full md:w-[55%] h-auto md:h-full bg-neutral-900">
+          <div className="w-full h-[300px] md:h-1/2 p-5 rounded-lg">
             <MapBox lng={location.longitude} lat={location.latitude} />
           </div>
 
-          <div className="w-full h-1/2 p-3 rounded-t-md bg-neutral-900 border-t border-t-neutral-800">
+          <div className="w-full h-auto md:h-1/2 p-3 rounded-t-md bg-neutral-900 border-t border-t-neutral-800">
             <Tabs value="heatmap" className="h-full flex flex-col">
               <TabsHeader
-                className="bg-neutral-900 flex justify-between py-1"
+                className="bg-neutral-900 flex justify-between py-1 overflow-x-auto"
                 indicatorProps={{
                   className:
                     "bg-neutral-800 shadow-none border-b-2 border-blue-500",
@@ -198,6 +174,7 @@ export const Dashboard = () => {
           </div>
         </section>
       </div>
+
       {selectedRoute && (
         <BusRouteModal
           route={selectedRoute}

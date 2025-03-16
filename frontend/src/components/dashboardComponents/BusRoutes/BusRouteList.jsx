@@ -12,12 +12,12 @@ export const BusRouteList = ({
   const observerRef = useRef(null);
   const containerRef = useRef(null);
 
-  // ✅ Ensure the limit is correctly initialized when `filteredRoutes` change
+  // Ensure the limit is correctly initialized when `filteredRoutes` changes
   useEffect(() => {
     setLimit(limit);
   }, [filteredRoutes]);
 
-  // ✅ Use useCallback to prevent unnecessary re-creation of function
+  // Load more routes function
   const loadMoreRoutes = useCallback(() => {
     if (loading) return;
 
@@ -25,11 +25,14 @@ export const BusRouteList = ({
     setTimeout(() => {
       setLimit((prevLimit) => prevLimit + 10); // Increase limit by 10
       setLoading(false);
-    }, 2000);
+    }, 1500);
   }, [loading, setLimit]);
 
+  // Auto-load more routes only on larger screens
   useEffect(() => {
-    if (!observerRef.current) return;
+    const isLargeScreen = window.innerWidth > 640; // Apply auto-scroll only if screen width > 640px
+
+    if (!isLargeScreen || !observerRef.current) return;
 
     let observer = new IntersectionObserver(
       (entries) => {
@@ -38,8 +41,8 @@ export const BusRouteList = ({
         }
       },
       {
-        root: null, // ✅ Observe relative to viewport
-        rootMargin: "200px", // ✅ Trigger before fully visible
+        root: null, // Observe relative to viewport
+        rootMargin: "200px", // Trigger before fully visible
         threshold: 0.1,
       }
     );
@@ -48,17 +51,20 @@ export const BusRouteList = ({
       if (observerRef.current) {
         observer.observe(observerRef.current);
       }
-    }, 500); // ✅ Ensure the DOM has updated before observing
+    }, 500); // Ensure DOM updates before observing
 
     return () => {
       clearTimeout(timeoutId);
       observer.disconnect();
     };
-  }, [loading, limit, filteredRoutes.length, loadMoreRoutes]); // ✅ Include filteredRoutes.length
+  }, [loading, limit, filteredRoutes.length, loadMoreRoutes]);
 
   return (
-    <div ref={containerRef} className="w-full p-4 h-[92%] overflow-y-auto">
-      <div className="w-full flex flex-col space-y-4 items-center">
+    <div
+      ref={containerRef}
+      className="w-full p-4 h-[100%] md:h-[82%] overflow-y-auto flex flex-col items-center space-y-2"
+    >
+      <div className="w-full flex flex-col space-y-2 items-center">
         {busRoutes ? (
           busRoutes.length !== 0 ? (
             <>
@@ -70,10 +76,19 @@ export const BusRouteList = ({
                 />
               ))}
 
-              {/* Loader & Intersection Observer Trigger */}
+              {/* Load More Button (Visible on Small Screens) */}
+              <button
+                onClick={loadMoreRoutes}
+                className="block sm:hidden bg-blue-600 text-white px-4 py-2 rounded-md mt-2 mb-2"
+                disabled={loading}
+              >
+                {loading ? "Loading..." : "Load More Routes"}
+              </button>
+
+              {/* Loader & Auto Load More Trigger (Only for Large Screens) */}
               <div
                 ref={observerRef}
-                className="w-full flex justify-center py-4"
+                className="hidden sm:flex w-full justify-center py-4"
               >
                 {loading && (
                   <span className="animate-spin h-6 w-6 border-4 border-blue-500 border-t-transparent rounded-full"></span>

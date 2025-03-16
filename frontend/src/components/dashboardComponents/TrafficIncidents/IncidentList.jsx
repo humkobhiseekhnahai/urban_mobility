@@ -195,17 +195,15 @@ export const IncidentList = ({ lat, lng, radius }) => {
   //   );
 
   return (
-    <div className="w-full h-full overflow-y-auto">
-      {data?.incidents.map((incident, indx) => {
-        return (
-          <IncidentElement
-            key={indx}
-            coordinates={incident.geometry.coordinates}
-            category={incident.properties.iconCategory}
-            location={incident.properties.location}
-          />
-        );
-      })}
+    <div className="w-full h-full md:h-full max-h-[50vh] md:max-h-none overflow-y-auto p-2">
+      {data?.incidents.map((incident, indx) => (
+        <IncidentElement
+          key={indx}
+          coordinates={incident.geometry.coordinates}
+          category={incident.properties.iconCategory}
+          location={incident.properties.location}
+        />
+      ))}
       {data.incidents.length === 0 && (
         <p className="text-gray-200 text-center">
           No incidents in the area. Drive safe!
