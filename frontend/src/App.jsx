@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Delivery from "./pages/delivery";
 import { Dashboard } from "./pages/dashboard";
 import Home from "./pages/home";
-import Documentation from "./pages/documentation";
+import DocsPage from "./components/documentation_folder/docMain";
 import AuthSuccess from "./pages/auth/authSuccess";
 import Login from "./pages/auth/login";
 import RoleSelection from "./pages/auth/roleSelection";
@@ -19,7 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/documentation" element={<Documentation />} />
+          <Route path="/documentation" element={<DocsPage />} />
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
