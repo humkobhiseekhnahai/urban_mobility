@@ -12,7 +12,6 @@ import Signup from "./pages/auth/signup";
 import ProtectedRoute from "./components/protectedRoute";
 import Unauthorized from "./pages/auth/unauthorized";
 import { Public } from "./pages/public";
-import { Requests } from "./pages/requests";
 function App() {
   return (
     <>
@@ -28,7 +27,6 @@ function App() {
           <Route path="/auth-success" element={<AuthSuccess />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/public" element={<Public />} />
-          <Route path="/requests" element={<Requests />} />
 
           {/* Protected routes */}
           <Route
