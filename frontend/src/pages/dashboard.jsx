@@ -224,13 +224,6 @@ export const Dashboard = () => {
                 >
                   Weather Data
                 </Tab>
-                <Tab
-                  value="ori"
-                  className="text-xs md:text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1 whitespace-nowrap"
-                  activeClassName="text-blue-400"
-                >
-                  Suggest Route
-                </Tab>
               </TabsHeader>
               <TabsBody className="text-white flex-1 overflow-y-auto">
                 <TabPanel value="heatmap" className="w-full h-full p-2">
@@ -249,40 +242,6 @@ export const Dashboard = () => {
                 </TabPanel>
                 <TabPanel value="weather" className="w-full h-full p-2">
                   <Weather lat={location.latitude} lng={location.longitude} />
-                </TabPanel>
-                <TabPanel value="ori" className="w-full h-full p-2">
-                  <div>
-                    <h2 className="text-lg font-semibold text-white">
-                      Suggest an Optimized Route
-                    </h2>
-
-                    <p className="text-gray-300 text-sm mt-2">
-                      If you know a more efficient route between the source and
-                      destination, help improve the transport network by
-                      submitting your suggestion. Better routes mean reduced
-                      travel time, fuel efficiency, and improved passenger
-                      experience.
-                    </p>
-
-                    <div className="mt-4 p-3 bg-black rounded-md">
-                      <p className="text-gray-100 text-sm font-medium">
-                        Why contribute?
-                      </p>
-                      <ul className="list-disc list-inside text-blue-400 text-xs mt-1">
-                        <li>Reduce congestion and delays.</li>
-                        <li>Enhance accessibility for passengers.</li>
-                        <li>Optimize fuel consumption and efficiency.</li>
-                      </ul>
-                    </div>
-
-                    <button
-                      className="w-full h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-md mt-4 transition-all transform hover:scale-[102%] active:scale-95 cursor-pointer hover:from-blue-600 hover:to-blue-700"
-                      type="button"
-                      onClick={handleOpen}
-                    >
-                      Suggest an Optimized Route
-                    </button>
-                  </div>
                 </TabPanel>
               </TabsBody>
             </Tabs>
