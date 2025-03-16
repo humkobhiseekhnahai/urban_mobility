@@ -1,4 +1,4 @@
-"use client";
+
 
 import { useState } from "react";
 import { motion } from "framer-motion";
@@ -80,21 +80,26 @@ export const Delivery_new = () => {
           setIsOptimized={setIsOptimized}
         />
       ) : (
+
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Route Planner Section */}
           <motion.div className="pb-6 border-b border-neutral-700 mb-8">
             <h1 className="text-2xl font-medium text-white mb-4">Route Planner</h1>
+
             <RouteInput attemptedOptimize={attemptedOptimize} />
           </motion.div>
 
           {/* Map Section */}
+
           <motion.div className="my-6 h-[300px] md:h-[400px] lg:h-[500px] w-full">
             <div className="h-full w-full border border-neutral-700 rounded-lg overflow-hidden">
+
               <DeliveryMap />
             </div>
           </motion.div>
 
           {/* Inputs Section */}
+
           <motion.div className="mt-6">
             <div className="flex flex-col sm:flex-row sm:justify-between gap-6">
               <div className="flex-1">
@@ -107,12 +112,14 @@ export const Delivery_new = () => {
               </div>
               <div className="flex-1">
                 <label className="block text-sm text-gray-400 mb-1">Capacity (kg)</label>
+
                 <input
                   type="number"
                   min="0"
                   step="0.1"
                   placeholder="Enter capacity"
                   onChange={(e) => setTotalCapacity(Number(e.target.value))}
+
                   className={`w-full bg-neutral-800 text-gray-200 border ${
                     attemptedOptimize && totalCapacity <= 0 ? "border-red-500" : "border-neutral-700"
                   } rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400`}
@@ -120,19 +127,23 @@ export const Delivery_new = () => {
               </div>
               <div className="flex-1">
                 <label className="block text-sm text-gray-400 mb-1">Number of Vehicles</label>
+
                 <input
                   type="number"
                   min="1"
                   step="1"
                   placeholder="Enter quantity"
                   onChange={(e) => setNumberOfVehicles(Number(e.target.value))}
+
                   className={`w-full bg-neutral-800 text-gray-200 border ${
                     attemptedOptimize && numberOfVehicles < 1 ? "border-red-500" : "border-neutral-700"
                   } rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400`}
+
                 />
               </div>
             </div>
           </motion.div>
+
 
           {/* Inventory Section */}
           <motion.div className="mt-6">
@@ -247,6 +258,7 @@ export const Delivery_new = () => {
 
 
           {/* Form Error Messages */}
+
           {attemptedOptimize && !isFormValid && (
             <div className="bg-red-900/20 border border-red-500 text-red-500 p-3 sm:p-4 rounded-lg mt-4 max-w-full overflow-auto text-xs sm:text-sm">
               <p className="font-semibold">Please correct the following errors:</p>
@@ -263,6 +275,8 @@ export const Delivery_new = () => {
               </ul>
             </div>
           )}
+
+
           {/* API Error Display */}
           {error && <div className="mt-4 text-center text-sm text-red-600">{error}</div>}
         </div>
@@ -270,3 +284,4 @@ export const Delivery_new = () => {
     </div>
   );
 };
+

@@ -55,7 +55,9 @@ const Navbar_home = () => {
           <div className="flex justify-between items-center py-3">
             <motion.div className="flex items-center flex-shrink-0">
               <motion.img
+
                 className="h-12 -my-4 w-auto md:h-16 lg:h-20"
+
                 src={logo}
                 alt="Logo"
                 initial={{ opacity: 0 }}

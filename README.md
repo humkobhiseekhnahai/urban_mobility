@@ -53,6 +53,7 @@ This guide provides instructions for setting up the complete Urban Mobility proj
 5. **Run the Python Backend**
    ```bash
    cd delivery
+
    uvicorn app.main:app --reload
    ```
 
@@ -112,4 +113,13 @@ conda deactivate
 **Removing Python Environment (if needed)**
 ```bash
 conda env remove -n urban_mobility
+```
+## Running the Entire Application with Docker Compose
+
+```bash
+docker-compose up --build
+```
+or
+```bash
+docker compose up -d --build
 ```

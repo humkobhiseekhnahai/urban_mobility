@@ -26,74 +26,73 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
 
   return (
     <Card
-      className="w-full md:w-[90%] overflow-hidden rounded-xl shadow-lg hover:shadow-xl bg-gray-100 border border-gray-300"
+      className="w-full md:w-[95%] overflow-hidden rounded-lg shadow-md hover:shadow-lg bg-neutral-800 border border-neutral-700 hover:border-neutral-600 transition-all"
       onMouseEnter={() => {
         const formattedRoute = route.mapJsonContent.map((r) => [
-          parseFloat(r.latlons[1]),
-          parseFloat(r.latlons[0]),
+          Number.parseFloat(r.latlons[1]),
+          Number.parseFloat(r.latlons[0]),
         ]);
 
         setHoveredRoute(formattedRoute);
-        console.log(formattedRoute);
       }}
       onMouseLeave={() => setHoveredRoute(null)}
     >
-      <CardBody className="p-4 md:p-6">
+      <CardBody className="p-3">
         {/* Route number and name */}
-        <div className="flex items-center gap-3 mb-3 flex-wrap">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
           <Chip
             value={route.routeNumber}
-            className="rounded-full bg-blue-600 py-1.5 text-white font-bold w-auto h-10 flex items-center justify-center text-sm md:text-lg flex-shrink-0"
+            className="rounded-full bg-neutral-700 py-1 text-white font-medium w-auto h-8 flex items-center justify-center text-xs flex-shrink-0"
           />
-          <div className="min-w-0">
+          <Typography
+            variant="h6"
+            color="white"
+            className="font-medium text-sm truncate"
+          >
+            {route.routeName}
+          </Typography>
+        </div>
+
+        <div className="flex flex-col sm:flex-row sm:items-start gap-1 text-gray-300 text-xs mb-2">
+          <div className="flex items-start gap-1 min-w-0">
+            <MapPinIcon className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
             <Typography
-              variant="h6"
-              color="black"
-              className="font-bold truncate"
+              variant="small"
+              className="truncate whitespace-normal break-words text-xs text-gray-300"
             >
-              {route.routeName}
+              From: {route.origin}
             </Typography>
-            <div className="flex flex-col sm:flex-row sm:items-start gap-2 text-gray-600 mt-1">
-              <div className="flex items-start gap-1 min-w-0">
-                <MapPinIcon className="h-5 w-5 text-blue-500 flex-shrink-0" />
-                <Typography
-                  variant="small"
-                  color="gray"
-                  className="truncate whitespace-normal break-words"
-                >
-                  Origin: {route.origin}
-                </Typography>
-              </div>
-              <div className="hidden sm:block text-gray-400">•</div>
-              <div className="flex items-start gap-1 min-w-0">
-                <MapPinIcon className="h-5 w-5 text-blue-500 flex-shrink-0" />
-                <Typography
-                  variant="small"
-                  color="gray"
-                  className="whitespace-normal break-words"
-                >
-                  Destination: {route.destination}
-                </Typography>
-              </div>
-            </div>
+          </div>
+          <div className="hidden sm:block text-gray-500 text-xs">•</div>
+          <div className="flex items-start gap-1 min-w-0">
+            <MapPinIcon className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
+            <Typography
+              variant="small"
+              className="whitespace-normal break-words text-xs text-gray-300"
+            >
+              To: {route.destination}
+            </Typography>
           </div>
         </div>
 
         {/* Departure Times */}
-        <div className="mt-3 bg-white rounded-lg p-3 md:p-4 border border-gray-200">
-          <div className="flex items-center mb-2">
-            <ClockIcon className="h-5 w-5 text-blue-500 mr-2" />
-            <Typography variant="h6" className="text-black font-medium">
+        <div className="mt-2 bg-neutral-900 rounded-md p-2 border border-neutral-700">
+          <div className="flex items-center mb-1">
+            <ClockIcon className="h-3.5 w-3.5 text-blue-400 mr-1" />
+            <Typography
+              variant="small"
+              className="text-white font-medium text-xs"
+            >
               Departure Times
             </Typography>
           </div>
 
-          <div className="flex flex-wrap gap-2 mt-2">
+          <div className="flex flex-wrap gap-1 mt-1">
             {displayTimes.map((time, index) => (
               <Tooltip key={index} content={`Departs at ${time.trim()}`}>
                 <Chip
                   value={time.trim()}
-                  className="bg-blue-600 text-white font-medium border border-blue-500 hover:bg-blue-500 flex-shrink-0"
+                  className="bg-blue-900 text-blue-100 text-xs font-normal border border-blue-800 hover:bg-blue-800 flex-shrink-0 h-6"
                 />
               </Tooltip>
             ))}
@@ -101,7 +100,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
             {!expanded && times.length > 3 && (
               <Chip
                 value={`+${times.length - 3} more`}
-                className="bg-gray-300 text-gray-800 cursor-pointer hover:bg-gray-400 flex-shrink-0"
+                className="bg-neutral-700 text-gray-300 text-xs cursor-pointer hover:bg-neutral-600 flex-shrink-0 h-6"
                 onClick={() => setExpanded(true)}
               />
             )}
@@ -110,28 +109,28 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
           {expanded && (
             <Button
               variant="text"
-              className="flex items-center gap-2 mt-2 p-0 text-blue-600"
+              className="flex items-center gap-1 mt-1 p-0 text-blue-400 hover:text-blue-300 text-xs"
               onClick={() => setExpanded(false)}
             >
               <span>Show less</span>
-              <ChevronUpIcon className="h-4 w-4" />
+              <ChevronUpIcon className="h-3 w-3" />
             </Button>
           )}
         </div>
       </CardBody>
 
-      <CardFooter className="pt-0 pb-4 px-6">
+      <CardFooter className="pt-0 pb-3 px-3">
         <Button
-          size="lg"
+          size="sm"
           fullWidth
-          className="bg-blue-700 hover:bg-blue-800 shadow-md flex items-center justify-center gap-2 py-3 text-white"
+          className="bg-blue-600 hover:bg-blue-700 shadow-sm flex items-center justify-center gap-1 py-2 text-white text-xs"
           onClick={() => {
             setSelectedRoute(route);
             onViewDetails();
           }}
         >
-          <BusIcon className="h-5 w-5" />
-          View Route Details
+          <BusIcon className="h-3.5 w-3.5" />
+          View Details
         </Button>
       </CardFooter>
     </Card>

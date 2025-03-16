@@ -19,6 +19,7 @@ const fetchData = async (model, res) => {
 };
 
 // CRUD for suggested routes
+
 app.route("/api/suggested-routes")
   .get((req, res) => fetchData("suggestedRoute", res))
   .post(async (req, res) => {
@@ -29,18 +30,44 @@ app.route("/api/suggested-routes")
       }
 
       const newRoute = await prisma.suggestedRoute.create({
-        data: { source, destination, coordinates: JSON.stringify(coordinates) },
+
+        data: {
+          source,
+          destination,
+          coordinates: JSON.stringify(coordinates),
+          status: "pending",
+        },
       });
       res.status(201).json(newRoute);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: "Failed to add suggested route" });
     }
   });
 
+app.patch("/api/suggested-routes/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    if (!status) {
+      return res.status(400).json({ error: "Status field is required" });
+    }
+
+    const updatedRoute = await prisma.suggestedRoute.update({
+      where: { id: id },
+      data: { status },
+    });
+    res.json(updatedRoute);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to update suggested route" });
+  }
+});
+
 app.delete("/api/suggested-routes/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.suggestedRoute.delete({ where: { id: parseInt(id, 10) } });
+    await prisma.suggestedRoute.delete({ where: { id: id } });
     res.json({ message: "Suggested route deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete suggested route" });
@@ -167,6 +194,7 @@ app.get("/api/bus-routes", async (req, res) => {
 
 app.get("/api/:model", async (req, res) => {
   const { model } = req.params;
+
   const validModels = ["agency", "calendar", "stop", "trip", "route", "suggestedRoute", "busRoute"];
 
   if (!validModels.includes(model)) {
@@ -178,4 +206,6 @@ app.get("/api/:model", async (req, res) => {
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
+
 });
+

@@ -6,20 +6,57 @@ import { BusFront } from "lucide-react";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN; // Replace with your token
 
+
+const defaultBusCoordinates = [
+  [77.5946, 12.9716], // Bangalore MG Road
+  [77.61, 12.935], // Koramangala
+  [77.65, 12.9], // HSR Layout
+  [77.59, 12.94], // Richmond Town
+  [77.5806, 12.9201], // Lalbagh
+  [77.56, 12.99], // Yeshwanthpur
+  [77.53, 12.97], // Rajajinagar
+  [77.62, 12.95], // Indiranagar
+  [77.5, 12.91], // Vijayanagar
+  [77.64, 12.97], // KR Puram
+  [77.6, 13.0], // Hebbal
+  [77.63, 13.02], // Manyata Tech Park
+];
+
 export const MapBox = () => {
   const [hoveredRoute] = useAtom(hoveredRouteAtom);
   const [routeData, setRouteData] = useState(null);
-  const [viewState, setViewState] = useState({
-    longitude: 77.5923,
-    latitude: 12.9197,
-    zoom: 8,
-  });
+  const mapRef = useRef(null);
 
-  const mapRef = useRef(null); // Reference to the Mapbox instance
+  // Adjusts the map focus based on the given coordinates
+  const fitBoundsToCoordinates = (coordinates) => {
+    if (coordinates.length < 2 || !mapRef.current) return;
+
+    const allLons = coordinates.map(([lng, _]) => lng);
+    const allLats = coordinates.map(([_, lat]) => lat);
+
+    const minLon = Math.min(...allLons);
+    const maxLon = Math.max(...allLons);
+    const minLat = Math.min(...allLats);
+    const maxLat = Math.max(...allLats);
+
+    const bounds = [
+      [minLon, minLat], // Southwest corner
+      [maxLon, maxLat], // Northeast corner
+    ];
+
+    mapRef.current.fitBounds(bounds, {
+      padding: 50,
+      duration: 1000,
+      easing: (t) => t,
+    });
+  };
+
 
   useEffect(() => {
     if (!hoveredRoute || hoveredRoute.length < 2) {
       setRouteData(null);
+      fitBoundsToCoordinates(defaultBusCoordinates);
+
       return;
     }
 
@@ -41,45 +78,28 @@ export const MapBox = () => {
       .then((data) => {
         if (data.routes && data.routes.length > 0) {
           setRouteData(data.routes[0].geometry);
+          fitBoundsToCoordinates(hoveredRoute);
+
         }
       })
       .catch((err) => console.error("Error fetching route:", err));
   }, [hoveredRoute]);
 
-  // Smoothly adjust map view when route changes
-  useEffect(() => {
-    if (hoveredRoute && hoveredRoute.length > 1 && mapRef.current) {
-      const allLons = hoveredRoute.map(([lng, _]) => lng);
-      const allLats = hoveredRoute.map(([_, lat]) => lat);
-
-      const minLon = Math.min(...allLons);
-      const maxLon = Math.max(...allLons);
-      const minLat = Math.min(...allLats);
-      const maxLat = Math.max(...allLats);
-
-      const bounds = [
-        [minLon, minLat], // Southwest corner
-        [maxLon, maxLat], // Northeast corner
-      ];
-
-      // Animate fitBounds to smoothly center on the route
-      mapRef.current.fitBounds(bounds, {
-        padding: 50,
-        duration: 1000, // 1s smooth animation
-        easing: (t) => t, // Linear easing
-      });
-    }
-  }, [hoveredRoute]);
 
   return (
     <Map
-      {...viewState}
       ref={mapRef}
-      onMove={(evt) => setViewState(evt.viewState)}
+      initialViewState={{
+        longitude: 77.5923,
+        latitude: 12.9197,
+        zoom: 8,
+      }}
       style={{ borderRadius: "0.25rem" }}
-      mapStyle="mapbox://styles/mapbox/streets-v11"
+      mapStyle="mapbox://styles/mapbox/streets-v12"
       mapboxAccessToken={MAPBOX_TOKEN}
     >
+      {/* Show route if hovered */}
+
       {routeData && (
         <Source id="route" type="geojson" data={routeData}>
           <Layer
@@ -95,7 +115,29 @@ export const MapBox = () => {
         </Source>
       )}
 
-      {/* Start Marker (Small Green Circle) */}
+
+      {/* Show default bus markers when no route is hovered */}
+      {!hoveredRoute?.length &&
+        defaultBusCoordinates.map(([lng, lat], index) => (
+          <Marker key={index} longitude={lng} latitude={lat} anchor="center">
+            <div
+              style={{
+                width: "20px",
+                height: "20px",
+                backgroundColor: "#FFA500",
+                borderRadius: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <BusFront size={15} color="white" />
+            </div>
+          </Marker>
+        ))}
+
+      {/* Start Marker (Red Circle) */}
       {hoveredRoute?.length > 0 && (
         <Marker
           longitude={hoveredRoute[0][0]}
@@ -134,7 +176,9 @@ export const MapBox = () => {
         </Marker>
       ))}
 
-      {/* End Marker (Small Red Circle) */}
+
+      {/* End Marker (Green Circle) */}
+
       {hoveredRoute?.length > 1 && (
         <Marker
           longitude={hoveredRoute[hoveredRoute.length - 1][0]}

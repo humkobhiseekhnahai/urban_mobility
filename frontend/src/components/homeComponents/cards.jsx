@@ -1,3 +1,4 @@
+
 import { CheckCircle2, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { pricingOptions } from '../../constants';
@@ -52,6 +53,7 @@ const Cards = () => {
     }
   };
 
+
   // Elegant shape component for floating background elements
   const ElegantShape = ({ className, delay = 0, width = 400, height = 100, rotate = 0, gradient = "from-indigo-500/[0.15]" }) => (
     <motion.div
@@ -90,6 +92,7 @@ const Cards = () => {
     </motion.div>
   );
 
+
   // Unified card variants for all screen sizes - ensuring equal sizing
   const cardVariants = {
     active: {
@@ -118,6 +121,7 @@ const Cards = () => {
     }
   };
 
+
   const fadeUpVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: (i) => ({
@@ -134,11 +138,13 @@ const Cards = () => {
   return (
     <motion.div
       className="relative overflow-hidden px-4 sm:px-0 py-16 md:py-24"
+
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
       viewport={{ once: true }}
     >
+
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
       
@@ -353,8 +359,10 @@ const Cards = () => {
       
       {/* Foreground gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none" />
+=
     </motion.div>
   );
 };
 
 export default Cards;
+

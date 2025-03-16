@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState, useEffect } from "react";
 import { ChevronRight, Home } from "lucide-react";
@@ -7,11 +7,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/UPLYFT.svg";
 import StarBackground from "./homeComponents/StarBackground";
 
+
 export const NavBarComponent = () => {
   const [isDeliveryOpen, setDeliveryOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+
 
   // Open delivery dropdown if the current path is "/delivery"
   useEffect(() => {
@@ -19,6 +21,7 @@ export const NavBarComponent = () => {
       setDeliveryOpen(true);
     }
   }, [currentPath]);
+
 
   // Helper: determine if a route is active
   const isActive = (path) => currentPath === path;
