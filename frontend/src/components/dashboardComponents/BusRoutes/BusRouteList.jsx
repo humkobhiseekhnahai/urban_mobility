@@ -79,10 +79,10 @@ export const BusRouteList = ({
               {/* Load More Button (Visible on Small Screens) */}
               <button
                 onClick={loadMoreRoutes}
-                className="block sm:hidden bg-blue-600 text-white px-4 py-2 rounded-md mt-2 mb-2"
+                className="block sm:hidden bg-blue-600 text-white px-3 py-1 text-sm rounded-md mt-2 mb-2"
                 disabled={loading}
               >
-                {loading ? "Loading..." : "Load More Routes"}
+                {loading ? "Loading..." : "Load More"}
               </button>
 
               {/* Loader & Auto Load More Trigger (Only for Large Screens) */}

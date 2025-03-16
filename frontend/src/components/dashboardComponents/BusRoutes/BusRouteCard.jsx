@@ -54,7 +54,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-start gap-1 text-gray-300 text-xs mb-2">
-          <div className="flex items-start gap-1 min-w-0">
+          <div className="hidden md:flex items-start gap-1 min-w-0">
             <MapPinIcon className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
             <Typography
               variant="small"
@@ -64,7 +64,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
             </Typography>
           </div>
           <div className="hidden sm:block text-gray-500 text-xs">•</div>
-          <div className="flex items-start gap-1 min-w-0">
+          <div className="hidden md:flex items-start gap-1 min-w-0">
             <MapPinIcon className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
             <Typography
               variant="small"
@@ -76,7 +76,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         </div>
 
         {/* Departure Times */}
-        <div className="mt-2 bg-neutral-900 rounded-md p-2 border border-neutral-700">
+        <div className="hidden md:block mt-2 bg-neutral-900 rounded-md p-2 border border-neutral-700">
           <div className="flex items-center mb-1">
             <ClockIcon className="h-3.5 w-3.5 text-blue-400 mr-1" />
             <Typography
