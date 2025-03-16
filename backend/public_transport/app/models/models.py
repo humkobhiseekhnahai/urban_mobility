@@ -1,28 +1,34 @@
-from pydantic import BaseModel
-from typing import List, Tuple
+from typing import List, Optional
+from pydantic import BaseModel, validator
+import re
+import json
+from app.api.optimizer import load_routes
 
-class BusStop(BaseModel):
-    name: str
-    location: Tuple[float, float]  # (latitude, longitude)
-    passenger_count: int  # Estimated number of passengers
-    is_interchange: bool = False  # True if it connects multiple routes
+try:
+    routes_data = load_routes("data/busRoutes.json")
+except FileNotFoundError:
+    raise SystemExit("busRoutes.json not found. Application exiting.")
+except json.JSONDecodeError:
+    raise SystemExit("busRoutes.json is malformed. Application exiting.")
 
-class Route(BaseModel):
-    route_id: str
-    stops: List[BusStop]
-    frequency: int  # Buses per hour
-    overlaps_with: List[str] = []  # Other routes sharing stops
+class TransitRequest(BaseModel):
+    route_no: str
+    departure_time: str
 
-class TrafficData(BaseModel):
-    stop_name: str
-    congestion_level: float  # e.g., 0 (low) to 1 (high)
+    @validator("departure_time")
+    def validate_departure_time(cls, value):
+        if not re.match(r"^\d{2}:\d{2}$", value):
+            raise ValueError("Invalid departure time format. Use HH:MM")
+        return value
 
-class TransportInput(BaseModel):
-    routes: List[Route]
-    traffic_data: List[TrafficData]
-    max_passenger_load: int  # Maximum capacity per bus
-
-class TransshipmentNode(BaseModel):
+    @validator("route_no")
+    def validate_route_no(cls, value):
+        valid_routes = {str(route["route_no"]) for route in routes_data}
+        if value not in valid_routes:
+            raise ValueError(f"Route number '{value}' not found in available routes: {valid_routes}")
+        return value
+class CreateCustomRouteRequest(BaseModel):
+    start: str
     stop: str
-    location: Tuple[float, float]
-    action: str
+    intermediate_points: List[str]  # Rename from `intermediate` to `intermediate_points`
+    departure_time: str

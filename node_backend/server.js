@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
+const axios = require("axios"); 
 
 const app = express();
 const prisma = new PrismaClient();
@@ -145,6 +146,69 @@ app.get("/api/bus-routes", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch bus routes" });
+  }
+});
+
+app.use("/custom", require("./routes/customRoutes"));
+
+const PYTHON_BACKEND_URL = "http://localhost:8000/optimize_transit";
+
+// ✅ Optimize Route (POST)
+app.post("/api/optimize-route", async (req, res) => {
+  try {
+    console.log("Request received:", req.body);
+
+    const { route_no, optimized_route } = req.body;
+
+    if (!route_no || !optimized_route) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Extract the correct structure
+    const routeData = optimized_route.optimized_route; // Fix here
+
+    if (!routeData || !routeData.route_1 || !routeData.route_2 || !routeData.transfer_point || !routeData.transfer_route) {
+      return res.status(500).json({ error: "Invalid optimized route format" });
+    }
+
+    console.log("Parsed Optimized Route:", routeData);
+
+    // Save to the database
+    const updatedRoute = await prisma.optimizedRoute.upsert({
+      where: { routeNumber: route_no },
+      update: {
+        origin: JSON.stringify(routeData.route_1),
+        transferPoint: routeData.transfer_point,
+        transferRoute: routeData.transfer_route,
+        departureTimes: JSON.stringify(routeData.route_2),
+        mapJsonContent: JSON.stringify(routeData),
+      },
+      create: {
+        routeNumber: route_no,
+        routeName: `Route ${route_no}`,
+        origin: JSON.stringify(routeData.route_1),
+        transferPoint: routeData.transfer_point,
+        transferRoute: routeData.transfer_route,
+        departureTimes: JSON.stringify(routeData.route_2),
+        mapJsonContent: JSON.stringify(routeData),
+      },
+    });
+
+    console.log("Database updated:", updatedRoute);
+    res.json({ message: "Route optimized successfully", updatedRoute });
+
+  } catch (error) {
+    console.error("Optimization Error:", error);
+    res.status(500).json({ error: "Failed to optimize route", details: error.message });
+  }
+});
+// ✅ Get all optimized routes (GET)
+app.get("/api/optimized-routes", async (req, res) => {
+  try {
+    const optimizedRoutes = await prisma.optimizedRoute.findMany();
+    res.json(optimizedRoutes);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch optimized routes" });
   }
 });
 
