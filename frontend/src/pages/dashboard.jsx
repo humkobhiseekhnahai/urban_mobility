@@ -27,7 +27,7 @@ import { useAtom } from "jotai";
 import { filterRoutesByTime } from "../utils/dashboard/filterRoutesByTime";
 
 export const Dashboard = () => {
-  const serverUrl = import.meta.env.VITE_SERVER_URL;
+  const serverUrl = "http://localhost:3001";
 
 
   const location = useGeolocation();
@@ -72,7 +72,8 @@ export const Dashboard = () => {
   const getAllBusRoutes = async () => {
     try {
       const response = await fetch(
-        `${serverUrl}/api/bus-routes?limit=${busRoutesLimit}`
+        `${serverUrl}/api/bus-routes?limit=${busRoutesLimit}`,
+        {method: 'GET'}
       );
 
       const data = await response.json();
@@ -263,7 +264,7 @@ export const Dashboard = () => {
                     lng={location.longitude}
 
                     radius={0.05}
-=
+
                   />
                 </TabPanel>
                 <TabPanel value="weather" className="w-full h-full p-2">

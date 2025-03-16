@@ -47,7 +47,7 @@ export const NavBarComponent = () => {
           <img
             src={logo || "/placeholder.svg"}
             alt="UPLYFT Logo"
-            className="h-12 w-12 object-contain"
+            className="h-30 w-42 -my-4 object-contain"
           />
         </div>
 
