@@ -79,7 +79,6 @@ export const BusRouteModal = ({ isOpen, onClose, route }) => {
                           {stop.busstop.split(",").slice(1).join(", ")}
                         </Typography>
                       )}
-
                       <div className="flex items-center gap-1 md:gap-2 text-gray-400 text-[10px] md:text-xs mt-1 md:mt-2">
                         <MapPinIcon className="h-2 w-2 md:h-3 md:w-3" />
                         <span className="truncate">

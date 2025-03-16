@@ -63,7 +63,9 @@ export default function RouteDashboard() {
     };
 
     return (
+
         <div className="flex-1 flex flex-col h-screen bg-neutral-900 overflow-hidden">
+
             {/* Header */}
             <div className="flex items-center justify-between p-4 border-b border-neutral-700 h-20">
                 <div>

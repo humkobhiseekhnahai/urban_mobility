@@ -6,6 +6,7 @@ import { BusFront } from "lucide-react";
 
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN; // Replace with your token
 
+
 const defaultBusCoordinates = [
   [77.5946, 12.9716], // Bangalore MG Road
   [77.61, 12.935], // Koramangala
@@ -50,10 +51,12 @@ export const MapBox = () => {
     });
   };
 
+
   useEffect(() => {
     if (!hoveredRoute || hoveredRoute.length < 2) {
       setRouteData(null);
       fitBoundsToCoordinates(defaultBusCoordinates);
+
       return;
     }
 
@@ -76,10 +79,12 @@ export const MapBox = () => {
         if (data.routes && data.routes.length > 0) {
           setRouteData(data.routes[0].geometry);
           fitBoundsToCoordinates(hoveredRoute);
+
         }
       })
       .catch((err) => console.error("Error fetching route:", err));
   }, [hoveredRoute]);
+
 
   return (
     <Map
@@ -94,6 +99,7 @@ export const MapBox = () => {
       mapboxAccessToken={MAPBOX_TOKEN}
     >
       {/* Show route if hovered */}
+
       {routeData && (
         <Source id="route" type="geojson" data={routeData}>
           <Layer
@@ -108,6 +114,7 @@ export const MapBox = () => {
           />
         </Source>
       )}
+
 
       {/* Show default bus markers when no route is hovered */}
       {!hoveredRoute?.length &&
@@ -169,7 +176,9 @@ export const MapBox = () => {
         </Marker>
       ))}
 
+
       {/* End Marker (Green Circle) */}
+
       {hoveredRoute?.length > 1 && (
         <Marker
           longitude={hoveredRoute[hoveredRoute.length - 1][0]}

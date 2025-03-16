@@ -1,4 +1,4 @@
-"use client";
+
 
 import { useState, useEffect } from "react";
 import { MapBox } from "../components/dashboardComponents/Map";
@@ -22,11 +22,13 @@ import {
 } from "@material-tailwind/react";
 import { useAtom } from "jotai";
 
+
 // Functions
 import { filterRoutesByTime } from "../utils/dashboard/filterRoutesByTime";
 
 export const Dashboard = () => {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
+
 
   const location = useGeolocation();
   const [isOptimizedModalOpen, setIsOptimizedModalOpen] = useState(false);
@@ -48,9 +50,11 @@ export const Dashboard = () => {
   const [filteredRoutes, setFilteredRoutes] = useState([]);
   const [busRoutesLimit, setBusRoutesLimit] = useState(10);
 
+
   const addStop = () => {
     setStops([...stops, { latitude: "", longitude: "" }]);
   };
+
 
   const handleOpen = () => {
     setStops([{ latitude: "", longitude: "" }]);
@@ -70,6 +74,7 @@ export const Dashboard = () => {
       const response = await fetch(
         `${serverUrl}/api/bus-routes?limit=${busRoutesLimit}`
       );
+
       const data = await response.json();
 
       const busRoutes = data.data.map((route) => ({
@@ -178,6 +183,7 @@ export const Dashboard = () => {
             setFilteredRoutes={setFilteredRoutes}
           />
 
+
           {/* Timings List */}
           <BusRouteList
             filteredRoutes={filteredRoutes}
@@ -187,12 +193,15 @@ export const Dashboard = () => {
             setLimit={setBusRoutesLimit}
           />
         </section>
+
         <section className="w-full md:w-[55%] h-full bg-neutral-900 flex flex-col">
           <div className="w-full h-1/2 p-2 md:p-5 rounded-lg">
+
             <MapBox lng={location.longitude} lat={location.latitude} />
           </div>
 
           {/* Open Modal Text */}
+
           <div className="w-full h-1/2 p-2 md:p-3 rounded-t-md bg-neutral-900 border-t border-t-neutral-800">
             <Tabs value="heatmap" className="h-full flex flex-col">
               <TabsHeader
@@ -200,31 +209,38 @@ export const Dashboard = () => {
                 indicatorProps={{
                   className:
                     "bg-neutral-800 shadow-none border-b-2 border-blue-500",
+
                 }}
               >
                 <Tab
                   value="heatmap"
+
                   className="text-xs md:text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1 whitespace-nowrap"
                   activeClassName="text-blue-400"
+
                 >
                   Traffic Heatmap
                 </Tab>
                 <Tab
                   value="incident"
+
                   className="text-xs md:text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1 whitespace-nowrap"
                   activeClassName="text-blue-400"
+
                 >
                   Traffic Incidents
                 </Tab>
                 <Tab
                   value="weather"
+
                   className="text-xs md:text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1 whitespace-nowrap"
                   activeClassName="text-blue-400"
-                >
+    >
                   Weather Data
                 </Tab>
                 <Tab
                   value="ori"
+
                   className="text-xs md:text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1 whitespace-nowrap"
                   activeClassName="text-blue-400"
                 >
@@ -232,18 +248,22 @@ export const Dashboard = () => {
                 </Tab>
               </TabsHeader>
               <TabsBody className="text-white flex-1 overflow-y-auto">
+
                 <TabPanel value="heatmap" className="w-full h-full p-2">
                   <HeatMap
                     lat={location.latitude}
                     lng={location.longitude}
+
                     radius={0.05}
-                  />
+    />
                 </TabPanel>
                 <TabPanel value="incident" className="w-full h-full p-2">
                   <IncidentList
                     lat={location.latitude}
                     lng={location.longitude}
+
                     radius={0.05}
+=
                   />
                 </TabPanel>
                 <TabPanel value="weather" className="w-full h-full p-2">
@@ -251,7 +271,9 @@ export const Dashboard = () => {
                 </TabPanel>
                 <TabPanel value="ori" className="w-full h-full p-2">
                   <div>
+
                     <h2 className="text-lg font-semibold text-white">
+
                       Suggest an Optimized Route
                     </h2>
 
@@ -263,19 +285,22 @@ export const Dashboard = () => {
                       experience.
                     </p>
 
+
                     <div className="mt-4 p-3 bg-black rounded-md">
                       <p className="text-gray-100 text-sm font-medium">
                         Why contribute?
                       </p>
                       <ul className="list-disc list-inside text-blue-400 text-xs mt-1">
-                        <li>Reduce congestion and delays.</li>
+          <li>Reduce congestion and delays.</li>
                         <li>Enhance accessibility for passengers.</li>
                         <li>Optimize fuel consumption and efficiency.</li>
                       </ul>
                     </div>
 
                     <button
+
                       className="w-full h-10 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-md mt-4 transition-all transform hover:scale-[102%] active:scale-95 cursor-pointer hover:from-blue-600 hover:to-blue-700"
+
                       type="button"
                       onClick={handleOpen}
                     >
@@ -288,6 +313,8 @@ export const Dashboard = () => {
           </div>
         </section>
       </div>
+
+
       {selectedRoute && (
         <BusRouteModal
           route={selectedRoute}
@@ -295,6 +322,7 @@ export const Dashboard = () => {
           onClose={handleCloseModal}
         />
       )}
+
       <OptimizedRouteModal
         isOpen={isOptimizedModalOpen}
         handleOpen={handleOpen}
@@ -306,6 +334,7 @@ export const Dashboard = () => {
         setStops={setStops}
         addOptimizedRoute={addOptimizedRoute}
       />
+
     </main>
   );
 };

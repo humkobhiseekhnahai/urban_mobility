@@ -53,7 +53,8 @@ This guide provides instructions for setting up the complete Urban Mobility proj
 5. **Run the Python Backend**
    ```bash
    cd delivery
-   uvicorn main:app --reload
+
+   uvicorn app.main:app --reload
    ```
 
 ## Node.js Backend Setup
@@ -101,7 +102,6 @@ This guide provides instructions for setting up the complete Urban Mobility proj
    ```bash
    npm run dev
    ```
-   > The application will be available at http://localhost:3000 or http://localhost:5173
 
 ## Maintenance
 
@@ -114,7 +114,6 @@ conda deactivate
 ```bash
 conda env remove -n urban_mobility
 ```
-
 ## Running the Entire Application with Docker Compose
 
 ```bash

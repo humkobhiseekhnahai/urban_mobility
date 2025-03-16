@@ -7,6 +7,7 @@ import { IncidentElement } from "./IncidentElement";
 const tomtomApiKey = import.meta.env.VITE_TOMTOM_API_KEY;
 
 export const IncidentList = ({ lat, lng, radius }) => {
+
   const lati = parseFloat("12.9516");
   const lngi = parseFloat("77.6961");
   const bbox = coordsToBbox(lat, lng, radius);
@@ -22,6 +23,7 @@ export const IncidentList = ({ lat, lng, radius }) => {
     return (
       <div>
         <p className="text-gray-200">Loading Incidents Near 5 KM of you...</p>
+
       </div>
     );
 
@@ -35,7 +37,9 @@ export const IncidentList = ({ lat, lng, radius }) => {
     );
 
   return (
+
     <div className="w-full h-full overflow-y-auto">
+
       {data?.incidents.map((incident, indx) => {
         return (
           <IncidentElement

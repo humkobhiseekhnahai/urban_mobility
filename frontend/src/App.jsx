@@ -13,7 +13,6 @@ import ProtectedRoute from "./components/protectedRoute";
 import Unauthorized from "./pages/auth/unauthorized";
 import { Public } from "./pages/public";
 import { Requests } from "./pages/requests";
-
 function App() {
   return (
     <>

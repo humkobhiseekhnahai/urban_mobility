@@ -1,269 +1,248 @@
-import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+
 import { motion } from "framer-motion"
-import UplyftLogo from "../../assets/UPLYFT.svg"
+import clsx from "clsx"
+import { ChevronDown, Sparkles } from "lucide-react"
+const cn = clsx
+import UplyftLogo from "../../assets/UPLYFT.svg" // Adjust path as needed
 
-const HeroSection = () => {
-  const [scrolled, setScrolled] = useState(false)
-
-  // Handle scroll effect for navbar
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  // Animation variants
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6 }
-    }
-  }
-
-  const stagger = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  }
-
+// ElegantShape component for floating background shapes
+function ElegantShape({ className, delay = 0, width = 400, height = 100, rotate = 0, gradient = "from-white/[0.08]" }) {
   return (
-    <div className="relative min-h-screen bg-inherit overflow-hidden">
-      {/* Background pattern - keeping transparent */}
-      <div className="absolute inset-0 z-0 opacity-5">
-        <div className="absolute inset-0 bg-grid-pattern"></div>
-      </div>
-
-      {/* Main content - split layout */}
-      <div className="container mx-auto px-4 grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-        {/* Left side - Content */}
-        <motion.div 
-          className="flex flex-col justify-center z-10 pt-20 lg:pt-0"
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-        >
-          <div className="max-w-xl">
-            <motion.div 
-              className="mb-6 inline-block"
-              variants={fadeIn}
-            >
-              <div className="relative">
-                {/* Increased logo size */}
-                <img src={UplyftLogo || "/placeholder.svg"} alt="UPLYFT" className="h-28 md:h-32 w-auto" />
-                {/* Logo highlight effect */}
-                <motion.div 
-                  className="absolute -inset-1 bg-blue-500/10 rounded-lg blur-lg"
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    opacity: [0.5, 0.7, 0.5]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }}
-                ></motion.div>
-              </div>
-            </motion.div>
-
-            <motion.h1 
-              className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-gray-300"
-              variants={fadeIn}
-            >
-              Urban <span className="text-blue-600">Mobility</span> Reimagined
-            </motion.h1>
-
-            <motion.div 
-              className="w-16 h-1 bg-blue-500 mb-8"
-              variants={fadeIn}
-            ></motion.div>
-
-            <motion.p 
-              className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed max-w-lg"
-              variants={fadeIn}
-            >
-              Seamless city navigation with intelligent routing and real-time updates. Your essential companion for the modern urban explorer.
-            </motion.p>
-
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 mb-16"
-              variants={fadeIn}
-            >
-              <Link
-                to="/dashboard"
-                className="bg-blue-600 text-white px-8 py-4 rounded-full font-medium hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/20 text-center"
-              >
-                Get Started
-              </Link>
-
-              <Link
-                to="/documentation"
-                className="border border-blue-200 text-blue-600 px-8 py-4 rounded-full font-medium hover:bg-blue-50 transition-colors text-center"
-              >
-                Learn More
-              </Link>
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Right side - Visual with animation */}
-        <div className="relative hidden lg:flex items-center justify-center overflow-hidden">
-          <div className="relative w-full h-full">
-            {/* Abstract shapes with animation - changed to blues and whites */}
-            <motion.div 
-              className="absolute top-1/4 right-1/4 w-72 h-72 rounded-full bg-blue-200 mix-blend-multiply filter blur-xl opacity-70"
-              animate={{ 
-                x: [0, 20, 0],
-                y: [0, -20, 0]
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            ></motion.div>
-            <motion.div 
-              className="absolute bottom-1/3 right-1/3 w-80 h-80 rounded-full bg-blue-400 mix-blend-multiply filter blur-xl opacity-70"
-              animate={{ 
-                x: [0, -20, 0],
-                y: [0, 20, 0]
-              }}
-              transition={{
-                duration: 10,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            ></motion.div>
-            <motion.div 
-              className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full bg-white mix-blend-multiply filter blur-xl opacity-70"
-              animate={{ 
-                x: [0, 30, 0],
-                y: [0, 30, 0]
-              }}
-              transition={{
-                duration: 12,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            ></motion.div>
-
-            {/* App mockup with animation */}
-            <motion.div 
-              className="relative z-10 w-full h-full flex items-center justify-center"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-            >
-              <motion.div 
-                className="w-96 h-96 relative"
-                whileHover={{ scale: 1.02, rotate: 0 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                <motion.div 
-                  className="absolute inset-0 flex items-center justify-center"
-                  animate={{ rotate: [0, 5, 0, -5, 0] }}
-                  transition={{ duration: 20, repeat: Infinity }}
-                >
-                  <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                    <path
-                      fill="#3B82F6"
-                      d="M45.7,-76.3C59.3,-69.7,70.3,-57.4,78.9,-43.2C87.5,-29,93.8,-12.9,93.2,2.9C92.7,18.7,85.4,34.2,75.1,47.1C64.8,60,51.6,70.3,37,76.1C22.4,81.9,6.4,83.2,-9.3,81.1C-25,79,-40.4,73.5,-52.9,64.1C-65.4,54.7,-75,41.4,-80.8,26.4C-86.6,11.3,-88.6,-5.5,-85.2,-21.1C-81.8,-36.7,-73,-51.1,-60.8,-59.9C-48.6,-68.7,-33,-71.9,-18.5,-73.8C-4,-75.7,10.4,-76.3,24.4,-76.5C38.4,-76.7,52,-82.9,45.7,-76.3Z"
-                      transform="translate(100 100)"
-                    />
-                  </svg>
-                </motion.div>
-
-                <motion.div 
-                  className="absolute inset-0 flex items-center justify-center"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.8, delay: 0.5 }}
-                >
-                  <motion.div 
-                    className="w-64 h-64 bg-white rounded-2xl shadow-2xl p-6 rotate-3 transform hover:rotate-0 transition-transform duration-500"
-                    whileHover={{ 
-                      boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.25)",
-                      y: -5
-                    }}
-                  >
-                    <div className="w-full h-full flex flex-col">
-                      <div className="flex items-center gap-2 mb-4">
-                        <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                        <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                      </div>
-
-                      <div className="flex-1 bg-gray-50 rounded-lg p-4">
-                        <div className="w-full h-4 bg-blue-200 rounded mb-3"></div>
-                        <div className="w-3/4 h-4 bg-blue-100 rounded mb-6"></div>
-
-                        <div className="flex gap-2 mb-4">
-                          <div className="w-10 h-10 bg-blue-500 rounded-full"></div>
-                          <div className="flex-1">
-                            <div className="w-full h-3 bg-gray-200 rounded mb-2"></div>
-                            <div className="w-2/3 h-3 bg-gray-200 rounded"></div>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 mb-4">
-                          <div className="w-10 h-10 bg-blue-400 rounded-full"></div>
-                          <div className="flex-1">
-                            <div className="w-full h-3 bg-gray-200 rounded mb-2"></div>
-                            <div className="w-2/3 h-3 bg-gray-200 rounded"></div>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2">
-                          <div className="w-10 h-10 bg-blue-300 rounded-full"></div>
-                          <div className="flex-1">
-                            <div className="w-full h-3 bg-gray-200 rounded mb-2"></div>
-                            <div className="w-2/3 h-3 bg-gray-200 rounded"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator with animation */}
-      <motion.div 
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 z-10"
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.8 }}
+    <motion.div
+      initial={{ opacity: 0, y: -150, rotate: rotate - 15 }}
+      animate={{ opacity: 1, y: 0, rotate: rotate }}
+      transition={{
+        duration: 2.4,
+        delay,
+        ease: [0.23, 0.86, 0.39, 0.96],
+        opacity: { duration: 1.2 },
+      }}
+      className={cn("absolute", className)}
+    >
+      <motion.div
+        animate={{ y: [0, 15, 0] }}
+        transition={{
+          duration: 12,
+          repeat: Number.POSITIVE_INFINITY,
+          ease: "easeInOut",
+        }}
+        style={{ width, height }}
+        className="relative"
       >
-        <span className="text-xs text-gray-500 font-medium tracking-wider">SCROLL</span>
-        <motion.div 
-          className="w-5 h-10 border-2 border-gray-300 rounded-full flex justify-center p-1"
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          <motion.div 
-            className="w-1 h-2 bg-blue-500 rounded-full"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ 
-              duration: 1.5, 
-              repeat: Infinity,
-              ease: "easeInOut" 
-            }}
-          ></motion.div>
-        </motion.div>
+        <div
+          className={cn(
+            "absolute inset-0 rounded-full",
+            "bg-gradient-to-r to-transparent",
+            gradient,
+            "backdrop-blur-[2px] border-2 border-white/[0.15]",
+            "shadow-[0_8px_32px_0_rgba(255,255,255,0.1)]",
+            "after:absolute after:inset-0 after:rounded-full",
+            "after:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.2),transparent_70%)]",
+          )}
+        />
       </motion.div>
+    </motion.div>
+  )
+}
+
+// Badge component for highlighting features
+function FeatureBadge({ children, className }) {
+  return (
+    <div
+      className={cn(
+        "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium",
+        "bg-white/10 text-white/80 backdrop-blur-sm",
+        "border border-white/20",
+        className,
+      )}
+    >
+      <Sparkles className="w-3 h-3 mr-1.5 text-blue-300" />
+      {children}
     </div>
   )
 }
 
-export default HeroSection
+// Main HeroGeometric component
+export default function HeroGeometric() {
+  const fadeUpVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1,
+        delay: 0.5 + i * 0.2,
+        ease: [0.25, 0.4, 0.25, 1],
+      },
+    }),
+  }
+
+  return (
+    <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#030303]">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
+
+      {/* Subtle pattern overlay */}
+      <div className="absolute inset-0 bg-[url('/placeholder.svg?height=100&width=100')] bg-repeat opacity-[0.03]" />
+
+      {/* Floating elegant shapes */}
+      <div className="absolute inset-0 overflow-hidden">
+        <ElegantShape
+          delay={0.3}
+          width={600}
+          height={140}
+          rotate={12}
+          gradient="from-indigo-500/[0.15]"
+          className="left-[-10%] md:left-[-5%] top-[15%] md:top-[20%]"
+        />
+        <ElegantShape
+          delay={0.5}
+          width={500}
+          height={120}
+          rotate={-15}
+          gradient="from-rose-500/[0.15]"
+          className="right-[-5%] md:right-[0%] top-[70%] md:top-[75%]"
+        />
+        <ElegantShape
+          delay={0.4}
+          width={300}
+          height={80}
+          rotate={-8}
+          gradient="from-violet-500/[0.15]"
+          className="left-[5%] md:left-[10%] bottom-[5%] md:bottom-[10%]"
+        />
+        <ElegantShape
+          delay={0.6}
+          width={200}
+          height={60}
+          rotate={20}
+          gradient="from-amber-500/[0.15]"
+          className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
+        />
+        <ElegantShape
+          delay={0.7}
+          width={150}
+          height={40}
+          rotate={-25}
+          gradient="from-cyan-500/[0.15]"
+          className="left-[20%] md:left-[25%] top-[5%] md:top-[10%]"
+        />
+      </div>
+
+      {/* Main content */}
+      <div className="relative z-10 container mx-auto px-4 md:px-6">
+        <div className="max-w-4xl mx-auto text-center">
+
+          {/* Logo */}
+          <motion.div custom={1} variants={fadeUpVariants} initial="hidden" animate="visible" className="mb-6 mt-8 md:mb-8 md:mt-10">
+            <img src={UplyftLogo || "/placeholder.svg"} alt="UPLYFT" className="h-40 md:h-48 w-auto mx-auto" />
+          </motion.div>
+
+          {/* Title */}
+          <motion.h1
+            custom={2}
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate="visible"
+            className="text-4xl sm:text-6xl md:text-7xl font-bold mb-6 md:mb-8 tracking-tight leading-[1.1]"
+          >
+            <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">Reimagine </span>
+            <span className="bg-clip-text font-pacifico text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300">
+              Urban Travel
+            </span>
+            <br />
+            <span className="bg-clip-text font-pacifico text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300">
+              Experience{" "}
+            </span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-b from-white to-white/80">
+              The Difference
+            </span>
+          </motion.h1>
+
+          {/* Description */}
+          <motion.div custom={3} variants={fadeUpVariants} initial="hidden" animate="visible" className="mb-10">
+            {/* <p className="text-base sm:text-lg md:text-xl text-white/60 leading-relaxed font-light tracking-wide max-w-2xl mx-auto px-4 mb-4">
+              UPLYFT transforms how you navigate cities with AI-powered route optimization
+            </p> */}
+            <p className="text-sm sm:text-base text-white/40 max-w-xl mx-auto">
+              Join thousands of commuters saving up to 40% on travel time and reducing their carbon footprint.
+            </p>
+          </motion.div>
+
+          {/* Feature highlights */}
+          {/* <motion.div
+            custom={4}
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-wrap justify-center gap-3 mb-10"
+          >
+            <span className="text-xs text-white/40 px-3 py-1 border border-white/10 rounded-full">
+              Real-time Updates
+            </span>
+            <span className="text-xs text-white/40 px-3 py-1 border border-white/10 rounded-full">
+              Multi-modal Transport
+            </span>
+            <span className="text-xs text-white/40 px-3 py-1 border border-white/10 rounded-full">
+              Carbon Footprint Tracking
+            </span>
+            <span className="text-xs text-white/40 px-3 py-1 border border-white/10 rounded-full">
+              Smart Notifications
+            </span>
+          </motion.div> */}
+
+          {/* Buttons */}
+          <motion.div
+            custom={5}
+            variants={fadeUpVariants}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
+          >
+            <a
+              href="/dashboard"
+              className="group relative bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-full font-medium transition-all duration-300 shadow-lg hover:shadow-blue-500/30 text-center overflow-hidden"
+            >
+              <span className="relative z-10">Start Your Journey</span>
+              <span className="absolute inset-0 bg-gradient-to-r from-blue-700 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+            </a>
+            <a
+              href="/documentation"
+              className="group relative border border-white/20 text-white/90 px-8 py-4 rounded-full font-medium hover:bg-white/5 transition-colors text-center"
+            >
+              Explore Features
+              <span className="absolute bottom-0 left-1/2 w-0 h-0.5 bg-blue-400 group-hover:w-1/2 transition-all duration-300 -translate-x-1/2"></span>
+              <span className="absolute bottom-0 right-1/2 w-0 h-0.5 bg-blue-400 group-hover:w-1/2 transition-all duration-300 translate-x-1/2"></span>
+            </a>
+          </motion.div>
+
+          {/* Scroll indicator */}
+          {/* <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.5, duration: 1 }}
+            className="absolute bottom-1 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
+          >
+            <span className="text-white/40 text-xs mb-2">Scroll to explore</span>
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{
+                duration: 2,
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: "loop",
+              }}
+            >
+              <ChevronDown className="w-5 h-5 text-white/40" />
+            </motion.div>
+          </motion.div> */}
+        </div>
+      </div>
+
+      {/* Foreground gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none" />
+
+    </div>
+  )
+}
+
+
