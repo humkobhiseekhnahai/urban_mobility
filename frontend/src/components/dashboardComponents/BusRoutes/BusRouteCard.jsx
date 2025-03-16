@@ -123,7 +123,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         <Button
           size="sm"
           fullWidth
-          className="bg-blue-600 hover:bg-blue-700 shadow-sm flex items-center justify-center gap-1 py-2 text-white text-xs"
+          className="bg-blue-900 hover:bg-blue-800 shadow-sm flex items-center justify-center gap-1 py-2 text-white text-xs"
           onClick={() => {
             setSelectedRoute(route);
             onViewDetails();

@@ -86,7 +86,7 @@ export const Dashboard = () => {
         {/* Sidebar Section (Dashboard Heading, Filter & Bus Routes) */}
         <section className="w-full md:w-[45%] h-auto md:h-full bg-neutral-900 border-r border-r-neutral-800 p-4">
           {/* ✅ Added Dashboard Heading */}
-          <div className="mb-4 text-center">
+          <div className="mb-4 text-center flex flex-col items-start">
             <h1 className="text-white text-2xl font-semibold">Dashboard</h1>
             <p className="text-neutral-400 text-sm">
               View traffic incidents, weather data, and bus routes in your area
