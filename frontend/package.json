@@ -21,11 +21,15 @@
     "@tailwindcss/vite": "^4.0.1",
     "@tomtom-international/web-sdk-maps": "^6.25.0",
     "@tomtom-international/web-sdk-services": "^6.25.0",
+<<<<<<< HEAD
     "@uidotdev/usehooks": "^2.4.1",
     "axios": "^1.8.1",
     "babel-plugin-react-compiler": "^19.0.0-beta-30d8a17-20250209",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.4.9",
+=======
+    "babel-plugin-react-compiler": "^19.0.0-beta-30d8a17-20250209",
+>>>>>>> aa5370f84fa0dacff31fc133428352fface2ea58
     "jotai": "^2.12.0",
     "leaflet": "^1.9.4",
     "leaflet.heat": "^0.2.0",
@@ -38,10 +42,14 @@
     "react-leaflet": "^5.0.0",
     "react-map-gl": "^8.0.1",
     "react-router-dom": "^7.1.4",
+<<<<<<< HEAD
     "react-virtualized": "^9.22.6",
     "tailwind-scrollbar": "^4.0.1",
     "tailwindcss": "^4.0.1",
     "three": "^0.174.0"
+=======
+    "tailwindcss": "^4.0.1"
+>>>>>>> aa5370f84fa0dacff31fc133428352fface2ea58
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

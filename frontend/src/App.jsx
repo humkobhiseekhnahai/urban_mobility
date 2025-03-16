@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 import React from "react";
 import "./index.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -14,11 +15,20 @@ import ProtectedRoute from "./components/protectedRoute";
 import Unauthorized from "./pages/auth/unauthorized";
 import { Public } from "./pages/public";
 
+=======
+import './index.css'
+import { BrowserRouter, Route,Routes } from 'react-router-dom'
+import { Delivery } from './pages/delivery'
+import { Dashboard } from './pages/dashboard'
+>>>>>>> aa5370f84fa0dacff31fc133428352fface2ea58
 function App() {
+  
+
   return (
     <>
       <BrowserRouter>
         <Routes>
+<<<<<<< HEAD
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/documentation" element={<Documentation />} />
@@ -55,10 +65,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+=======
+          <Route path="/" element={<Dashboard/>}/>
+          <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/delivery" element={<Delivery/>}/>
+>>>>>>> aa5370f84fa0dacff31fc133428352fface2ea58
         </Routes>
       </BrowserRouter>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

@@ -19,8 +19,32 @@ import {
 } from "@material-tailwind/react";
 import { useAtom } from "jotai";
 
+<<<<<<< HEAD
 // Functions
 import { filterRoutesByTime } from "../utils/dashboard/filterRoutesByTime";
+=======
+const mapBoxAccessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+const tomtomApiKey = import.meta.env.VITE_TOMTOM_API_KEY;
+const hereApiKey = import.meta.env.VITE_HEREAPI_KEY;
+
+// Mapping of incident categories (TomTom)
+const incidentCategoryMap = {
+  0: "Unknown",
+  1: "Accident",
+  2: "Fog",
+  3: "Dangerous Conditions",
+  4: "Rain",
+  5: "Ice",
+  6: "Jam",
+  7: "Lane Closed",
+  8: "Road Closed",
+  9: "Road Works",
+  10: "Wind",
+  11: "Flooding",
+  13: "Cluster (Multiple Categories)",
+  14: "Broken Down Vehicle",
+};
+>>>>>>> aa5370f84fa0dacff31fc133428352fface2ea58
 
 export const Dashboard = () => {
   const serverUrl = import.meta.env.VITE_SERVER_URL;
@@ -73,8 +97,37 @@ export const Dashboard = () => {
           ?.busstop.split(",")[0],
       }));
 
+<<<<<<< HEAD
       setBusRoutes(busRoutes);
       setFilteredRoutes(busRoutes); // Initialize filtered list with all routes
+=======
+      if (!data.results) {
+        console.error("Error fetching traffic data");
+        return;
+      }
+
+      const points = [];
+      let maxIntensity = 1;
+
+      data.results.forEach((result) => {
+        result.location.shape.links.forEach((link) => {
+          const intensity = link.trafficDensity || 1;
+          maxIntensity = Math.max(maxIntensity, intensity);
+
+          link.points.forEach((point) => {
+            points.push([point.lat, point.lng, intensity]);
+          });
+        });
+      });
+      // Heatmap
+      const normalizedHeatmapData = points.map(([lat, lng, intensity]) => [
+        lat,
+        lng,
+        intensity / maxIntensity,
+      ]);
+
+      setHeatmapData(normalizedHeatmapData);
+>>>>>>> aa5370f84fa0dacff31fc133428352fface2ea58
     } catch (error) {
       setBusRoutes(null);
       console.error(error);
@@ -350,3 +403,27 @@ export const Dashboard = () => {
     </main>
   );
 };
+<<<<<<< HEAD
+=======
+
+const HeatmapLayer = ({ heatmapData }) => {
+  const map = useMap();
+
+  useEffect(() => {
+    if (!map || heatmapData.length === 0) return;
+
+    const heatLayer = L.heatLayer(heatmapData, {
+      radius: 10, // Adjust the spread of the heatmap
+      blur: 15,
+      maxZoom: 17,
+      max: 1.0,
+    }).addTo(map);
+
+    return () => {
+      heatLayer.remove(); // Cleanup the layer when data updates
+    };
+  }, [map, heatmapData]);
+
+  return null;
+};
+>>>>>>> aa5370f84fa0dacff31fc133428352fface2ea58

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // atoms.js
 import { atom } from "jotai";
 
@@ -23,4 +24,21 @@ export const markerAtom = atom((get) => {
         .filter((num) => !isNaN(num))
     )
     .filter((coords) => coords.length === 2);
+=======
+// atoms.js (updated for Jotai)
+import { atom } from 'jotai';
+
+export const inputAtom = atom([{ location: "", capacity: 0 }]);
+
+export const markerAtom = atom((get) => {
+    const input = get(inputAtom);
+    return input
+        .filter(stop => stop.location)
+        .map(stop => 
+            stop.location.split(',')
+                .map(num => parseFloat(num.trim()))
+                .filter(num => !isNaN(num))
+        )
+        .filter(coords => coords.length === 2);
+>>>>>>> aa5370f84fa0dacff31fc133428352fface2ea58
 });
