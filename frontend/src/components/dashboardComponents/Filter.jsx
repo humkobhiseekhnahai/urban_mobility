@@ -169,8 +169,8 @@ export const Filter = ({
 
               <Button
                 onClick={handleRouteFiltering}
-                className="h-9 px-3 bg-blue-600 hover:bg-blue-500 flex items-center justify-center"
-                color="blue"
+                className="h-9 px-3 bg-neutral-700 hover:bg-neutral-600 flex items-center justify-center"
+                color="gray"
                 size="sm"
               >
                 <Search size={14} />
