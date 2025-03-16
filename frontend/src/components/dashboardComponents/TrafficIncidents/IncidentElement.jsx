@@ -4,14 +4,12 @@ import { Info, TriangleAlert } from "lucide-react";
 import { fetchLocationName } from "../../../lib/fetch_location_name";
 import { useEffect, useState } from "react";
 
+export const IncidentElement = ({ coordinates, category, location }) => {
+  // const latitude = coordinates[0][1];
+  // const longitude = coordinates[0][0];
 
-export const IncidentElement = ({ coordinates, category }) => {
-  const latitude = coordinates[0][1];
-  const longitude = coordinates[0][0];
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [location, setLocation] = useState("");
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(false);
 
   // useEffect(() => {
   //   fetchLocationName(latitude, longitude)
@@ -32,9 +30,7 @@ export const IncidentElement = ({ coordinates, category }) => {
         <Info
           width={20}
           height={20}
-
           className="text-blue-400 relative top-1.5 mr-5"
-
         />
       ) : (
         <TriangleAlert
@@ -47,11 +43,7 @@ export const IncidentElement = ({ coordinates, category }) => {
         <p className="text-lg font-semibold text-white mb-0.5">
           {IncidentCategory[category][0]}
         </p>
-        <p className="text-sm text-gray-500">
-
-          Location: {loading ? "Loading..." : error ? "Unknown" : "Unknown"}
-
-        </p>
+        <p className="text-sm text-gray-500">Location: {location}</p>
       </span>
     </div>
   );
