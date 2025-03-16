@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -11,8 +10,8 @@ export const HeatMap = ({ lat, lng, radius }) => {
 
   const [loading, setLoading] = useState(true);
 
-  const lati = parseFloat(lat) || 12.9516;
-  const longi = parseFloat(lng) || 77.6961;
+  const lati = parseFloat(12.9446);
+  const longi = parseFloat(77.6837);
 
   useEffect(() => {
     setLoading(true);
@@ -55,7 +54,6 @@ export const HeatMap = ({ lat, lng, radius }) => {
             {heatmapData.length > 0 && <HeatLayer heatmapData={heatmapData} />}
           </MapContainer>
         </div>
-
       )}
     </div>
   );
