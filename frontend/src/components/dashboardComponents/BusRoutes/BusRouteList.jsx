@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { BusRouteCard } from "./BusRouteCard";
 
 export const BusRouteList = ({
@@ -12,11 +12,13 @@ export const BusRouteList = ({
   const observerRef = useRef(null);
   const containerRef = useRef(null);
 
+  // ✅ Ensure the limit is correctly initialized when `filteredRoutes` change
   useEffect(() => {
-    setLimit(limit); // Ensure the limit is correctly initialized
+    setLimit(limit);
   }, [filteredRoutes]);
 
-  const loadMoreRoutes = () => {
+  // ✅ Use useCallback to prevent unnecessary re-creation of function
+  const loadMoreRoutes = useCallback(() => {
     if (loading) return;
 
     setLoading(true);
@@ -24,28 +26,35 @@ export const BusRouteList = ({
       setLimit((prevLimit) => prevLimit + 10); // Increase limit by 10
       setLoading(false);
     }, 2000);
-  };
+  }, [loading, setLimit]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
+    if (!observerRef.current) return;
+
+    let observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && !loading) {
           loadMoreRoutes();
         }
       },
-      { root: containerRef.current, threshold: 1.0 }
+      {
+        root: null, // ✅ Observe relative to viewport
+        rootMargin: "200px", // ✅ Trigger before fully visible
+        threshold: 0.1,
+      }
     );
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
-    }
+    const timeoutId = setTimeout(() => {
+      if (observerRef.current) {
+        observer.observe(observerRef.current);
+      }
+    }, 500); // ✅ Ensure the DOM has updated before observing
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
-      }
+      clearTimeout(timeoutId);
+      observer.disconnect();
     };
-  }, [loading, limit]);
+  }, [loading, limit, filteredRoutes.length, loadMoreRoutes]); // ✅ Include filteredRoutes.length
 
   return (
     <div ref={containerRef} className="w-full p-4 h-[92%] overflow-y-auto">
