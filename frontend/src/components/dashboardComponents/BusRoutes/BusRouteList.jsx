@@ -9,6 +9,7 @@ export const BusRouteList = ({
   setLimit,
 }) => {
   const [loading, setLoading] = useState(false);
+  const observerRef = useRef(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -26,21 +27,22 @@ export const BusRouteList = ({
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-      if (scrollTop + clientHeight >= scrollHeight - 10 && !loading) {
-        loadMoreRoutes();
-      }
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading) {
+          loadMoreRoutes();
+        }
+      },
+      { root: containerRef.current, threshold: 1.0 }
+    );
 
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener("scroll", handleScroll);
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
     }
+
     return () => {
-      if (container) {
-        container.removeEventListener("scroll", handleScroll);
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current);
       }
     };
   }, [loading, limit]);
@@ -58,11 +60,16 @@ export const BusRouteList = ({
                   onViewDetails={() => handleViewRouteDetails(route)}
                 />
               ))}
-              {loading && (
-                <div className="flex justify-center py-4">
+
+              {/* Loader & Intersection Observer Trigger */}
+              <div
+                ref={observerRef}
+                className="w-full flex justify-center py-4"
+              >
+                {loading && (
                   <span className="animate-spin h-6 w-6 border-4 border-blue-500 border-t-transparent rounded-full"></span>
-                </div>
-              )}
+                )}
+              </div>
             </>
           ) : (
             <p className="text-gray-200">Loading Bus Routes...</p>
