@@ -8,7 +8,7 @@ def calculate_distance(route):
     """Calculate total route distance."""
     if len(route) < 2:
         return 0
-    return sum(euclidean(route[i], route[i + 1]) for i in range(len(route) - 1))
+    return sum(euclidean((route[i][0], route[i][1]), (route[i + 1][0], route[i + 1][1])) for i in range(len(route) - 1))
 
 def create_initial_population(locations, num_vehicles, population_size=50):
     """Generate initial random population while distributing locations across vehicles."""
@@ -23,11 +23,16 @@ def create_initial_population(locations, num_vehicles, population_size=50):
     return population
 
 def crossover(parent1, parent2):
-    """Crossover function for VRP (exchange segments between vehicles)."""
+    """Improved crossover function for VRP."""
     num_vehicles = len(parent1)
-    crossover_point = random.randint(1, num_vehicles - 1)
-    
-    child = parent1[:crossover_point] + parent2[crossover_point:]
+    child = [[] for _ in range(num_vehicles)]
+
+    for i in range(num_vehicles):
+        if random.random() < 0.5:
+            child[i] = parent1[i]
+        else:
+            child[i] = parent2[i]
+
     return child
 
 def mutate(routes, mutation_rate=0.1):
@@ -55,12 +60,14 @@ def genetic_algorithm(request: DeliveryRequest, generations=200, population_size
 
     # ✅ If only one vehicle, directly solve TSP instead of GA
     if request.num_vehicles == 1:
-        return [[{"lat": lat, "lon": lon} for lat, lon in tsp_solver([(i, loc) for i, loc in enumerate(locations)])]]
+        tsp_solution = tsp_solver([(i, (loc[0], loc[1])) for i, loc in enumerate(locations)])
+        
+        return [[{"id": request.delivery_locations[i].id, "lat": coord[0], "lon": coord[1]} for i, coord in tsp_solution]]
 
-    # ✅ Otherwise, proceed with Genetic Algorithm
+    # ✅ Edge Case: If more vehicles than locations
     num_vehicles = request.num_vehicles
     if len(locations) < num_vehicles:
-        return [[{"lat": loc[0], "lon": loc[1]}] for loc in locations]  # Edge case handling
+        return [[{"id": loc.id, "lat": loc.lat, "lon": loc.lon}] for loc in request.delivery_locations]
 
     population = create_initial_population(locations, num_vehicles, population_size)
     
@@ -77,4 +84,10 @@ def genetic_algorithm(request: DeliveryRequest, generations=200, population_size
         population = next_gen
 
     best_solution = population[0]
-    return [[{"lat": lat, "lon": lon} for lat, lon in route] for route in best_solution]
+
+    # ✅ Fix: Ensure result format is correct
+    optimized_routes = []
+    for vehicle_route in best_solution:
+        optimized_routes.append([{"id": request.delivery_locations[i].id, "lat": loc[0], "lon": loc[1]} for i, loc in enumerate(vehicle_route)])
+
+    return optimized_routes

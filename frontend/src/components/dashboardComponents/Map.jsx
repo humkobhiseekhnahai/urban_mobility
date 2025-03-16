@@ -51,9 +51,20 @@ export const MapBox = () => {
   };
 
   useEffect(() => {
+    if (mapRef.current) {
+      fitBoundsToCoordinates(defaultBusCoordinates);
+    }
+  }, []);
+
+  const handleMapLoad = () => {
+    fitBoundsToCoordinates(defaultBusCoordinates);
+  };
+
+  useEffect(() => {
     if (!hoveredRoute || hoveredRoute.length < 2) {
       setRouteData(null);
       fitBoundsToCoordinates(defaultBusCoordinates);
+
       return;
     }
 
@@ -84,16 +95,18 @@ export const MapBox = () => {
   return (
     <Map
       ref={mapRef}
+      onLoad={handleMapLoad}
       initialViewState={{
         longitude: 77.5923,
         latitude: 12.9197,
         zoom: 8,
       }}
       style={{ borderRadius: "0.25rem" }}
-      mapStyle="mapbox://styles/mapbox/dark-v11"
+      mapStyle="mapbox://styles/mapbox/streets-v12"
       mapboxAccessToken={MAPBOX_TOKEN}
     >
       {/* Show route if hovered */}
+
       {routeData && (
         <Source id="route" type="geojson" data={routeData}>
           <Layer
@@ -170,6 +183,7 @@ export const MapBox = () => {
       ))}
 
       {/* End Marker (Green Circle) */}
+
       {hoveredRoute?.length > 1 && (
         <Marker
           longitude={hoveredRoute[hoveredRoute.length - 1][0]}

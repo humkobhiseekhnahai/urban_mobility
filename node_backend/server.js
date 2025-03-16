@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
+const axios = require("axios"); 
 
 const app = express();
 const prisma = new PrismaClient();
@@ -19,8 +20,7 @@ const fetchData = async (model, res) => {
 };
 
 // CRUD for suggested routes
-app
-  .route("/api/suggested-routes")
+app.route("/api/suggested-routes")
   .get((req, res) => fetchData("suggestedRoute", res))
   .post(async (req, res) => {
     try {
@@ -30,43 +30,18 @@ app
       }
 
       const newRoute = await prisma.suggestedRoute.create({
-        data: {
-          source,
-          destination,
-          coordinates: JSON.stringify(coordinates),
-          status: "pending",
-        },
+        data: { source, destination, coordinates: JSON.stringify(coordinates) },
       });
       res.status(201).json(newRoute);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ error: "Failed to add suggested route" });
     }
   });
 
-app.patch("/api/suggested-routes/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-    if (!status) {
-      return res.status(400).json({ error: "Status field is required" });
-    }
-
-    const updatedRoute = await prisma.suggestedRoute.update({
-      where: { id: id },
-      data: { status },
-    });
-    res.json(updatedRoute);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Failed to update suggested route" });
-  }
-});
-
 app.delete("/api/suggested-routes/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    await prisma.suggestedRoute.delete({ where: { id: id } });
+    await prisma.suggestedRoute.delete({ where: { id: parseInt(id, 10) } });
     res.json({ message: "Suggested route deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete suggested route" });
@@ -91,10 +66,9 @@ app.get("/api/bus-routes/stops", async (req, res) => {
       select: { mapJsonContent: true },
     });
 
-    // Use a Map to store unique stops with their coordinates
-    const stopsMap = new Map();
+    const stopNamesSet = new Set();
 
-    busRoutes.forEach((route) => {
+    busRoutes.forEach(route => {
       let mapContent = route.mapJsonContent;
 
       // Ensure it's parsed JSON
@@ -108,88 +82,51 @@ app.get("/api/bus-routes/stops", async (req, res) => {
       }
 
       if (Array.isArray(mapContent)) {
-        mapContent.forEach((stop) => {
-          // Check if stop has the required properties
-          if (stop.busstop) {
-            let lat = "";
-            let lon = "";
-            // Extract lat and lon from the 'latlons' array if available
-            if (
-              stop.latlons &&
-              Array.isArray(stop.latlons) &&
-              stop.latlons.length >= 2
-            ) {
-              lat = stop.latlons[0];
-              lon = stop.latlons[1];
-            }
-            stopsMap.set(stop.busstop, {
-              name: stop.busstop,
-              lat,
-              lon,
-            });
-          }
-        });
+        mapContent.forEach(stop => stopNamesSet.add(stop.busstop));
       }
     });
 
-    // Convert Map to Array
-    let stops = Array.from(stopsMap.values());
+    let stopNames = [...stopNamesSet]; // Convert Set to Array
 
     // Apply regex filter if `search` is provided
     if (search) {
       const regex = new RegExp(search, "i");
-      stops = stops.filter((stop) => regex.test(stop.name));
+      stopNames = stopNames.filter(name => regex.test(name));
     }
 
     // Pagination
     const startIndex = (page - 1) * limit;
-    const paginatedStops = stops.slice(
-      startIndex,
-      startIndex + parseInt(limit)
-    );
+    const paginatedStops = stopNames.slice(startIndex, startIndex + parseInt(limit));
 
     res.json(paginatedStops);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Failed to fetch bus stop data" });
+    res.status(500).json({ error: "Failed to fetch bus stop names" });
   }
 });
+
+
+
 
 // ✅ Get bus routes with Pagination and Filtering
 app.get("/api/bus-routes", async (req, res) => {
   try {
-    const {
-      routeNumber,
-      routeName,
-      origin,
-      timeFrameStart,
-      timeFrameEnd,
-      page = 1,
-      limit = 10,
-    } = req.query;
+    const { routeNumber, routeName, origin, timeFrameStart, timeFrameEnd, page = 1, limit = 10 } = req.query;
     const pageNumber = parseInt(page, 10);
     const pageSize = parseInt(limit, 10);
 
-    if (
-      isNaN(pageNumber) ||
-      isNaN(pageSize) ||
-      pageNumber < 1 ||
-      pageSize < 1
-    ) {
+    if (isNaN(pageNumber) || isNaN(pageSize) || pageNumber < 1 || pageSize < 1) {
       return res.status(400).json({ error: "Invalid pagination parameters" });
     }
 
     const filters = {};
     if (routeNumber) filters.routeNumber = routeNumber;
-    if (routeName)
-      filters.routeName = { contains: routeName, mode: "insensitive" };
+    if (routeName) filters.routeName = { contains: routeName, mode: "insensitive" };
     if (origin) filters.origin = { contains: origin, mode: "insensitive" };
-
+    
     // ✅ Proper time filtering (Ensure departureTimes is an array)
     if (timeFrameStart && timeFrameEnd) {
-      filters.departureTimes = {
-        some: { gte: timeFrameStart, lte: timeFrameEnd },
-      };
+      filters.departureTimes = { some: { gte: timeFrameStart, lte: timeFrameEnd } };
     }
 
     const busRoutes = await prisma.busRoute.findMany({
@@ -200,11 +137,11 @@ app.get("/api/bus-routes", async (req, res) => {
 
     const totalRoutes = await prisma.busRoute.count({ where: filters });
 
-    res.json({
-      data: busRoutes,
-      currentPage: pageNumber,
-      totalPages: Math.ceil(totalRoutes / pageSize),
-      totalRoutes,
+    res.json({ 
+      data: busRoutes, 
+      currentPage: pageNumber, 
+      totalPages: Math.ceil(totalRoutes / pageSize), 
+      totalRoutes 
     });
   } catch (error) {
     console.error(error);
@@ -212,17 +149,72 @@ app.get("/api/bus-routes", async (req, res) => {
   }
 });
 
+app.use("/custom", require("./routes/customRoutes"));
+
+const PYTHON_BACKEND_URL = "http://localhost:8000/optimize_transit";
+
+// ✅ Optimize Route (POST)
+app.post("/api/optimize-route", async (req, res) => {
+  try {
+    console.log("Request received:", req.body);
+
+    const { route_no, optimized_route } = req.body;
+
+    if (!route_no || !optimized_route) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // Extract the correct structure
+    const routeData = optimized_route.optimized_route; // Fix here
+
+    if (!routeData || !routeData.route_1 || !routeData.route_2 || !routeData.transfer_point || !routeData.transfer_route) {
+      return res.status(500).json({ error: "Invalid optimized route format" });
+    }
+
+    console.log("Parsed Optimized Route:", routeData);
+
+    // Save to the database
+    const updatedRoute = await prisma.optimizedRoute.upsert({
+      where: { routeNumber: route_no },
+      update: {
+        origin: JSON.stringify(routeData.route_1),
+        transferPoint: routeData.transfer_point,
+        transferRoute: routeData.transfer_route,
+        departureTimes: JSON.stringify(routeData.route_2),
+        mapJsonContent: JSON.stringify(routeData),
+      },
+      create: {
+        routeNumber: route_no,
+        routeName: `Route ${route_no}`,
+        origin: JSON.stringify(routeData.route_1),
+        transferPoint: routeData.transfer_point,
+        transferRoute: routeData.transfer_route,
+        departureTimes: JSON.stringify(routeData.route_2),
+        mapJsonContent: JSON.stringify(routeData),
+      },
+    });
+
+    console.log("Database updated:", updatedRoute);
+    res.json({ message: "Route optimized successfully", updatedRoute });
+
+  } catch (error) {
+    console.error("Optimization Error:", error);
+    res.status(500).json({ error: "Failed to optimize route", details: error.message });
+  }
+});
+// ✅ Get all optimized routes (GET)
+app.get("/api/optimized-routes", async (req, res) => {
+  try {
+    const optimizedRoutes = await prisma.optimizedRoute.findMany();
+    res.json(optimizedRoutes);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch optimized routes" });
+  }
+});
+
 app.get("/api/:model", async (req, res) => {
   const { model } = req.params;
-  const validModels = [
-    "agency",
-    "calendar",
-    "stop",
-    "trip",
-    "route",
-    "suggestedRoute",
-    "busRoute",
-  ];
+  const validModels = ["agency", "calendar", "stop", "trip", "route", "suggestedRoute", "busRoute"];
 
   if (!validModels.includes(model)) {
     return res.status(400).json({ error: "Invalid model requested" });
@@ -231,6 +223,5 @@ app.get("/api/:model", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+

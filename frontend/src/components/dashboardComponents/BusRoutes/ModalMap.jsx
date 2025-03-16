@@ -51,7 +51,7 @@ export const ModalMap = ({ busStops, isOpen }) => {
 
   // Fit map to bus stops when modal is opened
   useEffect(() => {
-    if (isOpen && busStops.length > 1 && mapRef.current) {
+    if (mapRef.current) {
       const allLons = busStops.map((stop) => stop.latlons[1]);
       const allLats = busStops.map((stop) => stop.latlons[0]);
 
@@ -71,7 +71,13 @@ export const ModalMap = ({ busStops, isOpen }) => {
         easing: (t) => t,
       });
     }
-  }, [isOpen, busStops]);
+  }, [
+    busStops,
+    isOpen,
+    mapRef.current,
+    mapRef.current?.fitBounds,
+    mapRef.current?.get,
+  ]);
 
   return (
     <Map
