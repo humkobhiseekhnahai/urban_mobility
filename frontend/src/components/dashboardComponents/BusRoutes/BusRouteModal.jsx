@@ -16,7 +16,7 @@ export const BusRouteModal = ({ isOpen, onClose, route }) => {
       />
 
       {/* Neutral-themed modal */}
-      <div className="fixed left-0 top-0 h-screen w-full bg-neutral-900 shadow-xl z-50 overflow-hidden flex flex-col text-neutral-100">
+      <div className="fixed left-0 top-0 h-screen w-full bg-neutral-900/50 backdrop-blur-md shadow-xl z-50 overflow-hidden flex flex-col text-neutral-100">
         <section className="flex flex-col h-full">
           {/* Header */}
           <div className="p-3 md:p-4 border-b border-neutral-700 flex items-center justify-between">

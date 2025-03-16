@@ -10,7 +10,6 @@ import { NavBarComponent } from "../components/navBarComponent";
 import { Filter } from "../components/dashboardComponents/Filter";
 import { BusRouteList } from "../components/dashboardComponents/BusRoutes/BusRouteList";
 import { selectedRouteAtom } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
-import { OptimizedRouteModal } from "../components/dashboardComponents/OptimizedRoute/OptimizedRouteModal";
 import {
   Tabs,
   TabsHeader,
@@ -28,7 +27,6 @@ export const Dashboard = () => {
 
   const location = useGeolocation();
   const [isOptimizedModalOpen, setIsOptimizedModalOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
 
   const [source, setSource] = useState("");
   const [destination, setDestination] = useState("");
@@ -68,7 +66,6 @@ export const Dashboard = () => {
       const response = await fetch(
         `${serverUrl}/api/bus-routes?limit=${busRoutesLimit}`
       );
-
       const data = await response.json();
 
       const busRoutes = data.data.map((route) => ({
@@ -117,56 +114,12 @@ export const Dashboard = () => {
     getAllBusRoutes();
   }, [busRoutesLimit]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      // Adjust height for mobile view
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
-    };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const checkIfMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkIfMobile();
-    window.addEventListener("resize", checkIfMobile);
-
-    return () => {
-      window.removeEventListener("resize", checkIfMobile);
-    };
-  }, []);
-
   if (location.loading || location.error) return <LocationLoading />;
   return (
-    <main
-      className="bg-neutral-850 overflow-hidden"
-      style={{ minHeight: isMobile ? "calc(var(--vh, 1vh) * 100)" : "100vh" }}
-    >
-      <div
-        className={`w-full flex flex-col md:flex-row ${
-          isMobile ? "h-auto" : "h-screen"
-        }`}
-      >
-        <div className="hidden md:block top-0 left-0 h-full w-56 bg-neutral-900 z-40">
-          <NavBarComponent />
-        </div>
-
-        <section className="w-full md:w-[45%] h-full bg-neutral-900 border-b md:border-b-0 md:border-r border-neutral-800 overflow-y-auto">
-          <header className="p-3">
-            <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-            <p className="text-gray-400">
-              Find the best routes and optimize your travel experience.
-            </p>
-          </header>
+    <main className="bg-neutral-850">
+      <div className="w-full h-screen flex">
+        <NavBarComponent />
+        <section className="w-[45%] h-full bg-neutral-900 border-r border-r-neutral-800">
           <Filter
             busRoutes={busRoutes}
             setSource={setSource}
@@ -186,18 +139,15 @@ export const Dashboard = () => {
             setLimit={setBusRoutesLimit}
           />
         </section>
-
-        <section className="w-full md:w-[55%] h-full bg-neutral-900 flex flex-col">
-          <div className="w-full h-1/2 p-2 md:p-5 rounded-lg">
+        <section className="w-[55%] h-full bg-neutral-900">
+          <div className="w-full h-1/2 p-5 rounded-lg">
             <MapBox lng={location.longitude} lat={location.latitude} />
           </div>
 
-          {/* Open Modal Text */}
-
-          <div className="w-full h-1/2 p-2 md:p-3 rounded-t-md bg-neutral-900 border-t border-t-neutral-800">
+          <div className="w-full h-1/2 p-3 rounded-t-md bg-neutral-900 border-t border-t-neutral-800">
             <Tabs value="heatmap" className="h-full flex flex-col">
               <TabsHeader
-                className="bg-neutral-900 flex justify-between py-1 overflow-x-auto"
+                className="bg-neutral-900 flex justify-between py-1"
                 indicatorProps={{
                   className:
                     "bg-neutral-800 shadow-none border-b-2 border-blue-500",
@@ -205,27 +155,27 @@ export const Dashboard = () => {
               >
                 <Tab
                   value="heatmap"
-                  className="text-xs md:text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1 whitespace-nowrap"
+                  className="text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1"
                   activeClassName="text-blue-400"
                 >
                   Traffic Heatmap
                 </Tab>
                 <Tab
                   value="incident"
-                  className="text-xs md:text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1 whitespace-nowrap"
+                  className="text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1"
                   activeClassName="text-blue-400"
                 >
                   Traffic Incidents
                 </Tab>
                 <Tab
                   value="weather"
-                  className="text-xs md:text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1 whitespace-nowrap"
+                  className="text-sm text-white hover:text-blue-400 transition-colors duration-200 focus:outline-none flex-1 text-center py-1"
                   activeClassName="text-blue-400"
                 >
                   Weather Data
                 </Tab>
               </TabsHeader>
-              <TabsBody className="text-white flex-1 overflow-y-auto">
+              <TabsBody className="text-white flex-1">
                 <TabPanel value="heatmap" className="w-full h-full p-2">
                   <HeatMap
                     lat={location.latitude}
@@ -248,7 +198,6 @@ export const Dashboard = () => {
           </div>
         </section>
       </div>
-
       {selectedRoute && (
         <BusRouteModal
           route={selectedRoute}
@@ -256,18 +205,6 @@ export const Dashboard = () => {
           onClose={handleCloseModal}
         />
       )}
-
-      <OptimizedRouteModal
-        isOpen={isOptimizedModalOpen}
-        handleOpen={handleOpen}
-        suggestedSource={suggestedSource}
-        setSuggestedSource={setSuggestedSource}
-        suggestedDestination={suggestedDestination}
-        setSuggestedDestination={setSuggestedDestination}
-        stops={stops}
-        setStops={setStops}
-        addOptimizedRoute={addOptimizedRoute}
-      />
     </main>
   );
 };
