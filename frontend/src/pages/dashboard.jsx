@@ -46,7 +46,8 @@ export const Dashboard = () => {
   const getAllBusRoutes = async () => {
     try {
       const response = await fetch(
-        `${serverUrl}/api/bus-routes?limit=${busRoutesLimit}`
+        `${serverUrl}/api/bus-routes?limit=${busRoutesLimit}`,
+        {method: 'GET'}
       );
       const data = await response.json();
 
