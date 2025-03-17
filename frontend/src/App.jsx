@@ -40,9 +40,9 @@ function App() {
           <Route
             path="/delivery"
             element={
-              <ProtectedRoute role="partner">
+              // <ProtectedRoute role="partner">
                 <Delivery />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
           <Route

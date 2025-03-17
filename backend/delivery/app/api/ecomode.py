@@ -6,6 +6,9 @@ from app.models.models import DeliveryRequest
 
 def tsp_solver(locations):
     """Solves the Traveling Salesman Problem (TSP) for a given set of locations."""
+    if len(locations) <= 1:
+        return locations  # No need to optimize a single location
+    
     min_distance = float('inf')
     best_route = []
 
@@ -22,22 +25,21 @@ def eco_friendly_route(request: DeliveryRequest):
     locations = [(loc.id, (loc.lat, loc.lon), loc.load_weight) for loc in request.delivery_locations]
     
     total_weight = sum(weight for _, _, weight in locations)
-    max_capacity = request.vehicle_capacity  # Assume all vehicles have the same max capacity
+    max_capacity = request.vehicle_capacity
 
-    # ✅ Calculate the minimum number of trucks required
-    min_trucks = max(1, int(np.ceil(total_weight / max_capacity)))
-    print(f"[Eco Mode] Total Weight: {total_weight}, Max Capacity: {max_capacity}, Min Trucks: {min_trucks}")
-
-    # ✅ If only one truck is needed, solve TSP directly
-    if min_trucks == 1:
+    # ✅ If all deliveries fit in one truck, solve TSP directly
+    if total_weight <= max_capacity:
+        print(f"[Eco Mode] All deliveries fit in 1 truck. Solving TSP...")
         sorted_route = tsp_solver([(loc_id, coords) for loc_id, coords, _ in locations])
         return [[{"id": loc_id, "lat": coords[0], "lon": coords[1]} for loc_id, coords in sorted_route]]
 
-    # ✅ Use fewer clusters than the normal method (minimizing vehicle usage)
-    num_clusters = max(1, min(min_trucks, len(locations)))
-    print(f"[Eco Mode] Using {num_clusters} clusters")
+    # ✅ Otherwise, determine minimum trucks needed
+    min_trucks = max(1, int(np.ceil(total_weight / max_capacity)))
+    num_clusters = min(min_trucks, len(locations))
 
-    # ✅ Apply K-Means clustering to distribute locations into groups
+    print(f"[Eco Mode] Total Weight: {total_weight}, Max Capacity: {max_capacity}, Min Trucks: {min_trucks}, Clusters: {num_clusters}")
+
+    # ✅ Apply K-Means clustering to distribute locations
     kmeans = KMeans(n_clusters=num_clusters, random_state=42, n_init=10).fit([coords for _, coords, _ in locations])
     
     clusters = {i: [] for i in range(num_clusters)}
