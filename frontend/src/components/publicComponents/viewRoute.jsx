@@ -1,5 +1,5 @@
-import { useRef, useEffect } from "react";
-import { RotateCw, ArrowUpDown, Bus } from "lucide-react";
+import { useRef, useEffect, useState } from "react";
+import { RotateCw, ArrowUpDown, Bus, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 function getTimeframeColor(timeframe) {
@@ -59,6 +59,7 @@ export default function ViewRoutes({
   scrollRef,
 }) {
   const loadingRef = useRef();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (!hasMore || !scrollRef.current || !loadingRef.current) return;
@@ -76,7 +77,7 @@ export default function ViewRoutes({
     return () => loadingObserver.disconnect();
   }, [hasMore, loading, fetchNextPage, scrollRef]);
 
-  const displayedRoutes = routes.map((route) => {
+  const transformedRoutes = routes.map((route) => {
     try {
       return transformRoute(route);
     } catch (error) {
@@ -93,9 +94,20 @@ export default function ViewRoutes({
     }
   });
 
+  // Filter routes based on search query
+  const displayedRoutes = transformedRoutes.filter((route) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      route.id.toLowerCase().includes(query) ||
+      route.origin.name.toLowerCase().includes(query) ||
+      route.destination.name.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -135,6 +147,20 @@ export default function ViewRoutes({
             </>
           )}
         </motion.button>
+
+        {/* Search Box */}
+        <div className="relative w-full sm:w-auto">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search className="h-4 w-4 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search routes..."
+            className="w-full sm:w-64 h-10 pl-10 pr-4 bg-neutral-800 border border-neutral-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
       </div>
 
       <motion.div
@@ -148,16 +174,16 @@ export default function ViewRoutes({
             <table className="w-full divide-y divide-neutral-800 table-fixed">
               <thead className="bg-neutral-900 sticky top-0 z-10">
                 <tr>
-                  <th scope="col" className="w-1/6 text-left py-3 px-4 text-white font-medium">
+                  <th scope="col" className="w-1/6 md:w-1/6 text-left py-3 px-4 text-white font-medium">
                     Route
                   </th>
-                  <th scope="col" className="w-1/4 text-left py-3 px-4 text-white font-medium">
+                  <th scope="col" className="w-2/5 md:w-1/4 text-left py-3 px-4 text-white font-medium">
                     Origin
                   </th>
-                  <th scope="col" className="w-1/4 text-left py-3 px-4 text-white font-medium">
+                  <th scope="col" className="w-2/5 md:w-1/4 text-left py-3 px-4 text-white font-medium">
                     Destination
                   </th>
-                  <th scope="col" className="w-1/6 text-left py-3 px-4 text-white font-medium">
+                  <th scope="col" className="hidden md:table-cell w-1/6 text-left py-3 px-4 text-white font-medium">
                     <div className="flex items-center">
                       Date
                       <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.3 }}>
@@ -165,7 +191,7 @@ export default function ViewRoutes({
                       </motion.div>
                     </div>
                   </th>
-                  <th scope="col" className="w-1/12 text-left py-3 px-4 text-white font-medium">
+                  <th scope="col" className="hidden md:table-cell w-1/12 text-left py-3 px-4 text-white font-medium">
                     <div className="flex items-center">
                       Time
                       <motion.div whileHover={{ rotate: 180 }} transition={{ duration: 0.3 }}>
@@ -173,63 +199,63 @@ export default function ViewRoutes({
                       </motion.div>
                     </div>
                   </th>
-                  <th scope="col" className="w-1/6 text-left py-3 px-4 text-white font-medium">
+                  <th scope="col" className="hidden md:table-cell w-1/6 text-left py-3 px-4 text-white font-medium">
                     Timeframe
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-800 bg-neutral-900">
-  <AnimatePresence mode="sync">
-    {displayedRoutes.map((route) => (
-      <motion.tr
-        key={route.rawId}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="hover:bg-neutral-800/50 transition-colors"
-      >
-        <td className="py-3 px-4 font-medium text-white">
-          <div className="flex items-center">
-            <motion.div
-              whileHover={{ scale: 1.1, rotate: 5 }}
-              className="bg-neutral-800 p-2 rounded-md mr-2 flex-shrink-0"
-            >
-              <Bus className="h-4 w-4 text-blue-400" />
-            </motion.div>
-            <span className="truncate">{route.id}</span>
-          </div>
-        </td>
-        <td className="py-3 px-4 text-gray-300">
-          <div className="truncate" title={route.origin.name}>
-            {route.origin.name}
-          </div>
-        </td>
-        <td className="py-3 px-4 text-gray-300">
-          <div className="truncate" title={route.destination.name}>
-            {route.destination.name}
-          </div>
-        </td>
-        <td className="py-3 px-4 text-gray-300">
-          <div className="truncate">{route.date}</div>
-        </td>
-        <td className="py-3 px-4 text-gray-300">
-          <div className="truncate">{route.startTime}</div>
-        </td>
-        <td className="py-3 px-4">
-          <motion.span
-            whileHover={{ scale: 1.05 }}
-            className={`px-2 py-1 rounded-md text-xs font-medium ${getTimeframeColor(
-              route.timeframe
-            )}`}
-          >
-            {route.timeframe}
-          </motion.span>
-        </td>
-      </motion.tr>
-    ))}
-  </AnimatePresence>
-</tbody>
+                <AnimatePresence mode="sync">
+                  {displayedRoutes.map((route) => (
+                    <motion.tr
+                      key={route.rawId}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="hover:bg-neutral-800/50 transition-colors"
+                    >
+                      <td className="py-2 md:py-3 px-2 md:px-4 font-medium text-white">
+                        <div className="flex items-center">
+                          <motion.div
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            className="bg-neutral-800 p-1 md:p-2 rounded-md mr-2 flex-shrink-0"
+                          >
+                            <Bus className="h-3 w-3 md:h-4 md:w-4 text-blue-400" />
+                          </motion.div>
+                          <span className="truncate text-sm md:text-base">{route.id}</span>
+                        </div>
+                      </td>
+                      <td className="py-2 md:py-3 px-2 md:px-4 text-gray-300">
+                        <div className="truncate text-sm md:text-base" title={route.origin.name}>
+                          {route.origin.name}
+                        </div>
+                      </td>
+                      <td className="py-2 md:py-3 px-2 md:px-4 text-gray-300">
+                        <div className="truncate text-sm md:text-base" title={route.destination.name}>
+                          {route.destination.name}
+                        </div>
+                      </td>
+                      <td className="hidden md:table-cell py-3 px-4 text-gray-300">
+                        <div className="truncate">{route.date}</div>
+                      </td>
+                      <td className="hidden md:table-cell py-3 px-4 text-gray-300">
+                        <div className="truncate">{route.startTime}</div>
+                      </td>
+                      <td className="hidden md:table-cell py-3 px-4">
+                        <motion.span
+                          whileHover={{ scale: 1.05 }}
+                          className={`px-2 py-1 rounded-md text-xs font-medium ${getTimeframeColor(
+                            route.timeframe
+                          )}`}
+                        >
+                          {route.timeframe}
+                        </motion.span>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </AnimatePresence>
+              </tbody>
             </table>
           </div>
         </div>
@@ -268,13 +294,23 @@ export default function ViewRoutes({
           )}
         </div>
 
-        {!hasMore && routes.length > 0 && (
+        {!hasMore && displayedRoutes.length > 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-4 text-gray-400 text-sm"
           >
             End of routes
+          </motion.div>
+        )}
+
+        {displayedRoutes.length === 0 && !loading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-8 text-gray-400"
+          >
+            No routes found{searchQuery ? ` matching "${searchQuery}"` : ""}
           </motion.div>
         )}
       </motion.div>

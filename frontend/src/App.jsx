@@ -17,16 +17,14 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          {/* Public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/documentation" element={<DocsPage />} />
-          {/* Public routes */}
+          <Route path="/documentation" element={<DocsPage />} />     
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/public" element={<Public />} />
 
           {/* Protected routes */}
           <Route
@@ -37,6 +35,16 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/public"
+            element={
+              <ProtectedRoute role={"operator"}>
+                <Public />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/delivery"
             element={
