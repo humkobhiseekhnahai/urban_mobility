@@ -52,12 +52,10 @@ const Navbar_home = () => {
     >
       <div className={`w-full transition-all duration-500 ${scrolled ? 'bg-black/30 backdrop-blur-xl shadow-lg shadow-black/10' : 'bg-transparent'}`}>
         <div className="container mx-auto px-4 md:px-6">
-          <div className="flex justify-between items-center py-3">
+          <div className="flex justify-between items-center py-2">
             <motion.div className="flex items-center flex-shrink-0">
               <motion.img
-
-                className="h-12 -my-4 w-auto md:h-16 lg:h-20"
-
+                className="h-12 w-auto md:h-16 lg:h-20 -my-4"
                 src={logo}
                 alt="Logo"
                 initial={{ opacity: 0 }}

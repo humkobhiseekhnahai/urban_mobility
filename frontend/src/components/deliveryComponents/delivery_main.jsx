@@ -53,7 +53,7 @@ export const Delivery_new = () => {
       const stops = [{ location: startingLocation, capacity: 0 }, ...deliveryStops];
       const data = await collectRouteData(stops, markers, totalCapacity, numberOfVehicles);
       const url = ecoMode
-        ? "http://127.0.0.1:8000/optimize_delivery?method=ga&ecomode=true"
+        ? "http://127.0.0.1:8000/optimize_delivery?ecomode=true"
         : "http://127.0.0.1:8000/optimize_delivery?method=ga";
       const response = await axios.post(url, data, {
         headers: { "Content-Type": "application/json" },

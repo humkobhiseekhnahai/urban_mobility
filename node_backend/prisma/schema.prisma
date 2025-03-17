@@ -115,3 +115,16 @@ model CustomRoute {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 }
+
+model OptimizedRoute {
+  id             Int      @id @default(autoincrement())
+  routeNumber    String   @unique
+  routeName      String
+  origin         String
+  transferPoint  String
+  transferRoute  String
+  departureTimes Json
+  mapJsonContent Json
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
