@@ -25,7 +25,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
-          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/public" element={<Public />} />
 
           {/* Protected routes */}

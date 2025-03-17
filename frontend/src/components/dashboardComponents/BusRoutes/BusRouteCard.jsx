@@ -92,7 +92,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
               <Tooltip key={index} content={`Departs at ${time.trim()}`}>
                 <Chip
                   value={time.trim()}
-                  className="bg-blue-900 text-blue-100 text-xs font-normal border border-blue-800 hover:bg-blue-800 flex-shrink-0 h-6"
+                  className="bg-neutral-950 text-white text-xs font-normal border border-gray-700 hover:bg-blue-600 flex-shrink-0 h-6 flex justify-center items-center"
                 />
               </Tooltip>
             ))}
@@ -100,7 +100,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
             {!expanded && times.length > 3 && (
               <Chip
                 value={`+${times.length - 3} more`}
-                className="bg-neutral-700 text-gray-300 text-xs cursor-pointer hover:bg-neutral-600 flex-shrink-0 h-6"
+                className="bg-neutral-700 text-gray-300 text-xs cursor-pointer hover:bg-neutral-600 flex-shrink-0 h-6 flex justify-center items-center"
                 onClick={() => setExpanded(true)}
               />
             )}
@@ -123,7 +123,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         <Button
           size="sm"
           fullWidth
-          className="bg-blue-900 hover:bg-blue-800 shadow-sm flex items-center justify-center gap-1 py-2 text-white text-xs"
+          className="bg-neutral-700 hover:bg-neutral-500 shadow-sm flex items-center justify-center gap-1 py-2 text-white text-xs font-medium"
           onClick={() => {
             setSelectedRoute(route);
             onViewDetails();
