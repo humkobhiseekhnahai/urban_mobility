@@ -297,13 +297,13 @@ export default function CreateRoute({ setRoutes }) {
   };
 
   return (
-    <div className="flex h-full gap-6 p-4 overflow-hidden">
+    <div className="flex md:flex-row flex-col h-full gap-6 p-4 overflow-hidden">
       {/* Left Panel - Scrollable */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-1/2 overflow-y-auto pr-2"
+        className="md:w-1/2 w-full overflow-y-auto pr-2"
       >
         <motion.div
           className={`${cardStyle} text-white overflow-hidden`}
@@ -311,7 +311,7 @@ export default function CreateRoute({ setRoutes }) {
           transition={{ duration: 0.2 }}
         >
           {responseData ? (
-            <div className="p-6">
+            <div className="p-6 overflow-y-auto max-h-screen">
               <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-lg p-5 border border-green-500/30">
                 <div className="flex items-start">
                   <div className="bg-green-500/20 p-2 rounded-full mr-4">
@@ -1009,7 +1009,7 @@ export default function CreateRoute({ setRoutes }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.2 }}
-        className="w-1/2 h-full"
+        className="md:w-1/2 w-full"
       >
         <motion.div
           className={`${cardStyle} h-full flex flex-col`}
@@ -1029,7 +1029,9 @@ export default function CreateRoute({ setRoutes }) {
             </motion.div>
           </div>
           <div className="flex-1 p-6">
-            <RouteMap route={routeCoordinates} />
+            <div className="w-full h-64 md:h-full">
+              <RouteMap route={routeCoordinates} />
+            </div>
           </div>
         </motion.div>
       </motion.div>

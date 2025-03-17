@@ -274,7 +274,7 @@ export default function OptimizeRoute() {
 
   return (
     <div className="flex flex-col w-full h-full">
-      <div ref={panelsContainerRef} className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 h-full">
+      <div ref={panelsContainerRef} className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-6 p-2 sm:p-4 h-full">
         {/* Left Panel: Route Selection and Configuration */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -289,48 +289,48 @@ export default function OptimizeRoute() {
             whileHover={{ boxShadow: "0 8px 30px rgba(0, 0, 0, 0.3)" }}
             transition={{ duration: 0.2 }}
           >
-            <div className="p-5 border-b border-neutral-800 flex items-center justify-between">
+            <div className="p-3 sm:p-5 border-b border-neutral-800 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-semibold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
                   Route Configuration
                 </h3>
-                <p className="text-gray-400 text-sm mt-1">Select a route and set departure time</p>
+                <p className="text-xs sm:text-sm text-gray-400 mt-1">Select a route and set departure time</p>
               </div>
               <motion.div
                 onClick={handleRefresh}
                 whileHover={{ rotate: 180 }}
                 transition={{ duration: 0.5 }}
-                className="bg-blue-500/10 p-2 rounded-full cursor-pointer"
+                className="bg-blue-500/10 p-2 rounded-full cursor-pointer flex-shrink-0"
               >
-                <RotateCw className="h-5 w-5 text-blue-400" />
+                <RotateCw className="h-4 w-4 sm:h-5 sm:w-5 text-blue-400" />
               </motion.div>
             </div>
-            <div className="p-6 space-y-6 flex-1 overflow-auto">
+            <div className="p-3 sm:p-6 space-y-4 sm:space-y-6 flex-1 overflow-auto">
               {/* Search Box */}
               <motion.div className="relative search-box" whileHover={{ scale: 1.01 }}>
                 <div
-                  className="flex items-center h-11 pl-3 pr-4 bg-neutral-800/50 border border-neutral-700 rounded-lg text-white cursor-pointer hover:border-blue-500/50"
+                  className="flex items-center h-10 sm:h-11 pl-3 pr-4 bg-neutral-800/50 border border-neutral-700 rounded-lg text-white cursor-pointer hover:border-blue-500/50"
                   onClick={toggleRouteList}
                 >
-                  <Search className="h-4 w-4 text-gray-400 mr-2" />
+                  <Search className="h-4 w-4 text-gray-400 mr-2 flex-shrink-0" />
                   {selectedRoute ? (
-                    <div className="flex items-center">
+                    <div className="flex items-center overflow-hidden">
                       <div
-                        className="w-6 h-6 rounded-full flex items-center justify-center mr-2"
+                        className="flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center mr-2"
                         style={{
                           backgroundColor: currentRouteObj ? getRouteColor(currentRouteObj.routeNumber) : "#3b82f6",
                         }}
                       >
                         <RouteIcon className="h-3 w-3 text-white" />
                       </div>
-                      <span className="truncate">
+                      <span className="truncate text-sm">
                         {currentRouteObj?.routeNumber}: {currentRouteObj?.routeName}
                       </span>
                     </div>
                   ) : (
-                    <span className="text-gray-400">Select a route...</span>
+                    <span className="text-gray-400 text-sm">Select a route...</span>
                   )}
-                  <Menu className="h-4 w-4 text-gray-400 ml-auto" />
+                  <Menu className="h-4 w-4 text-gray-400 ml-auto flex-shrink-0" />
                 </div>
 
                 <AnimatePresence>
@@ -352,7 +352,7 @@ export default function OptimizeRoute() {
                             value={searchQuery}
                             onChange={handleSearchChange}
                             placeholder="Search routes by number or name..."
-                            className="w-full h-11 pl-10 pr-4 bg-transparent text-white placeholder-gray-400 focus:outline-none"
+                            className="w-full h-10 sm:h-11 pl-10 pr-4 bg-transparent text-white placeholder-gray-400 focus:outline-none text-sm"
                           />
                         </div>
                         <div className="max-h-60 overflow-y-auto">
@@ -365,11 +365,10 @@ export default function OptimizeRoute() {
                                   <motion.div
                                     key={route.id}
                                     ref={isLast ? lastRouteElementRef : null}
-                                    className={`cursor-pointer p-3 border-b border-neutral-700/50 hover:bg-neutral-700/50 ${
-                                      selectedRoute === route.id.toString()
+                                    className={`cursor-pointer p-2 sm:p-3 border-b border-neutral-700/50 hover:bg-neutral-700/50 ${selectedRoute === route.id.toString()
                                         ? "bg-blue-500/10 border-l-4 border-l-blue-500"
                                         : ""
-                                    }`}
+                                      }`}
                                     onClick={() => {
                                       setSelectedRoute(route.id.toString());
                                       setRouteListOpen(false);
@@ -378,13 +377,13 @@ export default function OptimizeRoute() {
                                   >
                                     <div className="flex items-center">
                                       <div
-                                        className="w-8 h-8 rounded-full flex items-center justify-center mr-3"
+                                        className="flex-shrink-0 w-6 sm:w-8 h-6 sm:h-8 rounded-full flex items-center justify-center mr-2 sm:mr-3"
                                         style={{ backgroundColor: routeColor }}
                                       >
-                                        <RouteIcon className="h-4 w-4 text-white" />
+                                        <RouteIcon className="h-3 sm:h-4 w-3 sm:w-4 text-white" />
                                       </div>
-                                      <div>
-                                        <p className="text-sm font-medium">{route.routeName}</p>
+                                      <div className="min-w-0 flex-1">
+                                        <p className="text-xs sm:text-sm font-medium truncate">{route.routeName}</p>
                                         <p className="text-xs text-gray-400">Route {route.routeNumber}</p>
                                       </div>
                                     </div>
@@ -396,13 +395,13 @@ export default function OptimizeRoute() {
                                   <motion.div
                                     animate={{ rotate: 360 }}
                                     transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-                                    className="w-6 h-6 border-2 border-blue-500 border-t-transparent rounded-full"
+                                    className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-blue-500 border-t-transparent rounded-full"
                                   />
                                 </div>
                               )}
                             </>
                           ) : (
-                            <p className="p-3 text-gray-400">
+                            <p className="p-3 text-gray-400 text-sm">
                               {fetchingMore ? "Loading routes..." : "No routes found"}
                             </p>
                           )}
@@ -415,52 +414,52 @@ export default function OptimizeRoute() {
 
               {/* Departure Time Input */}
               <div className="mt-4">
-                <label className="text-gray-400 flex items-center mb-2">
-                  <Clock className="h-4 w-4 mr-2" />
+                <label className="text-gray-400 flex items-center mb-2 text-sm">
+                  <Clock className="h-4 w-4 mr-2 flex-shrink-0" />
                   Departure Time
                 </label>
                 <input
                   type="time"
                   value={departureTime}
                   onChange={(e) => setDepartureTime(e.target.value)}
-                  className="w-full p-3 bg-neutral-800 border border-neutral-700 rounded-lg text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition-colors"
+                  className="w-full p-2 sm:p-3 bg-neutral-800 border border-neutral-700 rounded-lg text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition-colors"
                 />
               </div>
 
               {/* Current Route Details */}
               <motion.div
-                className="p-5 rounded-lg bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-700 shadow-inner"
+                className="p-3 sm:p-5 rounded-lg bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-700 shadow-inner"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.3 }}
               >
-                <h3 className="text-lg font-semibold mb-3 flex items-center">
-                  <MapPin className="mr-2 h-5 w-5 text-blue-400" />
+                <h3 className="text-base sm:text-lg font-semibold mb-2 sm:mb-3 flex items-center">
+                  <MapPin className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-blue-400 flex-shrink-0" />
                   Current Route Details
                 </h3>
-                <div className="grid grid-cols-1 gap-4 text-sm">
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-green-400" />
-                    <p className="text-gray-400">Origin</p>
-                    <p className="text-white font-medium ml-auto truncate max-w-[200px]">{origin}</p>
+                <div className="grid grid-cols-1 gap-2 sm:gap-4 text-xs sm:text-sm">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-2 h-2 rounded-full bg-green-400 flex-shrink-0" />
+                    <p className="text-gray-400 flex-shrink-0">Origin</p>
+                    <p className="text-white font-medium ml-auto truncate max-w-[120px] sm:max-w-[200px]">{origin}</p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-red-400" />
-                    <p className="text-gray-400">Destination</p>
-                    <p className="text-white font-medium ml-auto truncate max-w-[200px]">{destination}</p>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-2 h-2 rounded-full bg-red-400 flex-shrink-0" />
+                    <p className="text-gray-400 flex-shrink-0">Destination</p>
+                    <p className="text-white font-medium ml-auto truncate max-w-[120px] sm:max-w-[200px]">{destination}</p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-blue-400" />
-                    <p className="text-gray-400">Number of Stops</p>
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-2 h-2 rounded-full bg-blue-400 flex-shrink-0" />
+                    <p className="text-gray-400 flex-shrink-0">Number of Stops</p>
                     <p className="text-white font-medium ml-auto">{numStops} stops</p>
                   </div>
                 </div>
               </motion.div>
 
               {/* Bus Stop Sequence */}
-              <div className="space-y-4 flex-1 flex flex-col min-h-0">
-                <h3 className="text-lg font-semibold flex items-center">
-                  <Layers className="mr-2 h-5 w-5 text-indigo-400" />
+              <div className="space-y-3 sm:space-y-4 flex-1 flex flex-col min-h-0">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center">
+                  <Layers className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-indigo-400 flex-shrink-0" />
                   Bus Stop Sequence
                 </h3>
                 {selectedStops.length > 0 ? (
@@ -468,18 +467,18 @@ export default function OptimizeRoute() {
                     {selectedStops.map((stop, index) => (
                       <motion.div
                         key={index}
-                        className="flex items-center gap-4 p-3 rounded-lg border border-neutral-700 bg-neutral-800 hover:border-blue-500/50"
+                        className="flex items-center gap-2 sm:gap-4 p-2 sm:p-3 rounded-lg border border-neutral-700 bg-neutral-800 hover:border-blue-500/50"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
                         whileHover={{ x: 2 }}
                       >
-                        <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-semibold">
+                        <div className="flex-shrink-0 flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-blue-500/20 text-blue-400 font-semibold text-xs sm:text-sm">
                           {index + 1}
                         </div>
-                        <div className="flex-grow">
-                          <p className="text-white font-medium truncate">{stop.name}</p>
-                          <p className="text-xs text-gray-400 truncate">
+                        <div className="flex-grow min-w-0">
+                          <p className="text-white font-medium truncate text-xs sm:text-sm">{stop.name}</p>
+                          <p className="text-[10px] sm:text-xs text-gray-400 truncate">
                             Coordinates: {stop.coordinates?.join(", ") || "N/A"}
                           </p>
                         </div>
@@ -491,7 +490,7 @@ export default function OptimizeRoute() {
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                           >
-                            <ChevronUp className="h-4 w-4" />
+                            <ChevronUp className="h-3 w-3 sm:h-4 sm:w-4" />
                           </motion.button>
                           <motion.button
                             onClick={() => moveStopDown(index)}
@@ -500,7 +499,7 @@ export default function OptimizeRoute() {
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                           >
-                            <ChevronDown className="h-4 w-4" />
+                            <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4" />
                           </motion.button>
                         </div>
                       </motion.div>
@@ -508,7 +507,7 @@ export default function OptimizeRoute() {
                   </div>
                 ) : (
                   <motion.p
-                    className="text-gray-400 text-center py-8 italic border border-dashed border-neutral-700 rounded-lg"
+                    className="text-gray-400 text-center py-6 sm:py-8 italic border border-dashed border-neutral-700 rounded-lg text-xs sm:text-sm"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
@@ -520,10 +519,10 @@ export default function OptimizeRoute() {
             </div>
 
             {/* Action Button: Run Optimization */}
-            <div className="p-5 border-t border-neutral-800 mt-auto">
+            <div className="p-3 sm:p-5 border-t border-neutral-800 mt-auto">
               <motion.button
                 onClick={handleOptimize}
-                className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:shadow-none"
+                className="w-full h-10 sm:h-12 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:shadow-none text-sm sm:text-base"
                 disabled={loading || !selectedRoute || !departureTime}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -531,7 +530,7 @@ export default function OptimizeRoute() {
                 {loading ? (
                   <span className="flex items-center">
                     <motion.svg
-                      className="h-5 w-5 mr-3"
+                      className="h-4 w-4 sm:h-5 sm:w-5 mr-2 sm:mr-3"
                       viewBox="0 0 24 24"
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
@@ -555,7 +554,7 @@ export default function OptimizeRoute() {
                   </span>
                 ) : (
                   <>
-                    <RotateCw className="mr-2 h-5 w-5" />
+                    <RotateCw className="mr-2 h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
                     Run Optimization
                   </>
                 )}
@@ -578,12 +577,12 @@ export default function OptimizeRoute() {
             whileHover={{ boxShadow: "0 8px 30px rgba(0, 0, 0, 0.3)" }}
             transition={{ duration: 0.2 }}
           >
-            <div className="p-5 border-b border-neutral-800 flex items-center justify-between">
+            <div className="p-3 sm:p-5 border-b border-neutral-800 flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-semibold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                <h3 className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
                   Optimized Route Results
                 </h3>
-                <p className="text-gray-400 text-sm mt-1">
+                <p className="text-xs sm:text-sm text-gray-400 mt-1">
                   {optimizationResult ? "Optimized route details and map" : "Run optimization to see results"}
                 </p>
               </div>
@@ -596,7 +595,7 @@ export default function OptimizeRoute() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="p-6 flex flex-col h-full overflow-auto"
+                  className="p-3 sm:p-6 flex flex-col h-full overflow-auto"
                   ref={resultsRef}
                 >
                   {/* Map */}
@@ -604,40 +603,47 @@ export default function OptimizeRoute() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="rounded-lg overflow-hidden border border-neutral-700 mb-6"
-                    style={{ minHeight: "300px", height: "350px", maxHeight: "350px" }}
+                    className="rounded-lg overflow-hidden border border-neutral-700 mb-4 sm:mb-6"
+                    style={{
+                      minHeight: "300px",
+                      height: "350px",
+                      maxHeight: "400px"
+                    }}
                   >
-                    <MapComponent optimizationResult={optimizationResult} />
+                    <MapComponent optimizationResult={optimizationResult} selectedStops={selectedStops} />
                   </motion.div>
+
 
                   {/* Results Card */}
                   <motion.div
-                    className="p-5 rounded-lg bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-700 shadow-lg flex-1"
+                    className="p-3 sm:p-5 rounded-lg bg-gradient-to-br from-neutral-800 to-neutral-900 border border-neutral-700 shadow-lg flex-1"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
                   >
-                    <h3 className="text-xl font-semibold mb-4 flex items-center">
-                      <Truck className="mr-3 h-6 w-6 text-green-400" />
+                    <h3 className="text-base sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center">
+                      <Truck className="mr-2 sm:mr-3 h-5 w-5 sm:h-6 sm:w-6 text-green-400 flex-shrink-0" />
                       Optimized Transit Route
                     </h3>
 
-                    <div className="space-y-6" style={{ maxHeight: "calc(100% - 60px)" }}>
+                    <div className="space-y-4 sm:space-y-6 pr-2" style={{ maxHeight: "calc(100% - 60px)" }}>
                       {/* Route 1 */}
                       {optimizationResult.route_1 && (
-                        <div className="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700">
-                          <h4 className="font-medium flex items-center text-blue-400 mb-2">
-                            <div className="w-4 h-4 rounded-full bg-blue-500 mr-2"></div>
+                        <div className="bg-neutral-800/50 rounded-lg p-3 sm:p-4 border border-neutral-700">
+                          <h4 className="text-sm sm:text-base font-medium flex items-center text-blue-400 mb-2">
+                            <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-blue-500 mr-2 flex-shrink-0"></div>
                             Route 1: {optimizationResult.route_1.route_no || "N/A"}
                           </h4>
-                          <div className="pl-6 space-y-1">
+                          <div className="pl-4 sm:pl-6 space-y-1">
                             {optimizationResult.route_1.stops &&
                               optimizationResult.route_1.stops.map((stop, index) => (
                                 <div key={index} className="flex items-center text-gray-300">
-                                  <span className="w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs mr-2">
+                                  <span className="flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-[10px] sm:text-xs mr-2">
                                     {index + 1}
                                   </span>
-                                  <span className="truncate">{stop.busstop}</span>
+                                  <span className="truncate text-xs sm:text-sm">
+                                    {typeof stop === 'string' ? stop : stop.busstop || 'N/A'}
+                                  </span>
                                 </div>
                               ))}
                           </div>
@@ -649,30 +655,30 @@ export default function OptimizeRoute() {
                         <>
                           <div className="flex items-center">
                             <div className="flex-grow h-px bg-gradient-to-r from-blue-500 to-transparent"></div>
-                            <div className="px-4 py-2 rounded-full bg-red-500/20 text-red-400 font-medium flex items-center mx-2">
-                              <ArrowRight className="h-4 w-4 mr-2" />
+                            <div className="px-3 sm:px-4 py-1 sm:py-2 rounded-full bg-red-500/20 text-red-400 font-medium flex items-center mx-2 text-xs sm:text-sm">
+                              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2 flex-shrink-0" />
                               Transfer
                             </div>
                             <div className="flex-grow h-px bg-gradient-to-l from-green-500 to-transparent"></div>
                           </div>
 
-                          <div className="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700">
-                            <h4 className="font-medium flex items-center text-red-400 mb-2">
-                              <div className="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
+                          <div className="bg-neutral-800/50 rounded-lg p-3 sm:p-4 border border-neutral-700">
+                            <h4 className="text-sm sm:text-base font-medium flex items-center text-red-400 mb-2">
+                              <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-red-500 mr-2 flex-shrink-0"></div>
                               Transfer Details
                             </h4>
-                            <div className="pl-6 space-y-1">
+                            <div className="pl-4 sm:pl-6 space-y-1">
                               <div className="flex items-center text-gray-300">
-                                <span className="w-5 h-5 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-xs mr-2">
+                                <span className="flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-[10px] sm:text-xs mr-2">
                                   T
                                 </span>
-                                <span>Transfer Point: {optimizationResult.transfer_point}</span>
+                                <span className="truncate text-xs sm:text-sm">Transfer Point: {optimizationResult.transfer_point}</span>
                               </div>
                               <div className="flex items-center text-gray-300">
-                                <span className="w-5 h-5 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-xs mr-2">
+                                <span className="flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-[10px] sm:text-xs mr-2">
                                   R
                                 </span>
-                                <span>Transfer Route: {optimizationResult.transfer_route || "N/A"}</span>
+                                <span className="truncate text-xs sm:text-sm">Transfer Route: {optimizationResult.transfer_route || "N/A"}</span>
                               </div>
                             </div>
                           </div>
@@ -681,18 +687,20 @@ export default function OptimizeRoute() {
 
                       {/* Route 2 */}
                       {optimizationResult.route_2?.stops?.length > 0 && (
-                        <div className="bg-neutral-800/50 rounded-lg p-4 border border-neutral-700">
-                          <h4 className="font-medium flex items-center text-green-400 mb-2">
-                            <div className="w-4 h-4 rounded-full bg-green-500 mr-2"></div>
+                        <div className="bg-neutral-800/50 rounded-lg p-3 sm:p-4 border border-neutral-700">
+                          <h4 className="text-sm sm:text-base font-medium flex items-center text-green-400 mb-2">
+                            <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-green-500 mr-2 flex-shrink-0"></div>
                             Route 2: {optimizationResult.route_2.route_no || "N/A"}
                           </h4>
-                          <div className="pl-6 space-y-1">
+                          <div className="pl-4 sm:pl-6 space-y-1">
                             {optimizationResult.route_2.stops.map((stop, index) => (
                               <div key={index} className="flex items-center text-gray-300">
-                                <span className="w-5 h-5 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs mr-2">
+                                <span className="flex-shrink-0 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-[10px] sm:text-xs mr-2">
                                   {index + 1}
                                 </span>
-                                <span className="truncate">{stop.busstop}</span>
+                                <span className="truncate text-xs sm:text-sm">
+                                  {typeof stop === 'string' ? stop : stop.busstop || 'N/A'}
+                                </span>
                               </div>
                             ))}
                           </div>
@@ -703,7 +711,7 @@ export default function OptimizeRoute() {
                 </motion.div>
               ) : (
                 <motion.div
-                  className="flex flex-col items-center justify-center p-12 flex-grow"
+                  className="flex flex-col items-center justify-center p-6 sm:p-12 flex-grow"
                   key="empty"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -711,14 +719,14 @@ export default function OptimizeRoute() {
                   transition={{ duration: 0.3 }}
                 >
                   <motion.div
-                    className="w-24 h-24 text-gray-600 opacity-40 mb-6"
+                    className="w-16 h-16 sm:w-24 sm:h-24 text-gray-600 opacity-40 mb-4 sm:mb-6"
                     animate={{ y: [0, -10, 0], rotate: [0, 5, 0, -5, 0] }}
                     transition={{ repeat: Number.POSITIVE_INFINITY, duration: 5, ease: "easeInOut" }}
                   >
-                    <Truck size={96} />
+                    <Truck size="100%" />
                   </motion.div>
-                  <p className="text-gray-400 text-lg mb-2">No optimization results yet</p>
-                  <p className="text-gray-500 text-center max-w-md">
+                  <p className="text-gray-400 text-base sm:text-lg mb-2">No optimization results yet</p>
+                  <p className="text-gray-500 text-center max-w-md text-xs sm:text-sm px-2">
                     Select a route and departure time, then click "Run Optimization" to see the optimized route and map
                   </p>
                 </motion.div>
@@ -731,16 +739,25 @@ export default function OptimizeRoute() {
       {/* Custom Scrollbar Styles */}
       <style jsx>{`
         .custom-scrollbar::-webkit-scrollbar {
-          width: 8px;
+          width: 4px;
         }
+        
+        @media (min-width: 640px) {
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+          }
+        }
+        
         .custom-scrollbar::-webkit-scrollbar-track {
           background: rgba(0, 0, 0, 0.1);
           border-radius: 4px;
         }
+        
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: rgba(59, 130, 246, 0.5);
           border-radius: 4px;
         }
+        
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
           background: rgba(59, 130, 246, 0.7);
         }

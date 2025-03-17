@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 import { ChevronRight, Home } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,13 +5,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/UPLYFT.svg";
 import StarBackground from "./homeComponents/StarBackground";
 
-
 export const NavBarComponent = () => {
   const [isDeliveryOpen, setDeliveryOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
-
 
   // Open delivery dropdown if the current path is "/delivery"
   useEffect(() => {
@@ -21,7 +17,6 @@ export const NavBarComponent = () => {
       setDeliveryOpen(true);
     }
   }, [currentPath]);
-
 
   // Helper: determine if a route is active
   const isActive = (path) => currentPath === path;
@@ -31,6 +26,20 @@ export const NavBarComponent = () => {
     isActive(path)
       ? "bg-blue-500/10 text-blue-400 font-medium"
       : "text-gray-400 hover:text-gray-200 hover:bg-white/5";
+
+  // Logout function that properly removes the token
+  const handleLogout = () => {
+    // Remove JWT token from localStorage
+    localStorage.removeItem('authToken');
+    
+    // Also remove from sessionStorage if your app might use it
+    sessionStorage.removeItem('authToken');
+    
+    console.log("Logged out: Token removed from storage");
+    
+    // Redirect to home page
+    navigate('/');
+  };
 
   return (
     <div className="relative bg-neutral-900 w-56 flex-shrink-0 border-r border-neutral-800 shadow-xl flex flex-col min-h-screen">
@@ -204,6 +213,28 @@ export const NavBarComponent = () => {
             </AnimatePresence>
           </div>
         </div>
+      </div>
+
+      {/* Logout button - positioned above footer */}
+      <div className="flex justify-end px-4 mb-2">
+        <button 
+          onClick={handleLogout}
+          className="p-2 rounded-md hover:bg-neutral-800 transition-colors text-gray-400 hover:text-red-400"
+          title="Logout"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            className="w-5 h-5 fill-none stroke-current" 
+            strokeWidth="2"
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+          >
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+        </button>
       </div>
 
       {/* Bottom section - always visible */}
