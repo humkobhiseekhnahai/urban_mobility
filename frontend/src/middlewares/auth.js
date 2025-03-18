@@ -1,10 +1,11 @@
+const SERVER_URL_AUTH = import.meta.env.VITE_SERVER_URL_AUTH
 export const checkAuth = async () => {
     const token = localStorage.getItem('authToken');
     if (!token) return { valid: false, role: null };
   
     try {
       // Try the user endpoint first
-      const response = await fetch('http://localhost:3000/auth/check-user', {
+      const response = await fetch(`${SERVER_URL_AUTH}/auth/check-user`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -14,7 +15,7 @@ export const checkAuth = async () => {
       }
       
       // Try operator endpoint
-      const operatorResponse = await fetch('http://localhost:3000/auth/check-operator', {
+      const operatorResponse = await fetch(`${SERVER_URL_AUTH}/auth/check-operator`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -24,7 +25,7 @@ export const checkAuth = async () => {
       }
     
       // Try partner endpoint
-      const partnerResponse = await fetch('http://localhost:3000/auth/check-partner', {
+      const partnerResponse = await fetch(`${SERVER_URL_AUTH}/auth/check-partner`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
