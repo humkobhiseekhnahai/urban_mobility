@@ -13,7 +13,7 @@ const DeliveryResult = ({ totalCapacity, numberOfVehicles, setIsOptimized }) => 
           setIsOptimized={setIsOptimized} 
         />
       ) : (
-        <DeliveryResult_single 
+        <DeliveryResult_multiple 
           totalCapacity={totalCapacity} 
           numberOfVehicles={numberOfVehicles} 
           setIsOptimized={setIsOptimized} 

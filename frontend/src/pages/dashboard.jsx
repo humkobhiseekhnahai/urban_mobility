@@ -76,7 +76,7 @@ export const Dashboard = () => {
     getAllBusRoutes();
   }, [busRoutesLimit]);
 
-  if (location.loading || location.error) return <LocationLoading />;
+  // if (location.loading || location.error) return <LocationLoading />;
 
   return (
     <main className="bg-neutral-850">

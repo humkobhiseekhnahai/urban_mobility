@@ -18,20 +18,24 @@ router.post("/create-custom-route", async (req, res) => {
             where: { origin: start }
         });
 
-        // Manually check if any route has the same intermediate stops
+        // Sort the input intermediate stops for consistency
+        const sortedIntermediate = intermediate.slice().sort();
+
+        // Manually check if any route has the same intermediate stops (sorted)
         const matchedRoute = existingRoutes.find(route => {
             const existingStops = JSON.parse(route.mapJsonContent).stops;
-            return JSON.stringify(existingStops) === JSON.stringify(intermediate);
+            const sortedExistingStops = existingStops.slice().sort();
+            return JSON.stringify(sortedExistingStops) === JSON.stringify(sortedIntermediate);
         });
 
         if (matchedRoute) {
             return res.json({ message: "Route already exists", route_no: matchedRoute.routeNumber });
         }
 
-        // Generate a new route number safely
+        // Generate a new route number using the sorted intermediate stops
         const safeStart = start ? start.slice(0, 3).toUpperCase() : "UNK";
         const safeStop = stop ? stop.slice(0, 3).toUpperCase() : "UNK";
-        const routeNumber = `USR-${safeStart}-${safeStop}-${intermediate.length}`;
+        const routeNumber = `USR-${safeStart}-${safeStop}-${sortedIntermediate.join('-')}`;
 
         // Save to database
         const newRoute = await prisma.customRoute.create({
@@ -42,7 +46,7 @@ router.post("/create-custom-route", async (req, res) => {
                 departureTimes: JSON.stringify(departure_time),
                 mapJsonContent: JSON.stringify({
                     origin: start,
-                    stops: intermediate,
+                    stops: sortedIntermediate,
                     destination: stop
                 })
             }
