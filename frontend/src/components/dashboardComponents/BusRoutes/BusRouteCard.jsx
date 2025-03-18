@@ -54,7 +54,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-start gap-1 text-gray-300 text-xs mb-2">
-          <div className="flex items-start gap-1 min-w-0">
+          <div className="hidden md:flex items-start gap-1 min-w-0">
             <MapPinIcon className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
             <Typography
               variant="small"
@@ -64,7 +64,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
             </Typography>
           </div>
           <div className="hidden sm:block text-gray-500 text-xs">•</div>
-          <div className="flex items-start gap-1 min-w-0">
+          <div className="hidden md:flex items-start gap-1 min-w-0">
             <MapPinIcon className="h-3.5 w-3.5 text-blue-400 flex-shrink-0" />
             <Typography
               variant="small"
@@ -76,7 +76,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         </div>
 
         {/* Departure Times */}
-        <div className="mt-2 bg-neutral-900 rounded-md p-2 border border-neutral-700">
+        <div className="hidden md:block mt-2 bg-neutral-900 rounded-md p-2 border border-neutral-700">
           <div className="flex items-center mb-1">
             <ClockIcon className="h-3.5 w-3.5 text-blue-400 mr-1" />
             <Typography
@@ -92,7 +92,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
               <Tooltip key={index} content={`Departs at ${time.trim()}`}>
                 <Chip
                   value={time.trim()}
-                  className="bg-blue-900 text-blue-100 text-xs font-normal border border-blue-800 hover:bg-blue-800 flex-shrink-0 h-6"
+                  className="bg-neutral-950 text-white text-xs font-normal border border-gray-700 hover:bg-blue-600 flex-shrink-0 h-6 flex justify-center items-center"
                 />
               </Tooltip>
             ))}
@@ -100,7 +100,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
             {!expanded && times.length > 3 && (
               <Chip
                 value={`+${times.length - 3} more`}
-                className="bg-neutral-700 text-gray-300 text-xs cursor-pointer hover:bg-neutral-600 flex-shrink-0 h-6"
+                className="bg-neutral-700 text-gray-300 text-xs cursor-pointer hover:bg-neutral-600 flex-shrink-0 h-6 flex justify-center items-center"
                 onClick={() => setExpanded(true)}
               />
             )}
@@ -123,7 +123,7 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
         <Button
           size="sm"
           fullWidth
-          className="bg-blue-900 hover:bg-blue-800 shadow-sm flex items-center justify-center gap-1 py-2 text-white text-xs"
+          className="bg-neutral-700 hover:bg-neutral-500 shadow-sm flex items-center justify-center gap-1 py-2 text-white text-xs font-medium"
           onClick={() => {
             setSelectedRoute(route);
             onViewDetails();

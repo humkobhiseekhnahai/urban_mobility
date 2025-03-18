@@ -10,6 +10,7 @@ import { NavBarComponent } from "../components/navBarComponent";
 import { Filter } from "../components/dashboardComponents/Filter";
 import { BusRouteList } from "../components/dashboardComponents/BusRoutes/BusRouteList";
 import { selectedRouteAtom } from "../components/dashboardComponents/BusRoutes/BusRouteCard";
+import { Footer } from "../components/dashboardComponents/Footer";
 import {
   Tabs,
   TabsHeader,
@@ -47,7 +48,7 @@ export const Dashboard = () => {
     try {
       const response = await fetch(
         `${serverUrl}/api/bus-routes?limit=${busRoutesLimit}`,
-        {method: 'GET'}
+        { method: "GET" }
       );
       const data = await response.json();
 
@@ -87,7 +88,7 @@ export const Dashboard = () => {
         {/* Sidebar Section (Dashboard Heading, Filter & Bus Routes) */}
         <section className="w-full md:w-[45%] h-auto md:h-full bg-neutral-900 border-r border-r-neutral-800 p-4">
           {/* ✅ Added Dashboard Heading */}
-          <div className="mb-4 text-center flex flex-col items-start">
+          <div className="mb-4 text-center flex flex-col items-center md:items-start">
             <h1 className="text-white text-2xl font-semibold">Dashboard</h1>
             <p className="text-neutral-400 text-sm">
               View traffic incidents, weather data, and bus routes in your area
@@ -117,7 +118,7 @@ export const Dashboard = () => {
 
         {/* Main Content Section (Map & Tabs) */}
         <section className="w-full md:w-[55%] h-auto md:h-full bg-neutral-900">
-          <div className="w-full h-[300px] md:h-1/2 p-5 rounded-lg">
+          <div className="hidden md:block w-full h-[300px] md:h-1/2 p-5 rounded-lg">
             <MapBox lng={location.longitude} lat={location.latitude} />
           </div>
 
@@ -174,6 +175,7 @@ export const Dashboard = () => {
             </Tabs>
           </div>
         </section>
+        <Footer />
       </div>
 
       {selectedRoute && (
