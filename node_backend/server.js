@@ -1,12 +1,16 @@
 const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
+const dotenv = require("dotenv")
+dotenv.config()
 
 const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
+
+const SERVER_URL=process.env.SERVER_URL
 
 // Generic route handler for fetching data
 const fetchData = async (model, res) => {
@@ -194,7 +198,7 @@ app.get("/api/bus-routes", async (req, res) => {
 
 app.use("/custom", require("./routes/customRoutes"));
 
-const PYTHON_BACKEND_URL = "http://localhost:4000/optimize_transit";
+const PYTHON_BACKEND_URL = `${SERVER_URL}:4000/optimize_transit`;
 
 // ✅ Optimize Route (POST)
 app.post("/api/optimize-route", async (req, res) => {
@@ -270,6 +274,6 @@ app.get("/api/:model", async (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on ${SERVER_URL}:${PORT}`);
 
 });
