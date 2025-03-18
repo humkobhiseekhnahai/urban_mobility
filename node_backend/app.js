@@ -11,6 +11,8 @@ dotenv.config();
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 // Configure the PostgreSQL session store
 const PgSession = connectPgSimple(session);
 const sessionStore = new PgSession({
@@ -30,6 +32,7 @@ app.use(session({
   cookie: {
     httpOnly: true, 
     secure: process.env.NODE_ENV === "production", // secure true if in production and using HTTPS
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 1000 * 60 * 60 * 24, // Session valid for 24 hours
   },
 }));
