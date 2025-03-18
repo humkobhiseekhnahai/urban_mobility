@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
+const SERVER_URL_AUTH = import.meta.env.VITE_SERVER_URL_AUTH
+
 export default function RoleSelection() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -24,7 +26,7 @@ export default function RoleSelection() {
       setIsLoading(true);
       setError('');
       
-      const response = await fetch('http://localhost:3000/auth/update-role', {
+      const response = await fetch(`${SERVER_URL_AUTH}/auth/update-role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

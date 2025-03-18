@@ -15,7 +15,7 @@ export default function RouteInput({ attemptedOptimize }) {
   const [inputValues, setInputValues] = useState(deliveryStops.map(stop => stop.location));
 
   // Toggle state for input type: 'address' or 'coordinates'
-  const [inputType, setInputType] = useState('coordinates');
+  const [inputType, setInputType] = useState('address');
 
   // Refs for the container and new inputs
   const scrollContainerRef = useRef(null);

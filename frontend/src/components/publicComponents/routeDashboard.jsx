@@ -7,6 +7,8 @@ import OptimizeRoute from "./optimizeRoute";
 import axios from "axios";
 import ErrorBoundary from "./errorBoundary";
 
+const SERVER_URL_BUS = import.meta.env.VITE_SERVER_URL;
+
 export default function RouteDashboard() {
     const [activeTab, setActiveTab] = useState("view");
     const [routes, setRoutes] = useState([]);
@@ -27,7 +29,7 @@ export default function RouteDashboard() {
         const startTime = Date.now();
 
         try {
-            const endpoint = `http://localhost:3001/api/bus-routes?page=${pageNum}&limit=15${query ? `&search=${encodeURIComponent(query)}` : ""}`;
+            const endpoint = `${SERVER_URL_BUS}/api/bus-routes?page=${pageNum}&limit=15${query ? `&search=${encodeURIComponent(query)}` : ""}`;
             const response = await axios.get(endpoint);
             const { data, currentPage, totalPages } = response.data;
 

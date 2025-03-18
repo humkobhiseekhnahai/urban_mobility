@@ -25,8 +25,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/public" element={<Public />} />
 
           {/* Protected routes */}
           <Route
@@ -41,26 +39,26 @@ function App() {
           <Route
             path="/public"
             element={
-              <ProtectedRoute role={"operator"}>
+              // <ProtectedRoute role={"operator"}>
                 <Public />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
 
           <Route
             path="/delivery"
             element={
-              <ProtectedRoute role="partner">
+              // <ProtectedRoute role="partner">
                 <Delivery />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
           <Route
             path="/role-select"
             element={
-              <ProtectedRoute>
+              // <ProtectedRoute>
                 <RoleSelection />
-              </ProtectedRoute>
+              // </ProtectedRoute>
             }
           />
         </Routes>

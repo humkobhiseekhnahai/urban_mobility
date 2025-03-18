@@ -52,23 +52,6 @@ export const IncidentList = ({ lat, lng, radius }) => {
       {
         type: "Feature",
         properties: {
-          iconCategory: 6,
-          incidentType: "Jam",
-          time: "15:45",
-          severity: 1,
-          location: "Brigade Road",
-        },
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [77.6033, 12.9791],
-            [77.6037, 12.9793],
-          ],
-        },
-      },
-      {
-        type: "Feature",
-        properties: {
           iconCategory: 8,
           incidentType: "Road Closed",
           time: "16:05",
@@ -98,74 +81,6 @@ export const IncidentList = ({ lat, lng, radius }) => {
             [77.6051, 12.9812],
             [77.6058, 12.9815],
             [77.6063, 12.9819],
-          ],
-        },
-      },
-      {
-        type: "Feature",
-        properties: {
-          iconCategory: 6,
-          incidentType: "Jam",
-          time: "16:15",
-          severity: 1,
-          location: "Indiranagar",
-        },
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [77.6203, 12.9934],
-            [77.621, 12.9937],
-          ],
-        },
-      },
-      {
-        type: "Feature",
-        properties: {
-          iconCategory: 8,
-          incidentType: "Road Closed",
-          time: "16:30",
-          severity: 2,
-          location: "Jayanagar",
-        },
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [77.6235, 12.9962],
-            [77.624, 12.9965],
-          ],
-        },
-      },
-      {
-        type: "Feature",
-        properties: {
-          iconCategory: 6,
-          incidentType: "Jam",
-          time: "16:40",
-          severity: 1,
-          location: "Hebbal",
-        },
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [77.6298, 13.0017],
-            [77.6303, 13.002],
-          ],
-        },
-      },
-      {
-        type: "Feature",
-        properties: {
-          iconCategory: 8,
-          incidentType: "Road Closed",
-          time: "16:55",
-          severity: 2,
-          location: "Marathahalli",
-        },
-        geometry: {
-          type: "LineString",
-          coordinates: [
-            [77.6766, 12.9561],
-            [77.6772, 12.9565],
           ],
         },
       },

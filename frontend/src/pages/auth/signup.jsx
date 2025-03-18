@@ -5,6 +5,8 @@ import { Icon } from '@iconify/react';
 import * as THREE from 'three';
 import logo from '../../assets/UPLYFT.svg';
 
+const SERVER_URL_AUTH = import.meta.env.VITE_SERVER_URL_AUTH
+
 export default function Signup() {
   const navigate = useNavigate();
   const [name, setName] = useState('');
@@ -168,7 +170,7 @@ export default function Signup() {
   }, []);
 
   const handleGoogleSignup = () => {
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href = `${SERVER_URL_AUTH}/auth/google`;
   };
 
   const handleSubmit = async (e) => {
@@ -188,7 +190,7 @@ export default function Signup() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/auth/signup', {
+      const response = await fetch(`${SERVER_URL_AUTH}/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password })
