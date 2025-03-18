@@ -47,9 +47,9 @@ router.get('/google/callback',
     const token = generateToken(req.user);
     
     if (req.user.roleSelected) {
-      return res.redirect(`http://localhost:5173/dashboard?token=${token}`);
+      return res.redirect(`https://uplyft-deloitte.vercel.app//dashboard?token=${token}`);
     }
-    res.redirect(`http://localhost:5173/role-select?token=${token}`);
+    res.redirect(`https://uplyft-deloitte.vercel.app/role-select?token=${token}`);
   }
 );
 
