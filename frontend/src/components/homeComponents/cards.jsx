@@ -189,7 +189,7 @@ const Cards = () => {
           className="text-3xl sm:text-5xl md:text-6xl text-center mb-12 md:mb-16 tracking-tight font-bold"
         >
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300">
-            Features
+            Profiles
           </span>
         </motion.h2>
 

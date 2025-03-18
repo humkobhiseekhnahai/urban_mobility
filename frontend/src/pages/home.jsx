@@ -13,16 +13,15 @@ const HomePage = () => {
     <div className="min-h-screen bg-black text-white overflow-hidden">
       <StarBackground />
       <Navbar_home />
-      <div id="home">
+      <div id="home" className="scroll-mt-20">
         <HeroSection />
       </div>
-      
+      <div id="features" className="scroll-mt-60 mb-10">
         <Features />
-        <div id="features">
-        <Cards />
       </div>
+      <Cards />
       <Testimonials />
-      <div id="about">
+      <div id="about" className="scroll-mt-20">
         <AboutUs />
       </div>
       <Footer />

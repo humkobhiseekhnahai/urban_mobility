@@ -5,6 +5,8 @@ import { Icon } from '@iconify/react';
 import * as THREE from 'three';
 import logo from '../../assets/UPLYFT.svg';
 
+const SERVER_URL_AUTH = import.meta.env.VITE_SERVER_URL_AUTH
+
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -167,7 +169,7 @@ export default function Login() {
   }, []);
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:3000/auth/google';
+    window.location.href = `${SERVER_URL_AUTH}/auth/google`;
   };
 
   const handleSubmit = async (e) => {
@@ -176,7 +178,7 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch(`${SERVER_URL_AUTH}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -190,7 +192,7 @@ export default function Login() {
 
       localStorage.setItem('authToken', data.token);
 
-      const roleCheck = await fetch('http://localhost:3000/auth/check-role', {
+      const roleCheck = await fetch(`${SERVER_URL_AUTH}/auth/check-role`, {
         headers: { Authorization: `Bearer ${data.token}` }
       });
 

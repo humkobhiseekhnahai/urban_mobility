@@ -11,6 +11,8 @@ import { Inventory } from "./inventory";
 import { collectRouteData } from "../../lib/collectRouteData";
 import DeliveryResult from "./delivery_result";
 
+const SERVER_URL_OPTIMIZE=import.meta.env.VITE_SERVER_URL_OPTIMIZE
+
 export const Delivery_new = () => {
   const [numberOfVehicles, setNumberOfVehicles] = useState(1);
   const [totalCapacity, setTotalCapacity] = useState(0);
@@ -53,8 +55,8 @@ export const Delivery_new = () => {
       const stops = [{ location: startingLocation, capacity: 0 }, ...deliveryStops];
       const data = await collectRouteData(stops, markers, totalCapacity, numberOfVehicles);
       const url = ecoMode
-        ? "http://localhost:8000/optimize_delivery?eco_mode=true"
-        : "http://localhost:8000/optimize_delivery?method=ga";
+        ? `${SERVER_URL_OPTIMIZE}/optimize_delivery?eco_mode=true`
+        : `${SERVER_URL_OPTIMIZE}/optimize_delivery?method=ga`
       const response = await axios.post(url, data, {
         headers: { "Content-Type": "application/json" },
       });

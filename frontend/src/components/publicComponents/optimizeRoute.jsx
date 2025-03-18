@@ -15,6 +15,9 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import MapComponent from "./map_optimize";
 
+const SERVER_URL_BUS = import.meta.env.VITE_SERVER_URL
+const SERVER_URL_TRANSIT = import.meta.env.VITE_SERVER_URL_TRANSIT
+
 export default function OptimizeRoute() {
   const [routes, setRoutes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -63,7 +66,7 @@ export default function OptimizeRoute() {
   const fetchRoutes = async (page = 1, query = "") => {
     setFetchingMore(true);
     const isLikelyRouteNumber = /^\d+$/.test(query);
-    let endpoint = `http://localhost:3001/api/bus-routes?page=${page}&limit=10`;
+    let endpoint = `${SERVER_URL_BUS}/api/bus-routes?page=${page}&limit=10`;
     if (query) {
       endpoint += isLikelyRouteNumber ? `&routeNumber=${query}` : `&routeName=${query}`;
     }
@@ -188,7 +191,7 @@ export default function OptimizeRoute() {
     setLoading(true);
     try {
       const route = routes.find((r) => r.id === Number.parseInt(selectedRoute));
-      const response = await fetch("http://localhost:4000/optimize_transit", {
+      const response = await fetch(`${SERVER_URL_TRANSIT}/optimize_transit`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

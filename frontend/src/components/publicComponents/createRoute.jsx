@@ -34,6 +34,8 @@ function getTimeframe(time) {
   return "Unknown";
 }
 
+const SERVER_URL_BUS=import.meta.env.VITE_SERVER_URL
+
 export default function CreateRoute({ setRoutes }) {
   // State declarations
   const [origin, setOrigin] = useState({ name: "", lon: "", lat: "" });
@@ -94,7 +96,7 @@ export default function CreateRoute({ setRoutes }) {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `http://localhost:3001/api/bus-routes/stops?search=${searchQuery || "jay"}&page=${page}&limit=10`
+        `${SERVER_URL_BUS}/api/bus-routes/stops?search=${searchQuery || "jay"}&page=${page}&limit=10`
       );
       const data = await response.json();
       const parsedStops = data.map((stop, index) => ({
@@ -253,7 +255,7 @@ export default function CreateRoute({ setRoutes }) {
     setResponseData(null);
 
     try {
-      const response = await axios.post("http://localhost:3001/custom/create-custom-route", routeData, {
+      const response = await axios.post(`${SERVER_URL_BUS}/custom/create-custom-route`, routeData, {
         validateStatus: (status) => status < 500,
       });
 
