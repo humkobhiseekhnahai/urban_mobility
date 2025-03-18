@@ -7,7 +7,8 @@ module.exports = new GoogleStrategy({
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.NODE_ENV === 'production' 
     ? 'https://urban-mobility-node-app.onrender.com/auth/google/callback'
-    : 'http://localhost:3000/auth/google/callback' // For local testing
+    : 'http://localhost:3000/auth/google/callback',// For local testing
+  proxy: true
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     const email = profile.emails[0].value;
