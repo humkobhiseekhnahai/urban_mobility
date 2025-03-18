@@ -20,11 +20,13 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/documentation" element={<DocsPage />} />     
+          <Route path="/documentation" element={<DocsPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="/auth-success" element={<AuthSuccess />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/public" element={<Public />} />
 
           {/* Protected routes */}
           <Route

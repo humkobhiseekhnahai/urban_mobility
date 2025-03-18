@@ -14,26 +14,24 @@ services:
   node_app:
     build:
       context: ./node_backend
-    # Remove: command: node app.js
     ports:
       - "3000:3000"   
     depends_on:
       - db
     environment:
       DATABASE_URL: postgresql://postgres:mysecretpassword@db:5432/postgres?schema=public
-      SCRIPT_TO_RUN: app.js  # Add this to specify which script to run
+      SCRIPT_TO_RUN: app.js
 
   node_server:
     build:
       context: ./node_backend
-    # Remove: command: node server.js
     ports:
       - "3001:3001"   
     depends_on:
       - db
     environment:
       DATABASE_URL: postgresql://postgres:mysecretpassword@db:5432/postgres?schema=public
-      SCRIPT_TO_RUN: server.js  # Add this to specify which script to run
+      SCRIPT_TO_RUN: server.js
 
   python_backend:
     build:
@@ -42,6 +40,18 @@ services:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql://postgres:mysecretpassword@db:5432/postgres?schema=public
+
+  python_public_transport:
+    build:
+      context: ./backend/public_transport
+      dockerfile: Dockerfile
+    command: uvicorn app.main:app --host 0.0.0.0 --port 4000 --reload
+    ports:
+      - "4000:4000"
     depends_on:
       - db
     environment:
@@ -56,6 +66,7 @@ services:
       - "5173:5173"
     depends_on:
       - python_backend
+      - python_public_transport
       - node_app
       - node_server
 
