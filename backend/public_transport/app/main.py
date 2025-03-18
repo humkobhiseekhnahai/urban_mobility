@@ -18,9 +18,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+SERVER_URL="https://urban-mobility.onrender.com"
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
 ROUTES_PATH = os.path.join(BASE_DIR, "data", "busRoutes.json")
-OPTIMIZEROUTEBACKEND = "http://localhost:3001/api/optimize-route"
+OPTIMIZEROUTEBACKEND = f"{SERVER_URL}/api/optimize-route"
 @app.post("/optimize_transit")
 def optimize_transit(data: TransitRequest):
     try:
@@ -44,7 +46,7 @@ def optimize_transit(data: TransitRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Server error: {str(e)}")
     
-NODE_BACKEND_URL = "http://localhost:3001/custom/create-custom-route"
+NODE_BACKEND_URL = f"{SERVER_URL}/custom/create-custom-route"
 @app.post("/create_custom_route")
 def create_custom_route(data: CreateCustomRouteRequest):
     try:
