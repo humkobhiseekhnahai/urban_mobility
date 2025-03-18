@@ -165,7 +165,7 @@ export default function HeroGeometric() {
               UPLYFT transforms how you navigate cities with AI-powered route optimization
             </p> */}
             <p className="text-sm sm:text-base text-white/40 max-w-xl mx-auto">
-              Join thousands of commuters saving up to 40% on travel time and reducing their carbon footprint.
+              Join thousands of delivery partners and commuters saving up to 40% on travel time and reducing their carbon footprint.
             </p>
           </motion.div>
 
