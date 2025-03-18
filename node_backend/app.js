@@ -4,15 +4,36 @@ const express = require('express');
 const passport = require('./config/passport.js');
 const authRoutes = require('./routes/auth.js');
 const { authMiddleware } = require('./middlewares/auth.js');
+const session = require("express-session")
 
 dotenv.config();
 
 const app = express();
 
+app.use(session({
+  secret:"delhi se hu behenchod",
+  cookie:{
+    httpOnly:true,
+    secure:false,
+  },
+  saveUninitialized:true,
+  resave:false
+}))
+
 // Middleware
 app.use(cors({origin:"*"}));
 app.use(express.json());
 app.use(passport.initialize());
+app.use(passport.session());
+app.use(session({
+  secret:"delhi se hu behenchod",
+  cookie:{
+    httpOnly:true,
+    secure:false,
+  },
+  saveUninitialized:true,
+  resave:false
+}))
 
 // Routes
 app.use('/auth', authRoutes);
