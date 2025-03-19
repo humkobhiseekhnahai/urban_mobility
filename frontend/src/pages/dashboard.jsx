@@ -79,10 +79,21 @@ export const Dashboard = () => {
     getAllBusRoutes();
   }, [busRoutesLimit]);
 
-  // if (location.loading || location.error) return <LocationLoading />;
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (location.loading || location.error) return <LocationLoading />;
 
   return (
-    <main className="bg-neutral-850 overflow-hidden">
+    <main className="bg-neutral-850">
       <div className="w-full h-screen flex flex-col md:flex-row">
         <div className="hidden md:block h-full w-56 bg-neutral-900 z-40">
           <NavBarComponent />
@@ -167,7 +178,17 @@ export const Dashboard = () => {
           {/* Bus Route List */}
           {/* Bus Route List - Scrollable for small screens */}
           {/* Bus Route List - Proper scroll handling */}
-          <div className="w-full h-[300px] overflow-y-auto md:h-full">
+          {isSmallScreen ? (
+            <div className="w-full h-[500px] overflow-y-auto md:h-full">
+              <BusRouteList
+                filteredRoutes={filteredRoutes}
+                handleViewRouteDetails={handleViewRouteDetails}
+                busRoutes={busRoutes}
+                limit={busRoutesLimit}
+                setLimit={setBusRoutesLimit}
+              />
+            </div>
+          ) : (
             <BusRouteList
               filteredRoutes={filteredRoutes}
               handleViewRouteDetails={handleViewRouteDetails}
@@ -175,7 +196,7 @@ export const Dashboard = () => {
               limit={busRoutesLimit}
               setLimit={setBusRoutesLimit}
             />
-          </div>
+          )}
         </section>
 
         {/* Main Content Section (Map & Tabs) */}
