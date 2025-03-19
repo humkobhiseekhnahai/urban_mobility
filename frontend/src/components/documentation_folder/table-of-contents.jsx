@@ -93,6 +93,7 @@ export function TableOfContents({ activeSection }) {
       { id: "what-is-bin-packing", label: "What is Bin Packing?" },
       { id: "implementation-process", label: "Implementation Process" },
     ],
+
     deliveryrouting: [
       {
         id: "genetic-algorithm-for-delivery-routing",
