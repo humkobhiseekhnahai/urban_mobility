@@ -30,27 +30,29 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              // <ProtectedRoute role={"user" | "operator" | "partner"}>
-              <Dashboard />
-              // </ProtectedRoute>
+              <ProtectedRoute role={"user" | "operator" | "partner"}>
+                <Dashboard />
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/public"
             element={
-              // <ProtectedRoute role={"operator"}>
-              <Public />
-              // </ProtectedRoute>
+
+              <ProtectedRoute role={"user" | "operator" | "partner"}>
+                <Public />
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/delivery"
             element={
-              // <ProtectedRoute role="partner">
-              <Delivery />
-              // </ProtectedRoute>
+              <ProtectedRoute role={"user" | "operator" | "partner"}>
+                <Delivery />
+              </ProtectedRoute>
+
             }
           />
           <Route

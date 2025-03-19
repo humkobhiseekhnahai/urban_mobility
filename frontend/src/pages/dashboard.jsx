@@ -241,7 +241,7 @@ export const Dashboard = () => {
                   <HeatMap
                     lat={location.latitude}
                     lng={location.longitude}
-                    radius={0.05}
+                    radius={0.1}
                   />
                 </TabPanel>
                 <TabPanel value="incident" className="w-full h-full p-2">
