@@ -79,7 +79,18 @@ export const Dashboard = () => {
     getAllBusRoutes();
   }, [busRoutesLimit]);
 
-  // if (location.loading || location.error) return <LocationLoading />;
+  const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (location.loading || location.error) return <LocationLoading />;
 
   return (
     <main className="bg-neutral-850">
@@ -165,13 +176,27 @@ export const Dashboard = () => {
           />
 
           {/* Bus Route List */}
-          <BusRouteList
-            filteredRoutes={filteredRoutes}
-            handleViewRouteDetails={handleViewRouteDetails}
-            busRoutes={busRoutes}
-            limit={busRoutesLimit}
-            setLimit={setBusRoutesLimit}
-          />
+          {/* Bus Route List - Scrollable for small screens */}
+          {/* Bus Route List - Proper scroll handling */}
+          {isSmallScreen ? (
+            <div className="w-full h-[500px] overflow-y-auto md:h-full">
+              <BusRouteList
+                filteredRoutes={filteredRoutes}
+                handleViewRouteDetails={handleViewRouteDetails}
+                busRoutes={busRoutes}
+                limit={busRoutesLimit}
+                setLimit={setBusRoutesLimit}
+              />
+            </div>
+          ) : (
+            <BusRouteList
+              filteredRoutes={filteredRoutes}
+              handleViewRouteDetails={handleViewRouteDetails}
+              busRoutes={busRoutes}
+              limit={busRoutesLimit}
+              setLimit={setBusRoutesLimit}
+            />
+          )}
         </section>
 
         {/* Main Content Section (Map & Tabs) */}

@@ -367,7 +367,7 @@ function ArchitectureContent() {
             <span className="font-semibold"> scalability</span>,{" "}
             <span className="font-semibold"> resilience</span>, and
             <span className="font-semibold"> independent deployment</span> of
-            services. The platform integrates multiple AI-driven modules to
+            services. The platform integrates multiple ML-driven modules to
             handle complex routing, logistics, and traffic management.
           </p>
         </motion.div>
@@ -382,7 +382,7 @@ function ArchitectureContent() {
           </h3>
           <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
             {[
-              "Route Optimization Engine - AI-powered logistics planning",
+              "Route Optimization Engine - ML-powered logistics planning",
               "Data Processing Pipeline - Ingests and processes live traffic, weather, and logistics data",
               "Real-time Analytics Service - Generates heatmaps and predictive models",
               "User Authentication System - Secures access via OAuth and multi-factor authentication",
@@ -434,7 +434,7 @@ function ArchitectureContent() {
               framework.
             </li>
             <li>
-              <span className="font-semibold">AI & ML Analysis:</span> Applies
+              <span className="font-semibold">ML Analysis:</span> Applies
               predictive models to optimize routing and congestion forecasting.
             </li>
             <li>
@@ -469,7 +469,7 @@ function ArchitectureContent() {
             </div>
             <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
               <code className="language-bash text-gray-100">
-                {`Data Sources → Data Collection → Processing → AI/ML Analysis → Visualization → User Interface`}
+                {`Data Sources → Data Collection → Processing → ML Analysis → Visualization → User Interface`}
               </code>
             </pre>
           </motion.div>
@@ -532,7 +532,7 @@ function ArchitectureContent() {
               Monitor{" "}
               <span className="font-semibold">
                 {" "}
-                AI-driven route optimization
+                ML-driven route optimization
               </span>{" "}
               in action.
             </li>
@@ -1331,18 +1331,18 @@ function LoadingSequenceContent() {
         <h1 className="scroll-m-20 text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-gray-400 to-gray-100 bg-clip-text text-transparent">
           Loading Sequence
         </h1>
-        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7 md:leading-8">
+        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7">
           Optimizing the order in which goods are loaded for efficient delivery
           operations.
         </p>
       </motion.header>
+
       <section className="space-y-8 md:space-y-12 mt-8 md:mt-12">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-        ></motion.div>
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          id="bin-packing-algorithm"
+        >
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight border-b border-gray-800 pb-2">
             Bin Packing Algorithm
           </h2>
@@ -1351,71 +1351,114 @@ function LoadingSequenceContent() {
             optimize how packages are loaded into delivery vehicles, ensuring
             efficient unloading and space utilization.
           </p>
+        </motion.div>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              What is Bin Packing?
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              The bin packing algorithm is a smart way to load items into a
-              truck, ensuring everything fits without overloading. It loads
-              items in reverse delivery order for efficient unloading and packs
-              them tightly to minimize wasted space, saving fuel and trips. This
-              makes deliveries faster, safer, and more cost effective.
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Algorithm Example
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`Dry Run Example:\n\n-  Sort Items: Reverse delivery order → C3 (last), B2, A1 (first).\n-  Load Truck:\n  - Add A1 (200kg): Remaining capacity = 300kg.\n  - Add B2 (300kg): Remaining capacity = 0kg.\n\nConstraint:\nThe total number of demands of the served destinations cannot exceed the capacity of the vehicle for each route.`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="what-is-bin-packing"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            What is Bin Packing?
+          </h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            The bin packing algorithm is a smart way to load items into a truck,
+            ensuring everything fits without overloading. It loads items in
+            **reverse delivery order** for **efficient unloading** and packs
+            them tightly to **minimize wasted space**, saving fuel and trips.
+            This makes deliveries **faster, safer, and more cost-effective**.
+          </p>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Implementation Process
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              Our implementation of the bin packing algorithm follows a
-              systematic process to ensure optimal loading sequence.
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Process Steps
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`1. Analyze Delivery Route: Determine the sequence of deliveries\n2. Reverse Order: Arrange items in reverse delivery order\n3. Weight Calculation: Calculate total weight and compare to vehicle capacity\n4. Space Optimization: Arrange items to maximize space utilization\n5. Loading Instructions: Generate step-by-step loading instructions for warehouse staff`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Algorithm Example
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-semibold">Sort Items:</span> Reverse
+                  delivery order → C3 (last), B2, A1 (first).
+                </li>
+                <li>
+                  <span className="font-semibold">Load Truck:</span>
+                </li>
+                <ul className="list-disc pl-5 mt-2 space-y-1">
+                  <li>Add A1 (200kg): Remaining capacity = 300kg.</li>
+                  <li>Add B2 (300kg): Remaining capacity = 0kg.</li>
+                </ul>
+                <li>
+                  <span className="font-semibold">Constraint:</span> The total
+                  number of demands of the served destinations cannot exceed the
+                  capacity of the vehicle for each route.
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="implementation-process"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Implementation Process
+          </h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            Our implementation of the bin packing algorithm follows a systematic
+            process to ensure optimal loading sequence.
+          </p>
+
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Process Steps
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-semibold">Analyze Delivery Route:</span>{" "}
+                  Determine the sequence of deliveries.
+                </li>
+                <li>
+                  <span className="font-semibold">Reverse Order:</span> Arrange
+                  items in reverse delivery order.
+                </li>
+                <li>
+                  <span className="font-semibold">Weight Calculation:</span>{" "}
+                  Calculate total weight and compare to vehicle capacity.
+                </li>
+                <li>
+                  <span className="font-semibold">Space Optimization:</span>{" "}
+                  Arrange items to maximize space utilization.
+                </li>
+                <li>
+                  <span className="font-semibold">Loading Instructions:</span>{" "}
+                  Generate step-by-step loading instructions for warehouse
+                  staff.
+                </li>
+              </ul>
+            </div>
+          </motion.div>
         </motion.div>
       </section>
     </>
@@ -1425,120 +1468,188 @@ function LoadingSequenceContent() {
 function DeliveryRoutingContent() {
   return (
     <>
-      <motion.header
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <motion.header initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1 }}>
         <h1 className="scroll-m-20 text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-gray-400 to-gray-100 bg-clip-text text-transparent">
           Delivery Routing
         </h1>
-        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7 md:leading-8">
+        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7">
           Advanced algorithms for optimizing delivery routes and schedules.
         </p>
       </motion.header>
+
       <section className="space-y-8 md:space-y-12 mt-8 md:mt-12">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-        ></motion.div>
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          id="genetic-algorithm-for-delivery-routing"
+        >
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight border-b border-gray-800 pb-2">
             Genetic Algorithm for Delivery Routing
           </h2>
           <p className="text-gray-300 mt-4 leading-7">
-            UPLYFT implements a Genetic Algorithm (GA) for delivery routing - an
+            UPLYFT implements a Genetic Algorithm (GA) for delivery routing—an
             optimization technique inspired by natural selection that helps find
             the most efficient delivery routes. It is especially useful for
-            solving complex Traveling Salesman Problems (TSP) or Vehicle Routing
-            Problems (VRP) in logistics.
+            solving complex
+            <span className="font-semibold">
+              {" "}
+              Traveling Salesman Problems (TSP)
+            </span>{" "}
+            or{" "}
+            <span className="font-semibold">
+              {" "}
+              Vehicle Routing Problems (VRP)
+            </span>{" "}
+            in logistics.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="how-it-works"
+        >
+          <h3 className="text-xl font-semibold text-white">How It Works</h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            A GA iteratively improves a population of possible delivery routes
+            using evolutionary principles such as selection, crossover, and
+            mutation.
           </p>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">How It Works</h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              A GA iteratively improves a population of possible delivery routes
-              using evolutionary principles such as selection, crossover, and
-              mutation.
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Algorithm Steps
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`1. Initialization\n   - Generate an initial population of random delivery routes\n   - Each route is a sequence of delivery points (customers, warehouses, etc.)\n\n2. Fitness Function\n   - Evaluate each route based on factors like distance, time, fuel consumption\n   - A lower total cost (distance/time) means a better fitness score`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Algorithm Steps
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-semibold">Initialization:</span>{" "}
+                  Generate an initial population of random delivery routes.
+                </li>
+                <li>
+                  <span className="font-semibold">Route Representation:</span>{" "}
+                  Each route is a sequence of delivery points (customers,
+                  warehouses, etc.).
+                </li>
+                <li>
+                  <span className="font-semibold">Fitness Function:</span>{" "}
+                  Evaluate each route based on distance, time, and fuel
+                  consumption.
+                </li>
+                <li>
+                  <span className="font-semibold">Selection:</span> Choose the
+                  best-performing routes (parents) for reproduction.
+                </li>
+                <li>
+                  <span className="font-semibold">
+                    Crossover (Recombination):
+                  </span>{" "}
+                  Combine parent routes to create new offspring routes.
+                </li>
+                <li>
+                  <span className="font-semibold">Mutation:</span> Randomly
+                  alter routes to maintain diversity and avoid local optima.
+                </li>
+                <li>
+                  <span className="font-semibold">Termination:</span> Process
+                  continues until a near-optimal route is found.
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Evolution Process
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              The algorithm uses evolutionary principles to iteratively improve
-              route solutions.
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Evolution Steps
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`3. Selection\n   - Choose the best-performing routes (parents) for reproduction\n   - Common selection methods: Roulette Wheel, Tournament Selection, Rank Selection\n\n4. Crossover (Recombination)\n   - Combine two parent routes to create new offspring routes\n   - Methods: Partially Mapped Crossover (PMX), Order Crossover (OX), Cycle Crossover (CX)\n\n5. Mutation\n   - Randomly alter routes to maintain diversity and avoid local optima\n   - Common mutations: Swap, Inversion, Scramble, and Insert mutations\n\n6. Termination\n   - Repeat the process for a fixed number of generations or until an optimal route is found\n   - The best route is selected based on the lowest cost and highest efficiency`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="evolution-process"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Evolution Process
+          </h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            The algorithm uses evolutionary principles to iteratively improve
+            route solutions.
+          </p>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Benefits of Genetic Algorithms
-            </h3>
-            <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
-              {[
-                "Can handle complex routing problems with many constraints",
-                "Finds near-optimal solutions for problems that would be impossible to solve exactly",
-                "Adaptable to changing conditions and requirements",
-                "Capable of balancing multiple objectives (time, distance, fuel, etc.)",
-                "Continuously improves solutions over time",
-              ].map((benefit, index) => (
-                <motion.li
-                  key={index}
-                  className="text-gray-300 pl-2"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {benefit}
-                </motion.li>
-              ))}
-            </ul>
-          </div>
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Evolution Steps
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-semibold">Selection:</span> Choose the
+                  fittest routes for reproduction.
+                </li>
+                <li>
+                  <span className="font-semibold">Crossover:</span> Combine
+                  parent routes to create improved routes.
+                </li>
+                <li>
+                  <span className="font-semibold">Mutation:</span> Introduce
+                  random changes to maintain diversity.
+                </li>
+                <li>
+                  <span className="font-semibold">Evaluation:</span> Assess new
+                  routes based on cost-efficiency.
+                </li>
+                <li>
+                  <span className="font-semibold">Termination:</span> Stop once
+                  an optimal route is found.
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="benefits-of-genetic-algorithms"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Benefits of Genetic Algorithms
+          </h3>
+          <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
+            {[
+              "Can handle complex routing problems with many constraints.",
+              "Finds near-optimal solutions for problems that would be impossible to solve exactly.",
+              "Adaptable to changing conditions and requirements.",
+              "Balances multiple objectives (time, distance, fuel efficiency).",
+              "Continuously improves solutions over time.",
+            ].map((benefit, index) => (
+              <motion.li
+                key={index}
+                className="text-gray-300 pl-2"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {benefit}
+              </motion.li>
+            ))}
+          </ul>
         </motion.div>
       </section>
     </>
@@ -1548,23 +1659,21 @@ function DeliveryRoutingContent() {
 function BusTransportOptimizationContent() {
   return (
     <>
-      <motion.header
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <motion.header initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1 }}>
         <h1 className="scroll-m-20 text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-gray-400 to-gray-100 bg-clip-text text-transparent">
           Bus Transport Optimization
         </h1>
-        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7 md:leading-8">
+        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7">
           Improving public transportation efficiency and passenger experience.
         </p>
       </motion.header>
+
       <section className="space-y-8 md:space-y-12 mt-8 md:mt-12">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-        ></motion.div>
-        <div>
+          id="optimization-techniques"
+        >
           <h3 className="text-xl md:text-2xl font-semibold tracking-tight text-gray-200">
             Optimization Techniques
           </h3>
@@ -1587,9 +1696,13 @@ function BusTransportOptimizationContent() {
               </motion.li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="transshipment-point-optimization"
+        >
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight border-b border-gray-800 pb-2">
             Transshipment Point Optimization
           </h2>
@@ -1598,95 +1711,138 @@ function BusTransportOptimizationContent() {
             optimize public transport by reducing overlapping routes and
             creating strategic transshipment nodes.
           </p>
+        </motion.div>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Purpose and Implementation
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              Transshipment points are created by identifying strategic
-              intersections where multiple routes naturally converge, making
-              them ideal hubs for passenger transfers.
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Transshipment Point Creation
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`-  The transshipment point is created by identifying the Shopping Center as a strategic intersection where Route A and Route B naturally converge, making it an ideal hub for passenger transfers\n\n-  The Shopping Center is then enhanced with essential infrastructure including waiting areas, digital display systems, and coordinated scheduling mechanisms to facilitate smooth transfers between routes`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="purpose-and-implementation"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Purpose and Implementation
+          </h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            Transshipment points are created by identifying strategic
+            intersections where multiple routes naturally converge, making them
+            ideal hubs for passenger transfers.
+          </p>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Algorithm Steps
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              Our optimization algorithm follows a systematic approach to
-              identify and implement transshipment nodes.
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Optimization Algorithm
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`1. Cluster Stops by Proximity\n   - DBSCAN clustering with eps 300 m and min_samples 3\n   - Merge isolated stops into the nearest cluster if within 500 m\n\n2. Identifying Central Node\n   - For each cluster, calculate the geographic centroid\n   - Selecting the stop closest to the centroid that lies on at least one route\n\n3. Route Optimization\n   - Redirecting overlapping routes through the central node\n   - Removing redundant segments to reduce overlap`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Transshipment Point Creation
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-semibold">
+                    Identifying Key Intersections:
+                  </span>{" "}
+                  Determine locations where multiple routes naturally converge.
+                </li>
+                <li>
+                  <span className="font-semibold">
+                    Enhancing Infrastructure:
+                  </span>{" "}
+                  Equip transshipment hubs with waiting areas, digital display
+                  systems, and coordinated scheduling mechanisms.
+                </li>
+                <li>
+                  <span className="font-semibold">Optimizing Transfers:</span>{" "}
+                  Streamline passenger movement between routes for minimal wait
+                  times.
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Benefits of Transshipment Nodes
-            </h3>
-            <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
-              {[
-                "Reduced route overlap and more efficient network coverage",
-                "Decreased operational costs through optimized fleet utilization",
-                "Improved passenger experience with coordinated transfers",
-                "Enhanced waiting facilities at strategic transfer points",
-                "Real-time information systems for smoother connections",
-                "Reduced congestion in urban areas through better route planning",
-              ].map((benefit, index) => (
-                <motion.li
-                  key={index}
-                  className="text-gray-300 pl-2"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {benefit}
-                </motion.li>
-              ))}
-            </ul>
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="algorithm-steps"
+        >
+          <h3 className="text-xl font-semibold text-white">Algorithm Steps</h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            Our optimization algorithm follows a systematic approach to identify
+            and implement transshipment nodes.
+          </p>
+
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Optimization Algorithm
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-semibold">
+                    Cluster Stops by Proximity:
+                  </span>{" "}
+                  Apply DBSCAN clustering with parameters set to 300m radius and
+                  minimum 3 stops.
+                </li>
+                <li>
+                  <span className="font-semibold">Identify Central Nodes:</span>{" "}
+                  Compute geographic centroids for clusters and select the most
+                  accessible stop.
+                </li>
+                <li>
+                  <span className="font-semibold">Optimize Routes:</span>{" "}
+                  Redirect overlapping routes through the central node while
+                  minimizing redundancy.
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="benefits-of-transshipment-nodes"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Benefits of Transshipment Nodes
+          </h3>
+          <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
+            {[
+              "Reduced route overlap and more efficient network coverage.",
+              "Decreased operational costs through optimized fleet utilization.",
+              "Improved passenger experience with coordinated transfers.",
+              "Enhanced waiting facilities at strategic transfer points.",
+              "Real-time information systems for smoother connections.",
+              "Reduced congestion in urban areas through better route planning.",
+            ].map((benefit, index) => (
+              <motion.li
+                key={index}
+                className="text-gray-300 pl-2"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {benefit}
+              </motion.li>
+            ))}
+          </ul>
         </motion.div>
       </section>
     </>
@@ -1696,20 +1852,22 @@ function BusTransportOptimizationContent() {
 function SafetyAnalysisContent() {
   return (
     <>
-      <motion.header
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <motion.header initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1 }}>
         <h1 className="scroll-m-20 text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-gray-400 to-gray-100 bg-clip-text text-transparent">
           Safety Analysis
         </h1>
-        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7 md:leading-8">
+        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7">
           Enhancing road safety through data-driven insights and predictive
           analytics.
         </p>
       </motion.header>
+
       <section className="space-y-8 md:space-y-12 mt-8 md:mt-12">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="safety-analytics"
+        >
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight border-b border-gray-800 pb-2">
             Safety Analytics
           </h2>
@@ -1720,7 +1878,11 @@ function SafetyAnalysisContent() {
           </p>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="safety-analysis-service"
+        >
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight border-b border-gray-800 pb-2">
             Safety Analysis Service
           </h2>
@@ -1732,95 +1894,176 @@ function SafetyAnalysisContent() {
             violations, and hazardous weather conditions—the service helps city
             planners and traffic authorities implement targeted safety measures.
           </p>
+        </motion.div>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">Key Features</h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              Our comprehensive safety analysis system includes several advanced
-              features:
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Accident Hotspot Identification
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`-  Uses clustering algorithms to detect areas with a high concentration of accidents\n-  Helps authorities focus safety interventions where they are most needed\n\nAccident Cause Analysis:\n-  Identifies common causes of accidents, including:\n   -  Speeding violations\n   -  Red-light running\n   -  Poor road conditions\n   -  Adverse weather effects\n-  Enables data-driven decisions for preventive measures like traffic enforcement and infrastructure improvements`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="key-features"
+        >
+          <h3 className="text-xl font-semibold text-white">Key Features</h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            Our comprehensive safety analysis system includes several advanced
+            features:
+          </p>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Real-Time Monitoring
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              The system provides continuous monitoring of critical safety
-              factors.
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Monitoring Systems
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`Real-Time Weather Monitoring:\n-  Integrates with live weather data sources to analyze the impact of weather conditions on road safety\n-  Alerts authorities and drivers about hazardous conditions such as heavy rainfall, fog, or icy roads\n\nReal-Time Traffic Analysis:\n-  Continuously monitors traffic flow, congestion, and accident reports\n-  Assists in dynamic route planning and safety advisories to reduce accident risks\n\nPredictive Analysis & Reporting:\n-  Uses historical data trends to predict future accident-prone areas\n-  Generates detailed safety reports and heatmaps for better urban planning`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Accident Hotspot Identification
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  Uses clustering algorithms to detect areas with a high
+                  concentration of accidents.
+                </li>
+                <li>
+                  Helps authorities focus safety interventions where they are
+                  most needed.
+                </li>
+                <li>
+                  <span className="font-semibold">
+                    Accident Cause Analysis:
+                  </span>
+                </li>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>Identifies common causes of accidents, including:</li>
+                  <ul className="list-disc pl-5 space-y-1">
+                    <li>Speeding violations</li>
+                    <li>Red-light running</li>
+                    <li>Poor road conditions</li>
+                    <li>Adverse weather effects</li>
+                  </ul>
+                  <li>
+                    Enables data-driven decisions for preventive measures like
+                    traffic enforcement and infrastructure improvements.
+                  </li>
+                </ul>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Impact & Benefits
-            </h3>
-            <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
-              {[
-                "Reduces Traffic Accidents – Enables early intervention through data-driven safety planning",
-                "Saves Lives – Helps cities take proactive measures to enhance road safety",
-                "Improves Urban Infrastructure – Supports decision-making for road improvements and traffic control measures",
-                "Enhances Emergency Response – Provides insights to optimize emergency vehicle dispatch routes",
-              ].map((benefit, index) => (
-                <motion.li
-                  key={index}
-                  className="text-gray-300 pl-2"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {benefit}
-                </motion.li>
-              ))}
-            </ul>
-            <p className="text-gray-300 mt-2 leading-7">
-              The Safety Analysis Service empowers city officials, traffic
-              management teams, and policymakers with actionable insights to
-              create safer and more efficient roadways for everyone.
-            </p>
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="real-time-monitoring"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Real-Time Monitoring
+          </h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            The system provides continuous monitoring of critical safety
+            factors.
+          </p>
+
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Monitoring Systems
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-semibold">
+                    Real-Time Weather Monitoring:
+                  </span>
+                </li>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    Integrates with live weather data sources to analyze the
+                    impact of weather conditions on road safety.
+                  </li>
+                  <li>
+                    Alerts authorities and drivers about hazardous conditions
+                    such as heavy rainfall, fog, or icy roads.
+                  </li>
+                </ul>
+                <li>
+                  <span className="font-semibold">
+                    Real-Time Traffic Analysis:
+                  </span>
+                </li>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    Continuously monitors traffic flow, congestion, and accident
+                    reports.
+                  </li>
+                  <li>
+                    Assists in dynamic route planning and safety advisories to
+                    reduce accident risks.
+                  </li>
+                </ul>
+                <li>
+                  <span className="font-semibold">
+                    Predictive Analysis & Reporting:
+                  </span>
+                </li>
+                <ul className="list-disc pl-5 space-y-1">
+                  <li>
+                    Uses historical data trends to predict future accident-prone
+                    areas.
+                  </li>
+                  <li>
+                    Generates detailed safety reports and heatmaps for better
+                    urban planning.
+                  </li>
+                </ul>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="impact-benefits"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Impact & Benefits
+          </h3>
+          <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
+            {[
+              "Reduces Traffic Accidents – Enables early intervention through data-driven safety planning.",
+              "Saves Lives – Helps cities take proactive measures to enhance road safety.",
+              "Improves Urban Infrastructure – Supports decision-making for road improvements and traffic control measures.",
+              "Enhances Emergency Response – Provides insights to optimize emergency vehicle dispatch routes.",
+            ].map((benefit, index) => (
+              <motion.li
+                key={index}
+                className="text-gray-300 pl-2"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {benefit}
+              </motion.li>
+            ))}
+          </ul>
+          <p className="text-gray-300 mt-2 leading-7">
+            The Safety Analysis Service empowers city officials, traffic
+            management teams, and policymakers with actionable insights to
+            create safer and more efficient roadways for everyone.
+          </p>
         </motion.div>
       </section>
     </>
@@ -2014,130 +2257,183 @@ function AuthenticationContent() {
 function DatabaseContent() {
   return (
     <>
-      <motion.header
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <motion.header initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1 }}>
         <h1 className="scroll-m-20 text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-gray-400 to-gray-100 bg-clip-text text-transparent">
           Database
         </h1>
-        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7 md:leading-8">
+        <p className="text-lg text-gray-300 mt-4 md:mt-6 leading-7">
           Database architecture and data management in UPLYFT.
         </p>
       </motion.header>
+
       <section className="space-y-8 md:space-y-12 mt-8 md:mt-12">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="database-architecture"
+        >
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight border-b border-gray-800 pb-2">
             Database Architecture
           </h2>
           <p className="text-gray-300 mt-4 leading-7">
-            UPLYFT uses a combination of relational and NoSQL databases to
-            handle different types of data and workloads efficiently.
+            UPLYFT uses a combination of relational (PostgreSQL) and NoSQL
+            databases to efficiently handle structured and unstructured data.
+            This architecture ensures scalability, performance, and secure
+            storage for critical platform operations.
           </p>
         </motion.div>
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="postgresql-prisma-integration"
+        >
           <h2 className="text-2xl md:text-3xl font-bold tracking-tight border-b border-gray-800 pb-2">
             PostgreSQL & Prisma Integration
           </h2>
           <p className="text-gray-300 mt-4 leading-7">
-            Uplyft utilizes PostgreSQL as the primary database and Prisma as the
-            ORM (Object-Relational Mapping) tool to manage and interact with the
-            database efficiently. The system securely stores user data,
-            retrieves bus details, and manages route creation, ensuring smooth
-            and reliable data handling.
+            UPLYFT leverages PostgreSQL as the primary database, integrated with
+            Prisma ORM for efficient data interaction. This setup ensures fast
+            queries, robust data relationships, and seamless migrations,
+            providing a scalable and well-structured database environment.
+          </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="key-database-features"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Key Database Features
+          </h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            The database plays a critical role in managing user data, bus
+            schedules, delivery information, and optimized routes.
           </p>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Key Database Features
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              Our database implementation provides several critical features for
-              the Uplyft platform:
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Data Storage & Management
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`User Data Storage:\n-  Stores user information, authentication credentials, and role-based access control details\n-  Ensures data integrity and security through robust database management practices\n\nBus Details Management:\n-  Fetches bus-related data from the database, including schedules, capacities, and operator details\n-  Enables quick and efficient retrieval for seamless functionality within the application\n\nRoute Creation & Storage:\n-  New bus routes are dynamically created and saved in the database\n-  Supports efficient route planning and management for bus operators`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Data Storage & Management
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  <span className="font-semibold">User Data Storage:</span>{" "}
+                  Stores authentication credentials, role-based access, and user
+                  preferences securely.
+                </li>
+                <li>
+                  <span className="font-semibold">Bus Details Management:</span>{" "}
+                  Retrieves real-time bus schedules, fleet details, and
+                  operational analytics.
+                </li>
+                <li>
+                  <span className="font-semibold">Route Planning:</span>{" "}
+                  Dynamically creates and optimizes public transport and
+                  delivery routes.
+                </li>
+                <li>
+                  <span className="font-semibold">Delivery Data Handling:</span>{" "}
+                  Stores package information, delivery tracking, and logistics
+                  data.
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Prisma ORM Implementation
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              Prisma ORM provides a type-safe and intuitive way to interact with
-              our PostgreSQL database.
-            </p>
-            <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
-                <span className="text-sm font-medium text-gray-400">
-                  Prisma Benefits
-                </span>
-                <motion.button
-                  type="button"
-                  whileTap={{ scale: 0.95 }}
-                  whileHover={{ scale: 1.05 }}
-                  className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
-                >
-                  <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
-                  <span className="sr-only">Copy code</span>
-                </motion.button>
-              </div>
-              <pre className="overflow-x-auto p-6 text-sm font-mono bg-gray-950/50 rounded-b-xl">
-                <code className="language-bash text-gray-100">
-                  {`-  Type-safe database queries with auto-generated TypeScript types\n-  Intuitive API for complex database operations\n-  Simplified database migrations and schema updates\n-  Efficient query building with relation handling\n-  Prepared statement caching for optimized performance\n-  Support for complex filtering and pagination`}
-                </code>
-              </pre>
-            </motion.div>
-          </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="prisma-orm-implementation"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Prisma ORM Implementation
+          </h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            Prisma ORM provides a type-safe and intuitive way to interact with
+            our PostgreSQL database, improving query efficiency and simplifying
+            database management.
+          </p>
 
-          <div className="mt-6">
-            <h3 className="text-xl font-semibold text-white">
-              Database Schema Design
-            </h3>
-            <p className="text-gray-300 mt-2 leading-7">
-              Our database schema is carefully designed to support all Uplyft
-              operations with optimal performance.
-            </p>
-            <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
-              {[
-                "User model with role-based access control fields",
-                "Bus model with detailed specifications and operational data",
-                "Route model with geospatial data and scheduling information",
-                "Delivery model with package details and tracking information",
-                "One-to-many relationships between operators and buses/routes",
-                "Advanced indexing for high-performance queries",
-              ].map((feature, index) => (
-                <motion.li
-                  key={index}
-                  className="text-gray-300 pl-2"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  {feature}
-                </motion.li>
-              ))}
-            </ul>
-          </div>
+          <motion.div className="mt-3 rounded-xl border border-gray-800 bg-gray-900/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+              <span className="text-sm font-medium text-gray-400">
+                Prisma Benefits
+              </span>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.05 }}
+                className="p-1.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Copy className="h-4 w-4 text-gray-300 hover:text-white" />
+              </motion.button>
+            </div>
+            <div className="overflow-x-auto p-6 text-sm bg-gray-950/50 rounded-b-xl text-gray-100">
+              <ul className="list-disc pl-5 space-y-2">
+                <li>
+                  Type-safe database queries with auto-generated TypeScript
+                  types.
+                </li>
+                <li>Intuitive API for complex database operations.</li>
+                <li>Simplified database migrations and schema updates.</li>
+                <li>
+                  Optimized query performance with prepared statement caching.
+                </li>
+                <li>
+                  Support for filtering, pagination, and relational data
+                  handling.
+                </li>
+              </ul>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          id="database-schema-design"
+        >
+          <h3 className="text-xl font-semibold text-white">
+            Database Schema Design
+          </h3>
+          <p className="text-gray-300 mt-2 leading-7">
+            The database schema is designed to handle various functionalities
+            within UPLYFT efficiently.
+          </p>
+
+          <ul className="my-6 ml-6 list-disc space-y-3 marker:text-gray-400">
+            {[
+              "User model: Stores authentication credentials, roles, and preferences.",
+              "Bus model: Maintains fleet information, route assignments, and schedules.",
+              "Route model: Contains geospatial data, timestamps, and transport analytics.",
+              "Delivery model: Handles package tracking, delivery schedules, and logistics details.",
+              "Operator model: Links bus operators and delivery partners with their assigned vehicles.",
+              "Advanced indexing: Ensures fast query performance across large datasets.",
+            ].map((feature, index) => (
+              <motion.li
+                key={index}
+                className="text-gray-300 pl-2"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
+              >
+                {feature}
+              </motion.li>
+            ))}
+          </ul>
         </motion.div>
       </section>
     </>

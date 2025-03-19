@@ -39,6 +39,7 @@ function App() {
           <Route
             path="/public"
             element={
+
               <ProtectedRoute role={"user" | "operator" | "partner"}>
                 <Public />
               </ProtectedRoute>
@@ -51,13 +52,14 @@ function App() {
               <ProtectedRoute role={"user" | "operator" | "partner"}>
                 <Delivery />
               </ProtectedRoute>
+
             }
           />
           <Route
             path="/role-select"
             element={
               // <ProtectedRoute>
-                <RoleSelection />
+              <RoleSelection />
               // </ProtectedRoute>
             }
           />
