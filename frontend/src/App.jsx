@@ -30,9 +30,9 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute role={"user" | "operator" | "partner"}>
-                <Dashboard />
-              </ProtectedRoute>
+              // <ProtectedRoute role={"user" | "operator" | "partner"}>
+              <Dashboard />
+              // </ProtectedRoute>
             }
           />
 
@@ -40,7 +40,7 @@ function App() {
             path="/public"
             element={
               // <ProtectedRoute role={"operator"}>
-                <Public />
+              <Public />
               // </ProtectedRoute>
             }
           />
@@ -49,7 +49,7 @@ function App() {
             path="/delivery"
             element={
               // <ProtectedRoute role="partner">
-                <Delivery />
+              <Delivery />
               // </ProtectedRoute>
             }
           />
@@ -57,7 +57,7 @@ function App() {
             path="/role-select"
             element={
               // <ProtectedRoute>
-                <RoleSelection />
+              <RoleSelection />
               // </ProtectedRoute>
             }
           />
