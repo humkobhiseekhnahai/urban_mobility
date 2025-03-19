@@ -1,7 +1,10 @@
+"use client";
+
 import { useState } from "react";
 import { DocsSidebar } from "./doc-sidebar";
 import { DocContent } from "./doc-content";
 import { TableOfContents } from "./table-of-contents";
+import { ScrollDownButton } from "../scroll-down-button";
 
 export default function DocsPage() {
   // State to track which section is currently active
@@ -9,13 +12,16 @@ export default function DocsPage() {
 
   return (
     <div className="dark flex min-h-screen flex-col bg-background">
+      {/* Floating scroll button - only visible on mobile */}
+      <ScrollDownButton />
+
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
         {/* Pass state and setter to sidebar */}
-        <DocsSidebar 
-          activeSection={activeSection} 
-          setActiveSection={setActiveSection} 
+        <DocsSidebar
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
         />
-        
+
         <main className="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px]">
           <div className="mx-auto w-full min-w-0">
             {/* Pass active section to content */}
