@@ -32,7 +32,13 @@ export const BusRouteList = ({
   useEffect(() => {
     const isLargeScreen = window.innerWidth > 640; // Apply auto-scroll only if screen width > 640px
 
-    if (!isLargeScreen || !observerRef.current) return;
+    // Prevent auto-loading if filters are applied
+    if (
+      !isLargeScreen ||
+      !observerRef.current ||
+      filteredRoutes.length < busRoutes.length
+    )
+      return;
 
     let observer = new IntersectionObserver(
       (entries) => {
@@ -57,7 +63,7 @@ export const BusRouteList = ({
       clearTimeout(timeoutId);
       observer.disconnect();
     };
-  }, [loading, limit, filteredRoutes.length, loadMoreRoutes]);
+  }, [loading, limit, filteredRoutes.length, loadMoreRoutes, busRoutes.length]);
 
   return (
     <div

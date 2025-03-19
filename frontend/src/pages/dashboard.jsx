@@ -82,7 +82,7 @@ export const Dashboard = () => {
   // if (location.loading || location.error) return <LocationLoading />;
 
   return (
-    <main className="bg-neutral-850">
+    <main className="bg-neutral-850 overflow-hidden">
       <div className="w-full h-screen flex flex-col md:flex-row">
         <div className="hidden md:block h-full w-56 bg-neutral-900 z-40">
           <NavBarComponent />
@@ -165,13 +165,17 @@ export const Dashboard = () => {
           />
 
           {/* Bus Route List */}
-          <BusRouteList
-            filteredRoutes={filteredRoutes}
-            handleViewRouteDetails={handleViewRouteDetails}
-            busRoutes={busRoutes}
-            limit={busRoutesLimit}
-            setLimit={setBusRoutesLimit}
-          />
+          {/* Bus Route List - Scrollable for small screens */}
+          {/* Bus Route List - Proper scroll handling */}
+          <div className="w-full h-[300px] overflow-y-auto md:h-full">
+            <BusRouteList
+              filteredRoutes={filteredRoutes}
+              handleViewRouteDetails={handleViewRouteDetails}
+              busRoutes={busRoutes}
+              limit={busRoutesLimit}
+              setLimit={setBusRoutesLimit}
+            />
+          </div>
         </section>
 
         {/* Main Content Section (Map & Tabs) */}
