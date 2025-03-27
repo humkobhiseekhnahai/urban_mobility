@@ -1,7 +1,8 @@
 
+
 # Urban Mobility Project [UPLYFT] Setup Guide
 
-This guide provides instructions for setting up the complete Urban Mobility project, including Python backend on Apple Silicon, Node.js backend, and frontend application.
+This guide provides instructions for setting up the complete Urban Mobility project, including Python backend on Apple Silicon, Node.js backend, and frontend application. To view deployed project visit https://www.uplyft.systems/
 
 ## Python Backend Setup (Apple Silicon)
 
