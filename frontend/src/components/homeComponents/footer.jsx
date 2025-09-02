@@ -10,7 +10,8 @@ const Footer = () => {
 
   const companyInfo = {
     name: 'UPLYFT',
-    address: 'SRM University, Kattankulathur, Tamil Nadu, India',
+    // address: 'SRM University, Kattankulathur, Tamil Nadu, India',
+    address: 'IIIT Kalyani,West Bengal, India',
     email: 'contact@uplyft.com',
     phone: '+91 123 456 7890',
   };
