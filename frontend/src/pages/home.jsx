@@ -21,9 +21,9 @@ const HomePage = () => {
       </div>
       <Cards />
       <Testimonials />
-      <div id="about" className="scroll-mt-20">
+{/*       <div id="about" className="scroll-mt-20">
         <AboutUs />
-      </div>
+      </div> */}
       <Footer />
     </div>
   );
