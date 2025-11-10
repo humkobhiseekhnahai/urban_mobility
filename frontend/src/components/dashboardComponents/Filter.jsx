@@ -69,7 +69,7 @@ export const Filter = ({
   };
 
   useEffect(() => {
-    if (selectedTimes.length === 0) {
+    if (selectedTimes?.length === 0) {
       setSelectedTime("All Time");
     } else {
       setSelectedTime(selectedTimes);
@@ -133,7 +133,7 @@ export const Filter = ({
                 >
                   <Clock size={14} className="mr-1" />
                   <span className="text-xs">
-                    {selectedTimes.length === 0
+                    {selectedTimes?.length === 0
                       ? "All"
                       : `${selectedTimes.length}`}
                   </span>
@@ -179,7 +179,7 @@ export const Filter = ({
           </div>
 
           {/* Active Filters */}
-          {(localSource || localDestination || selectedTimes.length > 0) && (
+          {(localSource || localDestination || selectedTimes?.length > 0) && (
             <div className="mt-2 flex flex-wrap gap-1 max-w-full overflow-x-auto pb-1">
               {localSource && (
                 <div className="bg-blue-900/30 text-blue-300 px-2 py-0.5 rounded-full text-xs flex items-center">
