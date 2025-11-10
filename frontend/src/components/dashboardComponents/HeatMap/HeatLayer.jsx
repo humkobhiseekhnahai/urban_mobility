@@ -8,7 +8,7 @@ export const HeatLayer = ({ heatmapData }) => {
   const map = useMap();
 
   useEffect(() => {
-    if (!map || heatmapData.length === 0) return;
+    if (!map || heatmapData?.length === 0) return;
 
     const heatLayer = L.heatLayer(heatmapData, {
       radius: 10,
