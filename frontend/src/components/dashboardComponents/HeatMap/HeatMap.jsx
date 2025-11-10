@@ -33,7 +33,7 @@ export const HeatMap = ({ lat, lng, radius }) => {
     <div className="w-full flex items-center justify-center">
       {loading ? (
         <p className="text-gray-200 text-center p-4">Loading Heatmap...</p>
-      ) : hmerror || !heatmapData.length ? (
+      ) : hmerror || !heatmapData?.length ? (
         <p className="text-gray-200 text-center p-4">
           Error Fetching Heatmap Data
         </p>
@@ -51,7 +51,7 @@ export const HeatMap = ({ lat, lng, radius }) => {
             className="leaflet-container"
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-            {heatmapData.length > 0 && <HeatLayer heatmapData={heatmapData} />}
+            {heatmapData?.length > 0 && <HeatLayer heatmapData={heatmapData} />}
           </MapContainer>
         </div>
       )}
