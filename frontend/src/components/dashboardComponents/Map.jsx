@@ -28,7 +28,7 @@ export const MapBox = () => {
 
   // Adjusts the map focus based on the given coordinates
   const fitBoundsToCoordinates = (coordinates) => {
-    if (coordinates.length < 2 || !mapRef.current) return;
+    if (coordinates?.length < 2 || !mapRef.current) return;
 
     const allLons = coordinates.map(([lng, _]) => lng);
     const allLats = coordinates.map(([_, lat]) => lat);
@@ -61,7 +61,7 @@ export const MapBox = () => {
   };
 
   useEffect(() => {
-    if (!hoveredRoute || hoveredRoute.length < 2) {
+    if (!hoveredRoute || hoveredRoute?.length < 2) {
       setRouteData(null);
       fitBoundsToCoordinates(defaultBusCoordinates);
 
@@ -69,8 +69,8 @@ export const MapBox = () => {
     }
 
     let limitedCoords = hoveredRoute.slice(0, 24);
-    if (hoveredRoute.length > 25) {
-      limitedCoords.push(hoveredRoute[hoveredRoute.length - 1]);
+    if (hoveredRoute?.length > 25) {
+      limitedCoords.push(hoveredRoute[hoveredRoute?.length - 1]);
     } else {
       limitedCoords = hoveredRoute;
     }
@@ -186,8 +186,8 @@ export const MapBox = () => {
 
       {hoveredRoute?.length > 1 && (
         <Marker
-          longitude={hoveredRoute[hoveredRoute.length - 1][0]}
-          latitude={hoveredRoute[hoveredRoute.length - 1][1]}
+          longitude={hoveredRoute[hoveredRoute?.length - 1][0]}
+          latitude={hoveredRoute[hoveredRoute?.length - 1][1]}
           anchor="bottom"
         >
           <div
