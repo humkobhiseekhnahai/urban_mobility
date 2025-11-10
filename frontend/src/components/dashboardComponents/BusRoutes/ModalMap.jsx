@@ -15,14 +15,14 @@ export const ModalMap = ({ busStops, isOpen }) => {
   const mapRef = useRef(null);
 
   useEffect(() => {
-    if (!busStops || busStops.length < 2) {
+    if (!busStops || busStops?.length < 2) {
       setRouteData(null);
       return;
     }
 
     const limitedStops =
-      busStops.length > 25
-        ? [...busStops.slice(0, 24), busStops[busStops.length - 1]]
+      busStops?.length > 25
+        ? [...busStops.slice(0, 24), busStops[busStops?.length - 1]]
         : busStops;
 
     const limitedCoords = limitedStops.map((stop) => [
@@ -38,7 +38,7 @@ export const ModalMap = ({ busStops, isOpen }) => {
     fetch(directionsUrl)
       .then((res) => res.json())
       .then((data) => {
-        if (data.routes && data.routes.length > 0) {
+        if (data.routes && data.routes?.length > 0) {
           setRouteData({
             type: "Feature",
             properties: {},
@@ -126,7 +126,7 @@ export const ModalMap = ({ busStops, isOpen }) => {
               backgroundColor:
                 index === 0
                   ? "#E74C3C"
-                  : index === busStops.length - 1
+                  : index === busStops?.length - 1
                   ? "#2ECC71"
                   : "#007bff",
               borderRadius: "50%",
