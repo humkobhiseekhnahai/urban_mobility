@@ -119,7 +119,7 @@ export const IncidentList = ({ lat, lng, radius }) => {
           location={incident.properties.location}
         />
       ))}
-      {data.incidents.length === 0 && (
+      {data.incidents?.length === 0 && (
         <p className="text-gray-200 text-center">
           No incidents in the area. Drive safe!
         </p>
