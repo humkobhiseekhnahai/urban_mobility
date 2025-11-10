@@ -97,9 +97,9 @@ export const BusRouteCard = ({ route, onViewDetails }) => {
               </Tooltip>
             ))}
 
-            {!expanded && times.length > 3 && (
+            {!expanded && times?.length > 3 && (
               <Chip
-                value={`+${times.length - 3} more`}
+                value={`+${times?.length - 3} more`}
                 className="bg-neutral-700 text-gray-300 text-xs cursor-pointer hover:bg-neutral-600 flex-shrink-0 h-6 flex justify-center items-center"
                 onClick={() => setExpanded(true)}
               />
