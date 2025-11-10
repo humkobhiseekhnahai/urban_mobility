@@ -36,7 +36,7 @@ export const BusRouteList = ({
     if (
       !isLargeScreen ||
       !observerRef.current ||
-      filteredRoutes.length < busRoutes.length
+      filteredRoutes?.length < busRoutes?.length
     )
       return;
 
@@ -63,7 +63,7 @@ export const BusRouteList = ({
       clearTimeout(timeoutId);
       observer.disconnect();
     };
-  }, [loading, limit, filteredRoutes.length, loadMoreRoutes, busRoutes.length]);
+  }, [loading, limit, filteredRoutes?.length, loadMoreRoutes, busRoutes?.length]);
 
   return (
     <div
@@ -72,7 +72,7 @@ export const BusRouteList = ({
     >
       <div className="w-full flex flex-col space-y-2 items-center">
         {busRoutes ? (
-          busRoutes.length !== 0 ? (
+          busRoutes?.length !== 0 ? (
             <>
               {filteredRoutes.slice(0, limit).map((route) => (
                 <BusRouteCard
